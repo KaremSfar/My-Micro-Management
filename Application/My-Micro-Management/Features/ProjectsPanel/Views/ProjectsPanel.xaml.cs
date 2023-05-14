@@ -1,3 +1,5 @@
+using MicroManagement.Services.Abstraction.DTOs;
+using My_Micro_Management.Features.Timer;
 using Windows.UI.Popups;
 
 namespace My_Micro_Management.Features.ProjectsPanel;
@@ -5,6 +7,7 @@ namespace My_Micro_Management.Features.ProjectsPanel;
 public partial class ProjectsPanel : ContentView
 {
     public ProjectsListViewModel ProjectsViewModel { get; set; } = new ProjectsListViewModel();
+    
     public ProjectsPanel()
     {
         InitializeComponent();

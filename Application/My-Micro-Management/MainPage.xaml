@@ -16,9 +16,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            
-            <p:ProjectsPanel Grid.Column="0"/>
-            <t:TimerPanel Grid.Column="1"/>
+
+            <p:ProjectsPanel Grid.Column="0" x:Name="ProjectsPanel"/>
+            <t:TimerPanel Grid.Column="1" SelectedProject="{Binding ProjectsViewModel.SelectedProject, Source={x:Reference ProjectsPanel}}"/>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>
