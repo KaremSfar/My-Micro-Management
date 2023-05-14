@@ -1,4 +1,6 @@
 ﻿using MicroManagement.Services.Abstraction.DTOs;
+using MicroManagement.Services.Abstraction.Services;
+using MicroManagement.Services.Mock;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,12 +15,23 @@ namespace My_Micro_Management.Features.Timer.ViewModels
     public class TimerViewModel : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        private ITimeSessionsService _timeSessionsService = new MockTimeSessionsService();
 
         private ProjectDTO selectedProject;
         public ProjectDTO SelectedProject
         {
             get { return selectedProject; }
-            set { selectedProject = value; OnPropertyChanged(); }
+            set
+            {
+                // Start the timer on the First Project Selection
+                if (selectedProject == null)
+                    StartTimer();
+                else
+                    OnProjectChanged();
+
+                selectedProject = value;
+                OnPropertyChanged();
+            }
         }
 
         private TimeSpan _timeElapsed = new TimeSpan();
@@ -50,6 +63,10 @@ namespace My_Micro_Management.Features.Timer.ViewModels
         public TimerViewModel()
         {
             TimeElapsedSpan = new TimeSpan();
+        }
+
+        private void StartTimer()
+        {
             Task.Factory.StartNew(async () =>
             {
                 while (true && !cancelTokenSource.IsCancellationRequested)
@@ -58,6 +75,23 @@ namespace My_Micro_Management.Features.Timer.ViewModels
                     TimeElapsedSpan = TimeElapsedSpan.Add(TimeSpan.FromSeconds(1));
                 }
             }, cancelTokenSource.Token);
+        }
+        private void ResetElapsed()
+        {
+            TimeElapsedSpan = TimeSpan.Zero;
+        }
+
+        private async Task OnProjectChanged()
+        {
+            var timeSession = new TimeSessionDTO()
+            {
+                StartTime = DateTime.Now - _timeElapsed,
+                EndDate = DateTime.Now
+            };
+
+            await _timeSessionsService.AddTimeSession(timeSession);
+
+            ResetElapsed();
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
