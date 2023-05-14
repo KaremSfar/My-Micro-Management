@@ -6,11 +6,19 @@
              xmlns:t="clr-namespace:My_Micro_Management.Features.Timer"
              x:Class="My_Micro_Management.MainPage">
 
-    <VerticalStackLayout>
+    <VerticalStackLayout Margin="10,10,15,15">
         <n:Navbar></n:Navbar>
-        <HorizontalStackLayout>
-            <p:ProjectsPanel/>
-            <t:TimerPanel/>
-        </HorizontalStackLayout>
+
+        <VerticalStackLayout MinimumHeightRequest="10"></VerticalStackLayout>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            
+            <p:ProjectsPanel Grid.Column="0"/>
+            <t:TimerPanel Grid.Column="1"/>
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>

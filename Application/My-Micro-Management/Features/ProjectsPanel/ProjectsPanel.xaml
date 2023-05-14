@@ -3,9 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="My_Micro_Management.Features.ProjectsPanel.ProjectsPanel">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="40" Padding="10" Stroke="#757575" StrokeThickness="1.5">
+            <Label 
+                Text="Add Project"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"/>
+        </Border>
+
+        <VerticalStackLayout MinimumHeightRequest="10"></VerticalStackLayout>
+
+        <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="300" Padding="10" Stroke="#757575" StrokeThickness="1.5">
+            
+        </Border>
     </VerticalStackLayout>
 </ContentView>
