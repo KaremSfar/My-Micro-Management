@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="My_Micro_Management.Features.ProjectsPanel.ProjectsPanel">
+             x:Class="My_Micro_Management.Features.ProjectsPanel.ProjectsPanelView"
+             xmlns:conv="clr-namespace:My_Micro_Management.Features.ProjectsPanel.Converters">
+    <ContentView.Resources>
+        <conv:ColorToBrushConverter x:Key="hexToColorConverter"/>
+    </ContentView.Resources>
+
     <VerticalStackLayout Margin="0,0,5,0">
         <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="40" Padding="10" Stroke="#757575" StrokeThickness="2">
             <Button Text="Add Project" Clicked="AddProject_Clicked"/>
@@ -15,7 +20,20 @@
                     <DataTemplate>
                         <ViewCell>
                             <Border StrokeShape="RoundRectangle 3" Padding="10" Margin="5" Stroke="#E6E6E6" StrokeThickness="1.5">
-                                <Label Text="{Binding Name}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.9*"/>
+                                        <ColumnDefinition Width="0.1*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Grid.Column="0" Text="{Binding Name}"/>
+                                    <Ellipse 
+                                        Grid.Column="1"
+                                        Fill="{Binding Color,Converter={StaticResource hexToColorConverter}}"
+                                        HeightRequest="20"
+                                        WidthRequest="20"
+                                        />
+                                </Grid>
                             </Border>
                         </ViewCell>
                     </DataTemplate>

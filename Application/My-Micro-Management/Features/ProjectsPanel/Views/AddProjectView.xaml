@@ -20,15 +20,7 @@
             <Label Grid.Row="1"/>
 
             <Label Grid.Row="2" Grid.Column="0">Color</Label>
-            <Picker Grid.Row="2" Grid.Column="1" SelectedItem="{Binding ProjectToAdd.Color}">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Red</x:String>
-                        <x:String>Green</x:String>
-                        <x:String>Blue</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+            <Entry Grid.Row="2" Grid.Column="1" Text="{Binding ProjectToAdd.Color}" Placeholder="#FFFFFF"/>
         </Grid>
         <Button Text="Add" Margin="10,15" Clicked="Button_Clicked"/>
     </VerticalStackLayout>

@@ -5,7 +5,11 @@ namespace MicroManagement.Services.Mock
 {
     public class MockProjectsService : IProjectsService
     {
-        private List<ProjectDTO> _projects = new List<ProjectDTO>();
+        private List<ProjectDTO> _projects = new List<ProjectDTO>()
+        {
+            new ProjectDTO() {Id = Guid.NewGuid(), Name = "Sprint", Color = "#e67e22"},
+        };
+
         public Task<ProjectDTO> AddProject(ProjectDTO projectToAdd)
         {
             projectToAdd.Id = Guid.NewGuid();
