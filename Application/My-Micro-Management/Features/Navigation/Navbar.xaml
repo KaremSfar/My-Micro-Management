@@ -4,10 +4,20 @@
              x:Class="My_Micro_Management.Features.Navigation.Navbar">
     <VerticalStackLayout>
         <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="40" Padding="10" Stroke="#757575" StrokeThickness="2">
-            <Label 
-                Text="Welcome to .NET MAUI!"
-                VerticalOptions="Center" 
-                HorizontalOptions="Start" />
+            <HorizontalStackLayout>
+                <Border StrokeShape="RoundRectangle 300" MinimumHeightRequest="3" MinimumWidthRequest="3" Padding="7" Stroke="#757575" StrokeThickness="2"/>
+                
+                <Label    
+                    Margin="30,0,0,0"
+                    Text="Context"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Start" />
+                <Label      
+                    Margin="30,0,0,0"
+                    Text="Collections"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Start" />
+            </HorizontalStackLayout>
         </Border>
     </VerticalStackLayout>
 </ContentView>
