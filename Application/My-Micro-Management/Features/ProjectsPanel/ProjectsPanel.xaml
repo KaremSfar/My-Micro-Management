@@ -2,17 +2,17 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="My_Micro_Management.Features.ProjectsPanel.ProjectsPanel">
-    <VerticalStackLayout>
-        <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="40" Padding="10" Stroke="#757575" StrokeThickness="1.5">
+    <VerticalStackLayout Margin="0,0,5,0">
+        <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="40" Padding="10" Stroke="#757575" StrokeThickness="2">
             <Label 
                 Text="Add Project"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center"/>
         </Border>
 
-        <VerticalStackLayout MinimumHeightRequest="10"></VerticalStackLayout>
+        <VerticalStackLayout MinimumHeightRequest="15"></VerticalStackLayout>
 
-        <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="300" Padding="10" Stroke="#757575" StrokeThickness="1.5">
+        <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="300" Padding="10" Stroke="#757575" StrokeThickness="2">
             
         </Border>
     </VerticalStackLayout>

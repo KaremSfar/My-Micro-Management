@@ -6,10 +6,10 @@
              xmlns:t="clr-namespace:My_Micro_Management.Features.Timer"
              x:Class="My_Micro_Management.MainPage">
 
-    <VerticalStackLayout Margin="10,10,15,15">
+    <VerticalStackLayout Margin="15,15,20,20">
         <n:Navbar></n:Navbar>
 
-        <VerticalStackLayout MinimumHeightRequest="10"></VerticalStackLayout>
+        <VerticalStackLayout MinimumHeightRequest="15"></VerticalStackLayout>
 
         <Grid>
             <Grid.ColumnDefinitions>
