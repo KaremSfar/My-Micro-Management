@@ -5,11 +5,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace My_Micro_Management.Features.Timer.ViewModels
 {
-    public class TimerViewModel : INotifyPropertyChanged
+    public class TimerViewModel : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -20,20 +21,53 @@ namespace My_Micro_Management.Features.Timer.ViewModels
             set { selectedProject = value; OnPropertyChanged(); }
         }
 
-        private TimeSpan timeElapsed = new TimeSpan();
-        public TimeSpan TimeElapsed
+        private TimeSpan _timeElapsed = new TimeSpan();
+        private TimeSpan TimeElapsedSpan
         {
-            get { return timeElapsed; }
-            set { timeElapsed = value; OnPropertyChanged(); }
+            get { return _timeElapsed; }
+            set
+            {
+                _timeElapsed = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TimeElapsedStr));
+            }
         }
+
+        public string TimeElapsedStr
+        {
+            get
+            {
+                return $"{TimeElapsedSpan.Minutes:00}:{TimeElapsedSpan.Seconds:00}";
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
 
         public TimerViewModel()
         {
+            TimeElapsedSpan = new TimeSpan();
+            Task.Factory.StartNew(async () =>
+            {
+                while (true && !cancelTokenSource.IsCancellationRequested)
+                {
+                    await Task.Delay(1000);
+                    TimeElapsedSpan = TimeElapsedSpan.Add(TimeSpan.FromSeconds(1));
+                }
+            }, cancelTokenSource.Token);
         }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Dispose()
+        {
+            cancelTokenSource.Dispose();
         }
     }
 }
