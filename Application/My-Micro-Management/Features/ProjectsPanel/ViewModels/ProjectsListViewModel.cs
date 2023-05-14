@@ -4,16 +4,26 @@ using MicroManagement.Services.Mock;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace My_Micro_Management.Features.ProjectsPanel
 {
-    public class ProjectsListViewModel
+    public class ProjectsListViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         private IProjectsService _projectsService = ProjectsServiceFactory.Instance;
         public ObservableCollection<ProjectDTO> ProjectsDTOs { get; set; }
+
+        private ProjectDTO selectedProject;
+        public ProjectDTO SelectedProject
+        {
+            get { return selectedProject; }
+            set { selectedProject = value; OnPropertyChanged(); }
+        }
 
         public ProjectsListViewModel()
         {
@@ -30,6 +40,11 @@ namespace My_Micro_Management.Features.ProjectsPanel
             {
                 ProjectsDTOs.Add(project);
             }
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
