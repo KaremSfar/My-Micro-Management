@@ -11,5 +11,12 @@ namespace MicroManagement.Core
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
+
+        public Project(Guid id, string name, string color)
+        {
+            Id = id;
+            Name = name;
+            Color = color;
+        }
     }
 }
