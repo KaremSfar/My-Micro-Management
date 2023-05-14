@@ -52,10 +52,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\MicroManagement.Services.Abstraction\MicroManagement.Services.Abstraction.csproj" />
+	  <ProjectReference Include="..\MicroManagement.Services.Mock\MicroManagement.Services.Mock.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Features\Navigation\Navbar.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Features\ProjectsPanel\ProjectsPanel.xaml">
+	  <MauiXaml Update="Features\ProjectsPanel\Views\AddProjectView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Features\ProjectsPanel\Views\ProjectsPanel.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Features\Timer\TimerPanel.xaml">

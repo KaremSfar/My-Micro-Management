@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="My_Micro_Management.Features.ProjectsPanel.AddProjectView">
+    <VerticalStackLayout VerticalOptions="Start" Margin="10, 40">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0">Project Name</Label>
+            <Entry Grid.Row="0" Grid.Column="1" Text="{Binding ProjectToAdd.Name, Mode=TwoWay}"/>
+
+            <Label Grid.Row="1"/>
+
+            <Label Grid.Row="2" Grid.Column="0">Color</Label>
+            <Picker Grid.Row="2" Grid.Column="1" SelectedItem="{Binding ProjectToAdd.Color}">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Red</x:String>
+                        <x:String>Green</x:String>
+                        <x:String>Blue</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+        </Grid>
+        <Button Text="Add" Margin="10,15" Clicked="Button_Clicked"/>
+    </VerticalStackLayout>
+</ContentPage>
