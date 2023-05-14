@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace My_Micro_Management.Features.ProjectsPanel.Converters
+namespace My_Micro_Management.Common.Converters
 {
     public class ColorToBrushConverter : IValueConverter
     {

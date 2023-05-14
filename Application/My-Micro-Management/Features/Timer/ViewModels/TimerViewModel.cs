@@ -31,6 +31,7 @@ namespace My_Micro_Management.Features.Timer.ViewModels
 
                 selectedProject = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Color));
             }
         }
 
@@ -55,6 +56,14 @@ namespace My_Micro_Management.Features.Timer.ViewModels
             set
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        public string Color
+        {
+            get
+            {
+                return SelectedProject?.Color ?? "#FFFFFF";
             }
         }
 

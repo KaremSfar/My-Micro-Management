@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace My_Micro_Management.Features.ProjectsPanel.Converters
+namespace My_Micro_Management.Common.Converters
 {
     public class DarkerHexConverter : IValueConverter
     {
@@ -25,6 +25,10 @@ namespace My_Micro_Management.Features.ProjectsPanel.Converters
             int r = int.Parse(hexColor.Substring(1, 2), NumberStyles.HexNumber);
             int g = int.Parse(hexColor.Substring(3, 2), NumberStyles.HexNumber);
             int b = int.Parse(hexColor.Substring(5, 2), NumberStyles.HexNumber);
+
+            // White color should not get darkened for aesthetic reasons
+            if (r == 255 && g == 255 && b == 255)
+                return hexColor;
 
             // Calculate the new RGB values for the darker shade
             r = (int)Math.Round(r * (1 - percentage));
