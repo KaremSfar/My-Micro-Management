@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="My_Micro_Management.Features.Timer.TimerPanel">
     <VerticalStackLayout>
-        <Border StrokeShape="RoundRectangle 3" Margin="0,0,0,10" MinimumHeightRequest="480" Padding="10" Stroke="#757575" StrokeThickness="1.5">
+        <Border StrokeShape="RoundRectangle 3" Margin="10,0,0,0" MinimumHeightRequest="480" Padding="10" Stroke="#757575" StrokeThickness="1.5">
 
         </Border>
 
