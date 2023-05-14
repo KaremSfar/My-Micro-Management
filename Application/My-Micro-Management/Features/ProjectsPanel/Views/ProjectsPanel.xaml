@@ -10,7 +10,7 @@
         <VerticalStackLayout MinimumHeightRequest="15"></VerticalStackLayout>
 
         <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="300" Padding="10" Stroke="#757575" StrokeThickness="2">
-            <ListView ItemsSource="{Binding ProjectsDTOs}">
+            <ListView ItemsSource="{Binding ProjectsDTOs}" SelectedItem="{Binding SelectedProject}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
