@@ -8,6 +8,7 @@ namespace MicroManagement.Services.Mock
         private List<ProjectDTO> _projects = new List<ProjectDTO>();
         public Task<ProjectDTO> AddProject(ProjectDTO projectToAdd)
         {
+            projectToAdd.Id = Guid.NewGuid();
             _projects.Add(projectToAdd);
             return Task.FromResult(projectToAdd);
         }

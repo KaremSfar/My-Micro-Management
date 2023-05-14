@@ -5,8 +5,11 @@
     <VerticalStackLayout>
         <Border StrokeShape="RoundRectangle 3" Margin="10,0,0,0" MinimumHeightRequest="470" Padding="10" Stroke="#757575" StrokeThickness="2">
             <VerticalStackLayout>
-                <Label Text="{Binding SelectedProject.Name}"></Label>
-                <Label Text="{Binding TimeElapsedStr, Mode=OneWay}"></Label>
+                <Border StrokeShape="RoundRectangle 3" Margin="10,0,0,0" Padding="10" Stroke="#757575" StrokeThickness="2">
+                    <Label Text="{Binding SelectedProject.Name}" HorizontalTextAlignment="End"></Label>
+                </Border>
+                <VerticalStackLayout MinimumHeightRequest="200"></VerticalStackLayout>
+                <Label Text="{Binding TimeElapsedStr, Mode=OneWay}" FontSize="32" HorizontalTextAlignment="Center"></Label>
             </VerticalStackLayout>
         </Border>
     </VerticalStackLayout>

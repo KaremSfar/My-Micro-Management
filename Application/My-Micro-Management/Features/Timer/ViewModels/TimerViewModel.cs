@@ -86,7 +86,8 @@ namespace My_Micro_Management.Features.Timer.ViewModels
             var timeSession = new TimeSessionDTO()
             {
                 StartTime = DateTime.Now - _timeElapsed,
-                EndDate = DateTime.Now
+                EndDate = DateTime.Now,
+                ProjectIds = new List<Guid>() { SelectedProject.Id }
             };
 
             await _timeSessionsService.AddTimeSession(timeSession);
