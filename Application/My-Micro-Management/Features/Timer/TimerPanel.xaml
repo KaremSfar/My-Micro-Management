@@ -4,6 +4,7 @@
              x:Class="My_Micro_Management.Features.Timer.TimerPanel">
     <VerticalStackLayout>
         <Border StrokeShape="RoundRectangle 3" Margin="10,0,0,0" MinimumHeightRequest="470" Padding="10" Stroke="#757575" StrokeThickness="2">
+            <Label Text="{Binding SelectedProject.Name}"></Label>
         </Border>
     </VerticalStackLayout>
 </ContentView>

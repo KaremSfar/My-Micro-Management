@@ -27,6 +27,10 @@ namespace My_Micro_Management.Features.Timer.ViewModels
             set { timeElapsed = value; OnPropertyChanged(); }
         }
 
+        public TimerViewModel()
+        {
+        }
+
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

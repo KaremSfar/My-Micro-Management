@@ -15,10 +15,14 @@ public partial class TimerPanel : ContentView
     public static readonly BindableProperty SelectedProjectProperty = BindableProperty.CreateAttached(
         "SelectedProject",
         typeof(ProjectDTO),
-        typeof(TimerPanel),
-        null);
+        typeof(TimerViewModel),
+        null,
+        propertyChanged: (bindable, oldValue, newValue) =>
+        {
+            (bindable as TimerPanel).ViewModel.SelectedProject = newValue as ProjectDTO;
+        });
 
-    public TimerViewModel ViewModel { get; set; }
+    public TimerViewModel ViewModel { get; set; } = new TimerViewModel();
     public TimerPanel()
     {
         InitializeComponent();
