@@ -23,7 +23,7 @@ public partial class Navbar : ContentView
 
         string targetFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "MicroMgmt",
-            $"Sessions - {DateTime.Now.DayOfWeek}.csv");
+            $"Sessions - {DateTime.Now.DayOfWeek} - {DateTime.Now.Day}.csv");
 
         await File.AppendAllTextAsync(targetFile, content);
     }
