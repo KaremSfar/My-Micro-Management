@@ -15,7 +15,7 @@ namespace My_Micro_Management.Features.Timer.ViewModels
     public class TimerViewModel : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private ITimeSessionsService _timeSessionsService = TimerServicesFactory.Instance;
+        private ITimeSessionsService _timeSessionsService = MauiProgram.GetService<ITimeSessionsService>();
 
         private ProjectDTO selectedProject;
         public ProjectDTO SelectedProject

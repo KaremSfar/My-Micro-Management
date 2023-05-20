@@ -15,7 +15,7 @@ namespace My_Micro_Management.Features.ProjectsPanel
     public class ProjectsListViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private IProjectsService _projectsService = ProjectsServiceFactory.Instance;
+        private IProjectsService _projectsService = MauiProgram.GetService<IProjectsService>();
         public ObservableCollection<ProjectDTO> ProjectsDTOs { get; set; }
 
         private ProjectDTO selectedProject;

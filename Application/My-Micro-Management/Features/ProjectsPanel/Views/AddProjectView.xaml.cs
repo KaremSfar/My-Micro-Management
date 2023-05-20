@@ -25,7 +25,7 @@ public partial class AddProjectView : ContentPage
 public class AddProjectViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
-    private IProjectsService _projectsService = ProjectsServiceFactory.Instance;
+    private IProjectsService _projectsService = MauiProgram.GetService<IProjectsService>();
 
     private ProjectDTO _projectToAdd;
     public ProjectDTO ProjectToAdd

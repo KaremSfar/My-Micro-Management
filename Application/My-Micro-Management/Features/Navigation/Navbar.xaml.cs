@@ -1,4 +1,5 @@
 using MicroManagement.Services;
+using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.Services;
 using My_Micro_Management.Features.ProjectsPanel;
 using My_Micro_Management.Features.Timer;
@@ -8,9 +9,7 @@ namespace My_Micro_Management.Features.Navigation;
 
 public partial class Navbar : ContentView
 {
-    private ITimeSessionsExporter _timeSessionExporter = new TimeSessionExporter(
-        TimerServicesFactory.Instance,
-        ProjectsServiceFactory.Instance);
+    private ITimeSessionsExporter _timeSessionExporter = MauiProgram.GetService<ITimeSessionsExporter>();
 
     public Navbar()
     {
