@@ -54,6 +54,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\MicroManagement.Services.Abstraction\MicroManagement.Services.Abstraction.csproj" />
 	  <ProjectReference Include="..\MicroManagement.Services.Mock\MicroManagement.Services.Mock.csproj" />
+	  <ProjectReference Include="..\MicroManagement.Services\MicroManagement.Services.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

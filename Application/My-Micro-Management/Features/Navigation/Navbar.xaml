@@ -5,7 +5,9 @@
     <VerticalStackLayout>
         <Border StrokeShape="RoundRectangle 3" MinimumHeightRequest="40" Padding="10" Stroke="#757575" StrokeThickness="2">
             <HorizontalStackLayout>
-                <Border StrokeShape="RoundRectangle 300" MinimumHeightRequest="3" MinimumWidthRequest="3" Padding="7" Stroke="#757575" StrokeThickness="2"/>
+                <Border StrokeShape="RoundRectangle 300" MinimumHeightRequest="3" MinimumWidthRequest="3" Padding="7" Stroke="#757575" StrokeThickness="2">
+                    <Button BackgroundColor="Transparent" Clicked="Button_Clicked" MinimumHeightRequest="1" MinimumWidthRequest="1"/>
+                </Border>
                 
                 <Label    
                     Margin="30,0,0,0"

@@ -10,5 +10,6 @@ namespace MicroManagement.Services.Abstraction.Services
     public interface ITimeSessionsService
     {
         Task<TimeSessionDTO> AddTimeSession(TimeSessionDTO timeSessionDTO);
+        Task<IEnumerable<TimeSessionDTO>> GetAll();
     }
 }

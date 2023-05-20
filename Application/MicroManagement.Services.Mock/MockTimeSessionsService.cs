@@ -16,5 +16,10 @@ namespace MicroManagement.Services.Mock
             _sessions.Add(timeSessionDTO);
             return timeSessionDTO;
         }
+
+        public async Task<IEnumerable<TimeSessionDTO>> GetAll()
+        {
+            return _sessions;
+        }
     }
 }
