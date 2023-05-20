@@ -9,7 +9,7 @@ namespace My_Micro_Management;
 public static class MauiProgram
 {
 
-    static IServiceProvider serviceProvider;
+    private static IServiceProvider serviceProvider;
 
     public static TService GetService<TService>()
         => serviceProvider.GetService<TService>();
