@@ -5,6 +5,7 @@ using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.Services;
 using MicroManagement.Services.Mock;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace My_Micro_Management;
@@ -31,8 +32,12 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
-        builder.Services.AddDbContext<SQLiteDbContext>();
+        // TODO-KAREM: this is now here as we're option for a Local SQLite DB, 
+        // when, and if, we're getting this project to a client-service app, remove these
+        builder.Services.AddDbContext<SQLiteDbContext>(options =>
+        {
+            options.UseSqlite(@"Data Source=C:\Repos\Temp\MyDB-dev.db");
+        });
 
         builder.Services.AddSingleton<IProjectsRepository, SQLiteProjectsRepository>();
 
