@@ -11,6 +11,7 @@ namespace MicroManagement.Persistence.SQLite.Configuration
     public class SQLiteDbContext : DbContext
     {
         public SQLiteDbContext() { }
+        public SQLiteDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
