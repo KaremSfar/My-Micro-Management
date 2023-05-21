@@ -10,7 +10,9 @@ using IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddDbContext<SQLiteDbContext>(options =>
         {
-            options.UseSqlite(@"Data Source=C:\Repos\Temp\MyDB-dev.db", b => b.MigrationsAssembly("MicroManagement.Persistence.SQLite.MigrationsApplier"));
+            options.UseSqlite(
+                connectionString: @"Data Source=C:\Repos\Temp\MyDB-dev.db",
+                sqliteOptionsAction: b => b.MigrationsAssembly("MicroManagement.Persistence.SQLite.MigrationsApplier"));
         });
     })
     .Build();

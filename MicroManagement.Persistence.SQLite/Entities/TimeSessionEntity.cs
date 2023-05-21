@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace MicroManagement.Persistence.SQLite.Entities
 {
-    public class TimeSessionEntity
+    [Table("TimeSessionsTable")]
+    public record TimeSessionEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,6 +17,6 @@ namespace MicroManagement.Persistence.SQLite.Entities
         public DateTime StartTime { get; set; }
         public DateTime EndDate { get; set; }
 
-        public virtual ICollection<ProjectEntity> Projects { get; set; }
+        public virtual ICollection<ProjectEntity> Projects { get; set; } = new List<ProjectEntity>();
     }
 }

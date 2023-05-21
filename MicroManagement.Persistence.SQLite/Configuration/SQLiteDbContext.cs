@@ -14,5 +14,6 @@ namespace MicroManagement.Persistence.SQLite.Configuration
         public SQLiteDbContext(DbContextOptions options) : base(options) { }
 
         public DbSet<ProjectEntity> Projects { get; set; }
+        public DbSet<TimeSessionEntity> TimeSessions { get; set; }
     }
 }
