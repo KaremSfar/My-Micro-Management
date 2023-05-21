@@ -1,4 +1,7 @@
-﻿using MicroManagement.Services;
+﻿using MicroManagement.Persistence.Abstraction.Repositories;
+using MicroManagement.Persistence.SQLite.Configuration;
+using MicroManagement.Persistence.SQLite.Repositories;
+using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.Services;
 using MicroManagement.Services.Mock;
@@ -28,6 +31,10 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+
+        builder.Services.AddDbContext<SQLiteDbContext>();
+
+        builder.Services.AddSingleton<IProjectsRepository, SQLiteProjectsRepository>();
 
         builder.Services.AddSingleton<ITimeSessionsService, MockTimeSessionsService>();
         builder.Services.AddSingleton<IProjectsService, MockProjectsService>();

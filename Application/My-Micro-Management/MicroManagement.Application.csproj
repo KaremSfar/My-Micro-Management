@@ -48,10 +48,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\MicroManagement.Persistence.SQLite\MicroManagement.Persistence.SQLite.csproj" />
+	  <ProjectReference Include="..\..\Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj" />
 	  <ProjectReference Include="..\MicroManagement.Services.Abstraction\MicroManagement.Services.Abstraction.csproj" />
 	  <ProjectReference Include="..\MicroManagement.Services.Mock\MicroManagement.Services.Mock.csproj" />
 	  <ProjectReference Include="..\MicroManagement.Services\MicroManagement.Services.csproj" />
@@ -76,6 +79,10 @@
 	  <MauiXaml Update="Features\Timer\TimerPanel.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Services\" />
 	</ItemGroup>
 
 </Project>
