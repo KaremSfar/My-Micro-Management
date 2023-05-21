@@ -37,7 +37,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IProjectsRepository, SQLiteProjectsRepository>();
 
         builder.Services.AddSingleton<ITimeSessionsService, MockTimeSessionsService>();
-        builder.Services.AddSingleton<IProjectsService, MockProjectsService>();
+        builder.Services.AddSingleton<IProjectsService, ProjectsService>();
         builder.Services.AddSingleton<ITimeSessionsExporter, TimeSessionExporter>();
 
         var app = builder.Build();

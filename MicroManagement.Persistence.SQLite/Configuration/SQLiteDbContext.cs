@@ -10,11 +10,11 @@ namespace MicroManagement.Persistence.SQLite.Configuration
 {
     public class SQLiteDbContext : DbContext
     {
-        public SQLiteDbContext(DbContextOptions options) : base(options) { }
+        public SQLiteDbContext() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(@"DataSource=mydatabase.db;");
+            optionsBuilder.UseSqlite(@"Data Source=C:\Repos\Temp\MyDB.db");
         }
 
         public DbSet<ProjectEntity> Projects { get; set; }
