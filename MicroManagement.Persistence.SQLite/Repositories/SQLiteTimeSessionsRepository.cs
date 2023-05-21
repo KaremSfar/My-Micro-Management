@@ -30,6 +30,13 @@ namespace MicroManagement.Persistence.SQLite.Repositories
                 EndDate = timeSession.EndDate,
             };
 
+            var projects = await _dbContext
+                .Projects
+                .Where(p => timeSession.ProjectIds.Contains(p.Id))
+                .ToListAsync();
+
+            timeSessionEntity.Projects = projects;
+
             await _dbSet.AddAsync(timeSessionEntity);
             await _dbContext.SaveChangesAsync();
         }
