@@ -40,8 +40,9 @@ public static class MauiProgram
         });
 
         builder.Services.AddSingleton<IProjectsRepository, SQLiteProjectsRepository>();
+        builder.Services.AddSingleton<ITimeSessionsRepository, SQLiteTimeSessionsRepository>();
 
-        builder.Services.AddSingleton<ITimeSessionsService, MockTimeSessionsService>();
+        builder.Services.AddSingleton<ITimeSessionsService, TimeSessionsService>();
         builder.Services.AddSingleton<IProjectsService, ProjectsService>();
         builder.Services.AddSingleton<ITimeSessionsExporter, TimeSessionExporter>();
 

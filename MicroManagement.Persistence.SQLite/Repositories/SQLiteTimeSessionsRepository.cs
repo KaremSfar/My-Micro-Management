@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace MicroManagement.Persistence.SQLite.Repositories
 {
-    public class TimeSessionRepository : ITimeSessionsRepository
+    public class SQLiteTimeSessionsRepository : ITimeSessionsRepository
     {
         private SQLiteDbContext _dbContext;
         private DbSet<TimeSessionEntity> _dbSet => _dbContext.TimeSessions;
 
-        public TimeSessionRepository(SQLiteDbContext dbContext)
+        public SQLiteTimeSessionsRepository(SQLiteDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -28,7 +28,6 @@ namespace MicroManagement.Persistence.SQLite.Repositories
             {
                 StartTime = timeSession.StartTime,
                 EndDate = timeSession.EndDate,
-                Projects = timeSession.ProjectIds.Select(id => new ProjectEntity() { Id = id }).ToList(),
             };
 
             await _dbSet.AddAsync(timeSessionEntity);
