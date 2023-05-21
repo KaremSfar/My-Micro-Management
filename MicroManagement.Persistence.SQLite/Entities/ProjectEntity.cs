@@ -19,5 +19,7 @@ namespace MicroManagement.Persistence.SQLite.Entities
         public string Name { get; set; }
         [Required]
         public string Color { get; set; }
+
+        public virtual ICollection<TimeSessionEntity> TimeSessions { get; set; }
     }
 }
