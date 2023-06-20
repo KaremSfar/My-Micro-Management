@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{90FDF657-AFED-4D8D-9CE0-4EBEB09BC19D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIs", "APIs", "{9A1B5CE0-6235-4333-B68F-F2B1959C9E9F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{BAB77EF7-CBEA-4EA9-8B91-7034C2033DE4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Core", "Core\MicroManagement.Core\MicroManagement.Core.csproj", "{8C74E1DD-2CDB-4568-8066-83B67481B59E}"
