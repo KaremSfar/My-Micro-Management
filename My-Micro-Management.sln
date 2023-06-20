@@ -15,13 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Core", "Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.Abstraction", "Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj", "{E2B84031-B27D-4EFA-91FC-E3FEF4896571}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Services.Abstraction", "Application\MicroManagement.Services.Abstraction\MicroManagement.Services.Abstraction.csproj", "{24733AFD-AE1B-4BA8-8806-1B6DCD69BCE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Application.Services.Abstraction", "Application\MicroManagement.Services.Abstraction\MicroManagement.Application.Services.Abstraction.csproj", "{24733AFD-AE1B-4BA8-8806-1B6DCD69BCE5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Application", "Application\My-Micro-Management\MicroManagement.Application.csproj", "{E3BA0A7B-B337-40CE-8D38-7822B0E5ACF9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Services.Mock", "Application\MicroManagement.Services.Mock\MicroManagement.Services.Mock.csproj", "{34AA4E2F-34B9-46F0-A741-314497947F25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Application.Services.Mock", "Application\MicroManagement.Services.Mock\MicroManagement.Application.Services.Mock.csproj", "{34AA4E2F-34B9-46F0-A741-314497947F25}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Services", "Application\MicroManagement.Services\MicroManagement.Services.csproj", "{2AE54201-5A9F-4FC5-A468-5B77E2C498F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Application.Services", "Application\MicroManagement.Services\MicroManagement.Application.Services.csproj", "{2AE54201-5A9F-4FC5-A468-5B77E2C498F4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.SQLite.MigrationsApplier", "Persistence\MicroManagement.Persistence.SQLite.MigrationsApplier\MicroManagement.Persistence.SQLite.MigrationsApplier.csproj", "{A53955C5-E586-4566-AB5E-C898BB0EC501}"
 EndProject
