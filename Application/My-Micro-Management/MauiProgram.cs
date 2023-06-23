@@ -1,9 +1,9 @@
-﻿using MicroManagement.Persistence.Abstraction.Repositories;
+﻿using MicroManagement.Application.Services;
+using MicroManagement.Application.Services.Abstraction;
+using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Persistence.SQLite.Configuration;
 using MicroManagement.Persistence.SQLite.Repositories;
-using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
-using MicroManagement.Services.Abstraction.Services;
 using MicroManagement.Services.Mock;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

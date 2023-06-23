@@ -1,4 +1,5 @@
-﻿using MicroManagement.Core;
+﻿using MicroManagement.Application.Services.Abstraction;
+using MicroManagement.Core;
 using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
@@ -10,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace MicroManagement.Services
+namespace MicroManagement.Application.Services
 {
     public class ProjectsService : IProjectsService
     {

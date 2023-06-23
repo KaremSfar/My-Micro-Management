@@ -1,14 +1,14 @@
-﻿using MicroManagement.Core;
+﻿using MicroManagement.Application.Services.Abstraction;
+using MicroManagement.Core;
 using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Services.Abstraction.DTOs;
-using MicroManagement.Services.Abstraction.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroManagement.Services
+namespace MicroManagement.Application.Services
 {
     public class TimeSessionsService : ITimeSessionsService
     {

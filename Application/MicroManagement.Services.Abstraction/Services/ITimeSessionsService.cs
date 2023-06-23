@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroManagement.Services.Abstraction.Services
+namespace MicroManagement.Application.Services.Abstraction
 {
     public interface ITimeSessionsService
     {

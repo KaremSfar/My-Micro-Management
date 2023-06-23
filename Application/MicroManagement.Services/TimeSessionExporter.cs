@@ -1,9 +1,9 @@
 ﻿using MicroManagement.Services.Abstraction;
-using MicroManagement.Services.Abstraction.Services;
 using System.Text;
 using System.Linq;
+using MicroManagement.Application.Services.Abstraction;
 
-namespace MicroManagement.Services
+namespace MicroManagement.Application.Services
 {
     public class TimeSessionExporter : ITimeSessionsExporter
     {
