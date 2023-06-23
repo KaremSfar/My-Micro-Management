@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MicroManagement.Persistence.SQLite\MicroManagement.Persistence.SQLite.csproj" />
+    <ProjectReference Include="..\MicroManagement.Persistence.SQLite\MicroManagement.Persistence.EF.csproj" />
   </ItemGroup>
 
 </Project>

@@ -54,7 +54,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj" />
-	  <ProjectReference Include="..\..\Persistence\MicroManagement.Persistence.SQLite\MicroManagement.Persistence.SQLite.csproj" />
+	  <ProjectReference Include="..\..\Persistence\MicroManagement.Persistence.SQLite\MicroManagement.Persistence.EF.csproj" />
 	  <ProjectReference Include="..\MicroManagement.Services.Abstraction\MicroManagement.Application.Services.Abstraction.csproj" />
 	  <ProjectReference Include="..\MicroManagement.Services.Mock\MicroManagement.Application.Services.Mock.csproj" />
 	  <ProjectReference Include="..\MicroManagement.Services\MicroManagement.Application.Services.csproj" />

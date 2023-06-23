@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.SQLite.MigrationsApplier", "Persistence\MicroManagement.Persistence.SQLite.MigrationsApplier\MicroManagement.Persistence.SQLite.MigrationsApplier.csproj", "{A53955C5-E586-4566-AB5E-C898BB0EC501}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.SQLite", "Persistence\MicroManagement.Persistence.SQLite\MicroManagement.Persistence.SQLite.csproj", "{99FB5D86-EC41-496B-AE89-F81C60B4662F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.EF", "Persistence\MicroManagement.Persistence.SQLite\MicroManagement.Persistence.EF.csproj", "{99FB5D86-EC41-496B-AE89-F81C60B4662F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
