@@ -43,10 +43,20 @@ namespace MicroManagement.Persistence.SQLite.Repositories
 
         public async Task<IEnumerable<TimeSession>> GetAllAsync()
         {
-            var timeSessions = await _dbSet
-                .Select(ts => ts.Adapt<TimeSession>())
+            var timeSessionEntities = await _dbSet
+                .Include(t => t.Projects)
                 .ToListAsync();
-            return timeSessions;
+
+            var timesSessions = new List<TimeSession>();
+
+            foreach (var timeSessionEntity in timeSessionEntities)
+            {
+                var timeSession = timeSessionEntity.Adapt<TimeSession>();
+                timeSession.ProjectIds = timeSessionEntity.Projects.Select(p => p.Id).ToList();
+                timesSessions.Add(timeSession);
+            }
+
+            return timesSessions;
         }
     }
 }

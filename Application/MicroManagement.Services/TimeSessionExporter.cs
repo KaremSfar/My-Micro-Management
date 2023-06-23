@@ -23,6 +23,7 @@ namespace MicroManagement.Services
                 .ToDictionary(p => p.Id, p => p.Name);
 
             var sessions = from timeSession in allSession
+                           where timeSession.StartTime > DateTime.Today
                            select new
                            {
                                SessionProject = allProjects[timeSession.ProjectIds.First()],
