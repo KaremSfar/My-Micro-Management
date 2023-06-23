@@ -1,4 +1,4 @@
-﻿using MicroManagement.Persistence.SQLite.Entities;
+﻿using MicroManagement.Persistence.EF.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroManagement.Persistence.SQLite.Configuration
+namespace MicroManagement.Persistence.EF.Configuration
 {
     public class MyMicroManagementDbContext : DbContext
     {

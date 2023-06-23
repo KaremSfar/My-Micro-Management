@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using MicroManagement.Persistence.SQLite.Configuration;
+using MicroManagement.Persistence.EF.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

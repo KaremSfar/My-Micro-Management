@@ -1,8 +1,8 @@
 ﻿using Mapster;
 using MicroManagement.Core;
 using MicroManagement.Persistence.Abstraction.Repositories;
-using MicroManagement.Persistence.SQLite.Configuration;
-using MicroManagement.Persistence.SQLite.Entities;
+using MicroManagement.Persistence.EF.Configuration;
+using MicroManagement.Persistence.EF.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroManagement.Persistence.SQLite.Repositories
+namespace MicroManagement.Persistence.EF.Repositories
 {
     public class SQLiteTimeSessionsRepository : ITimeSessionsRepository
     {

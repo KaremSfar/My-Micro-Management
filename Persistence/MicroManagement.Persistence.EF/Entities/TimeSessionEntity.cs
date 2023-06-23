@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MicroManagement.Persistence.SQLite.Entities
+namespace MicroManagement.Persistence.EF.Entities
 {
     [Table("TimeSessionsTable")]
     public record TimeSessionEntity
