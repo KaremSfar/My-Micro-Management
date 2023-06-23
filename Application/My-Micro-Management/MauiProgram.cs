@@ -34,7 +34,7 @@ public static class MauiProgram
 #endif
         // TODO-KAREM: this is now here as we're option for a Local SQLite DB, 
         // when, and if, we're getting this project to a client-service app, remove these
-        builder.Services.AddDbContext<SQLiteDbContext>(options =>
+        builder.Services.AddDbContext<MyMicroManagementDbContext>(options =>
         {
             options.UseSqlite(@"Data Source=C:\Repos\Temp\MyDB-dev.db");
         });

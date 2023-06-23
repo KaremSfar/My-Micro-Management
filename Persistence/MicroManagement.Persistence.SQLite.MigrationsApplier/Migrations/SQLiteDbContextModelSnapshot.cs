@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MicroManagement.Persistence.SQLite.MigrationsApplier.Migrations
 {
-    [DbContext(typeof(SQLiteDbContext))]
+    [DbContext(typeof(MyMicroManagementDbContext))]
     partial class SQLiteDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

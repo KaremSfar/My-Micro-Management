@@ -14,9 +14,9 @@ namespace MicroManagement.Persistence.SQLite.Repositories
 {
     public class SQLiteProjectsRepository : IProjectsRepository
     {
-        private SQLiteDbContext _dbContext;
+        private MyMicroManagementDbContext _dbContext;
 
-        public SQLiteProjectsRepository(SQLiteDbContext dbContext)
+        public SQLiteProjectsRepository(MyMicroManagementDbContext dbContext)
         {
             _dbContext = dbContext;
         }

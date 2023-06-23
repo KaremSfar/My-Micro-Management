@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MicroManagement.Persistence.SQLite.MigrationsApplier.Migrations
 {
-    [DbContext(typeof(SQLiteDbContext))]
+    [DbContext(typeof(MyMicroManagementDbContext))]
     [Migration("20230521153047_Adding_TimeSessions")]
     partial class Adding_TimeSessions
     {

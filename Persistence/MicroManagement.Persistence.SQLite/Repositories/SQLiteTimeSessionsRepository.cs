@@ -14,10 +14,10 @@ namespace MicroManagement.Persistence.SQLite.Repositories
 {
     public class SQLiteTimeSessionsRepository : ITimeSessionsRepository
     {
-        private SQLiteDbContext _dbContext;
+        private MyMicroManagementDbContext _dbContext;
         private DbSet<TimeSessionEntity> _dbSet => _dbContext.TimeSessions;
 
-        public SQLiteTimeSessionsRepository(SQLiteDbContext dbContext)
+        public SQLiteTimeSessionsRepository(MyMicroManagementDbContext dbContext)
         {
             _dbContext = dbContext;
         }

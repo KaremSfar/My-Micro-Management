@@ -10,7 +10,7 @@ Console.WriteLine("Hello, World!");
 using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddDbContext<SQLiteDbContext>(options =>
+        services.AddDbContext<MyMicroManagementDbContext>(options =>
         {
             options.UseSqlite(
                 connectionString: @"Data Source=C:\Repos\Temp\MyDB-dev.db", // FIXME: better connection string and multiple DBs
