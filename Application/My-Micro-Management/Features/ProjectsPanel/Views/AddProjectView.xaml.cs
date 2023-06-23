@@ -1,8 +1,8 @@
+using MicroManagement.Application.Services.Abstraction;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Xml.Linq;
 
 namespace My_Micro_Management.Features.ProjectsPanel;
 
@@ -25,7 +25,7 @@ public partial class AddProjectView : ContentPage
 public class AddProjectViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
-    private IProjectsService _projectsService = ProjectsServiceFactory.Instance;
+    private IProjectsService _projectsService = MauiProgram.GetService<IProjectsService>();
 
     private ProjectDTO _projectToAdd;
     public ProjectDTO ProjectToAdd

@@ -1,4 +1,4 @@
-﻿using MicroManagement.Services.Abstraction;
+﻿using MicroManagement.Application.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
 
 namespace MicroManagement.Services.Mock
