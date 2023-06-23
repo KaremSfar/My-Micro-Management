@@ -2,7 +2,7 @@
 using MicroManagement.Core;
 using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Persistence.EF.Configuration;
-using MicroManagement.Persistence.SQLite.Entities;
+using MicroManagement.Persistence.EF.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
