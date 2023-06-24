@@ -24,6 +24,7 @@ namespace MicroManagement.Application.Services
 
             var sessions = from timeSession in allSession
                            where timeSession.StartTime > DateTime.Today
+                           orderby timeSession.StartTime
                            select new
                            {
                                SessionProject = allProjects[timeSession.ProjectIds.First()],
