@@ -6,32 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 namespace MicroManagement.Auth.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
+            _logger = logger;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
-            // Register user and return result
+            return Ok(await _authService.RegisterAsync(model));
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
             // Authenticate user and return JWT and refresh token
+            throw new NotImplementedException();
         }
 
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
         {
             // Refresh JWT using refresh token
+            throw new NotImplementedException();
         }
     }
 }

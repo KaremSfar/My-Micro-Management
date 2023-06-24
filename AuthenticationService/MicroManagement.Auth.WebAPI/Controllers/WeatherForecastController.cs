@@ -1,4 +1,5 @@
 using MicroManagement.Auth.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroManagement.Auth.WebAPI.Controllers
@@ -19,6 +20,7 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
