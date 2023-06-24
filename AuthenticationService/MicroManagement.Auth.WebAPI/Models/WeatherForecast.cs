@@ -1,5 +1,6 @@
-namespace MicroManagement.Auth.WebAPI
+namespace MicroManagement.Auth.WebAPI.Models
 {
+    // To be removed soon enough
     public class WeatherForecast
     {
         public DateOnly Date { get; set; }

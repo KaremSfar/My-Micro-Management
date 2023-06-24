@@ -28,9 +28,8 @@
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors();
-
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();

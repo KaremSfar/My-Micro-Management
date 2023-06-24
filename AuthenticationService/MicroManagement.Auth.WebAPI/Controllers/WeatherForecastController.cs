@@ -1,3 +1,4 @@
+using MicroManagement.Auth.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MicroManagement.Auth.WebAPI.Controllers
