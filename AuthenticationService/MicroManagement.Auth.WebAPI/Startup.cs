@@ -1,6 +1,8 @@
-﻿using MicroManagement.Auth.WebAPI.Persistence;
+﻿using MicroManagement.Auth.WebAPI.Models;
+using MicroManagement.Auth.WebAPI.Persistence;
 using MicroManagement.Auth.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -22,6 +24,10 @@ namespace MicroManagement.Auth.WebAPI
             {
                 options.UseSqlite(@"Data Source=C:\Repos\Temp\MyAuthDB-dev.db");
             });
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AuthenticationServiceDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddControllers();
 

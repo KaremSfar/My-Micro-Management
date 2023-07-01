@@ -1,6 +1,7 @@
 ﻿using MicroManagement.Auth.WebAPI.Controllers;
 using MicroManagement.Auth.WebAPI.DTOs;
 using MicroManagement.Auth.WebAPI.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,16 +13,28 @@ namespace MicroManagement.Auth.WebAPI.Services
     {
         private readonly ILogger<AuthService> _logger;
         private readonly IConfiguration _configuration;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AuthService(ILogger<AuthService> logger, IConfiguration configuration)
+        public AuthService(ILogger<AuthService> logger, IConfiguration configuration, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _configuration = configuration;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public async Task<JwtAuthResult> AuthenticateAsync(string email, string password)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found");
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+
+            return null;
         }
         public Task<JwtAuthResult> RefreshTokenAsync(string refreshToken)
         {

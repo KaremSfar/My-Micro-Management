@@ -35,8 +35,7 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
-            // Authenticate user and return JWT and refresh token
-            throw new NotImplementedException();
+            return Ok(this._authService.AuthenticateAsync(model.Email, model.Password));
         }
 
         [HttpPost("refresh-token")]
