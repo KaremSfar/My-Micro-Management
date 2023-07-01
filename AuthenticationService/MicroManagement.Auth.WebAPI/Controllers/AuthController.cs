@@ -35,7 +35,7 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
-            return Ok(this._authService.AuthenticateAsync(model.Email, model.Password));
+            return Ok(await this._authService.AuthenticateAsync(model.Email, model.Password));
         }
 
         [HttpPost("refresh-token")]
