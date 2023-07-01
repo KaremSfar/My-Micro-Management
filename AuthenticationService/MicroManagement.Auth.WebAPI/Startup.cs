@@ -36,6 +36,12 @@ namespace MicroManagement.Auth.WebAPI
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
+            .AddGoogle(options =>
+            {
+                options.ClientId = Configuration["google:client-id"]!;
+                options.ClientSecret = Configuration["google:client-secret"]!;
+                options.CallbackPath = "/google/google-response";
+            })
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
