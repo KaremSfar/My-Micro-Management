@@ -21,7 +21,15 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
-            return Ok(await _authService.RegisterAsync(model));
+            try
+            {
+                var jwtResponses = await _authService.RegisterAsync(model);
+                return Ok(jwtResponses);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("login")]
