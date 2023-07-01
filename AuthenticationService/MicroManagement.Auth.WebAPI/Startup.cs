@@ -85,11 +85,6 @@ namespace MicroManagement.Auth.WebAPI
 
             app.UseHttpsRedirection();
 
-            app.UseCookiePolicy(new CookiePolicyOptions()
-            {
-                MinimumSameSitePolicy = SameSiteMode.Lax
-            });
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
