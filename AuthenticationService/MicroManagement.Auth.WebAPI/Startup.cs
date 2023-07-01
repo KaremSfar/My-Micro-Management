@@ -1,5 +1,7 @@
-﻿using MicroManagement.Auth.WebAPI.Services;
+﻿using MicroManagement.Auth.WebAPI.Persistence;
+using MicroManagement.Auth.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -16,6 +18,11 @@ namespace MicroManagement.Auth.WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AuthenticationServiceDbContext>(options =>
+            {
+                options.UseSqlite(@"Data Source=C:\Repos\Temp\MyAuthDB-dev.db");
+            });
+
             services.AddControllers();
 
             services.AddAuthentication(options =>
