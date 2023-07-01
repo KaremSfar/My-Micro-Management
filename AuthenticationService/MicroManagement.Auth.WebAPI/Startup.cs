@@ -25,12 +25,6 @@ namespace MicroManagement.Auth.WebAPI
                 options.UseSqlite(@"Data Source=C:\Repos\Temp\MyAuthDB-dev.db");
             });
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AuthenticationServiceDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddControllers();
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -52,9 +46,20 @@ namespace MicroManagement.Auth.WebAPI
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) // dotnet user-secrets set "Jwt:Key": to remove
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]!)) // dotnet user-secrets set "Jwt:Key": to remove
                 };
             });
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AuthenticationServiceDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.Secure = CookieSecurePolicy.Always;
+            });
+
+            services.AddControllers();
 
             services.AddScoped<IAuthService, AuthService>();
 
@@ -77,9 +82,13 @@ namespace MicroManagement.Auth.WebAPI
             app.UseCors();
 
             app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseHttpsRedirection();
+
+            app.UseCookiePolicy(new CookiePolicyOptions()
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax
+            });
 
             app.UseEndpoints(endpoints =>
             {
