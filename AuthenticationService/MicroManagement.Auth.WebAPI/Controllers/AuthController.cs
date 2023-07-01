@@ -39,10 +39,9 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         }
 
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenInputDto refreshToken)
         {
-            // Refresh JWT using refresh token
-            throw new NotImplementedException();
+            return Ok(await _authService.RefreshTokenAsync(refreshToken.RefreshToken));
         }
     }
 }
