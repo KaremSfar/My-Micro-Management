@@ -13,7 +13,8 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         [HttpGet("signin-google")]
         public IActionResult SignInWithGoogle()
         {
-            return Challenge(GoogleDefaults.AuthenticationScheme);
+            var properties = new AuthenticationProperties { RedirectUri = Url.Action("", controller: "WeatherForecast") };
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
         [HttpGet("google-response")]

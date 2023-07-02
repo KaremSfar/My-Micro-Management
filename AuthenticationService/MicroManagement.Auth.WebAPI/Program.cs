@@ -14,6 +14,10 @@ namespace MicroManagement.Auth.WebAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddConsole();
                 });
             return app;
         }
