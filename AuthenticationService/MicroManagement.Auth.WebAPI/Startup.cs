@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 namespace MicroManagement.Auth.WebAPI
@@ -27,34 +28,75 @@ namespace MicroManagement.Auth.WebAPI
                 options.UseSqlite(@"Data Source=C:\Repos\Temp\MyAuthDB-dev.db");
             });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]!)) // dotnet user-secrets set "Jwt:Key": to remove
-                    };
-                })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddGoogle(options =>
-                {
-                    options.SignInScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.ClientId = Configuration["google:client-id"]!;
-                    options.ClientSecret = Configuration["google:client-secret"]!;
-                    options.SaveTokens = false;
-                });
-
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AuthenticationServiceDbContext>()
-                .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<AuthenticationServiceDbContext>();
 
             services.AddControllers();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) // dotnet user-secrets set "Jwt:Key": to remove
+                };
+            })
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddGoogle(options =>
+            {
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.ClientId = Configuration["google:client-id"]!;
+                options.ClientSecret = Configuration["google:client-secret"]!;
+                options.SaveTokens = false;
+
+                options.Events.OnTicketReceived = async ctx =>
+                {
+                    var userManager = ctx.HttpContext.RequestServices.GetService(typeof(UserManager<ApplicationUser>)) as UserManager<ApplicationUser>;
+
+                    var userMail = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                    var firstName = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+                    var lastName = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+
+                    var user = await userManager!.FindByEmailAsync(userMail);
+
+                    if (user == null)
+                    {
+                        // Create the user if user is not created yet
+                        var result = await userManager.CreateAsync(new ApplicationUser()
+                        {
+                            UserName = userMail,
+                            Email = userMail,
+                            FirstName = firstName,
+                            LastName = lastName,
+                        });
+
+                        if (result.Succeeded)
+                        {
+                            ctx.Fail("Could not create user");
+                        }
+                    }
+                };
+            });
+
+            services.AddAuthorization(b =>
+            {
+                b.AddPolicy("google-token-exchange", pb =>
+                {
+                    pb.AuthenticationSchemes.Clear();
+                    pb.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
+                        .RequireAuthenticatedUser();
+                });
+            });
 
             services.AddScoped<IAuthService, AuthService>();
 
@@ -77,6 +119,7 @@ namespace MicroManagement.Auth.WebAPI
             app.UseCors();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseHttpsRedirection();
 

@@ -46,6 +46,20 @@ namespace MicroManagement.Auth.WebAPI.Services
             return new JwtAuthResult { AccessToken = accessToken, RefreshToken = refreshToken };
         }
 
+        public async Task<JwtAuthResult> AuthenticateAsync(string userMail)
+        {
+            var user = await _userManager.FindByEmailAsync(userMail);
+            if (user == null)
+            {
+                throw new InvalidOperationException("Verify Creds");
+            }
+
+            string accessToken = GenerateAccessToken(user);
+            string refreshToken = GenerateRefreshToken(user);
+
+            return new JwtAuthResult { AccessToken = accessToken, RefreshToken = refreshToken };
+        }
+
         public async Task<JwtAuthResult> RegisterAsync(RegisterDTO model)
         {
             var user = new ApplicationUser()
