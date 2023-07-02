@@ -7,21 +7,19 @@ using System.Security.Claims;
 namespace MicroManagement.Auth.WebAPI.Controllers
 {
     [ApiController]
-    [Route("google")]
+    [Route("/")]
     public class GoogleSignInController : ControllerBase
     {
-        [HttpGet("signin-google")]
-        public IActionResult SignInWithGoogle()
+        [HttpGet("google/google-link")]
+        public async Task<IResult> GoogleLink()
         {
-            var properties = new AuthenticationProperties { RedirectUri = Url.Action("", controller: "WeatherForecast") };
-            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
-        }
-
-        [HttpGet("google-response")]
-        public async Task<IActionResult> GoogleResponse()
-        {
-            // This endpoint is still not hit for some reasons,
-            return Ok();
+            return Results.Challenge(
+                properties: new AuthenticationProperties
+                {
+                    RedirectUri = "https://localhost:44325/WeatherForecast"
+                },
+                authenticationSchemes: new List<string> { GoogleDefaults.AuthenticationScheme }
+                );
         }
     }
 }

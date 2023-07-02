@@ -1,9 +1,11 @@
 ﻿using MicroManagement.Auth.WebAPI.Models;
 using MicroManagement.Auth.WebAPI.Persistence;
 using MicroManagement.Auth.WebAPI.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -25,39 +27,32 @@ namespace MicroManagement.Auth.WebAPI
                 options.UseSqlite(@"Data Source=C:\Repos\Temp\MyAuthDB-dev.db");
             });
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddGoogle(options =>
-            {
-                options.ClientId = Configuration["google:client-id"]!;
-                options.ClientSecret = Configuration["google:client-secret"]!;
-                options.CallbackPath = "/google/google-response";
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]!)) // dotnet user-secrets set "Jwt:Key": to remove
-                };
-            });
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]!)) // dotnet user-secrets set "Jwt:Key": to remove
+                    };
+                })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddGoogle(options =>
+                {
+                    options.SignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.ClientId = Configuration["google:client-id"]!;
+                    options.ClientSecret = Configuration["google:client-secret"]!;
+                    options.SaveTokens = false;
+                });
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationServiceDbContext>()
                 .AddDefaultTokenProviders();
-
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.Secure = CookieSecurePolicy.Always;
-            });
 
             services.AddControllers();
 
