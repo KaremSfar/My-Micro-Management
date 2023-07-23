@@ -34,6 +34,7 @@ namespace MicroManagement.Auth.WebAPI.Controllers
                 );
         }
 
+        // Try not to get too coupled to this, as it should be removed at a given time
         [Authorize(Policy = "google-token-exchange")]
         [HttpGet("google/exchange")]
         public async Task<IActionResult> GetToken()

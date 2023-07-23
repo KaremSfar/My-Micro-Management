@@ -121,7 +121,7 @@ namespace MicroManagement.Auth.WebAPI.Services
         #region Token Manipulation
         private ClaimsPrincipal ValidateRefreshToken(string refreshTokenInput)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:RefreshKey"]!));
 
             var validationParam = new TokenValidationParameters()
             {
@@ -142,7 +142,7 @@ namespace MicroManagement.Auth.WebAPI.Services
                 new Claim(ClaimTypes.Email, user.Email!)
             };
 
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:AccessKey"]!));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var tokenOptions = new JwtSecurityToken(
@@ -155,7 +155,6 @@ namespace MicroManagement.Auth.WebAPI.Services
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 
-        // TODO-Karem: Refresh Tokens should not use the same keys ?
         private string GenerateRefreshToken(ApplicationUser user)
         {
             var claims = new List<Claim>()
@@ -163,7 +162,7 @@ namespace MicroManagement.Auth.WebAPI.Services
                 new Claim(ClaimTypes.Email, user.Email!)
             };
 
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:RefreshKey"]!));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var tokenOptions = new JwtSecurityToken(

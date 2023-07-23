@@ -50,7 +50,7 @@ namespace MicroManagement.Auth.WebAPI
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) // dotnet user-secrets set "Jwt:Key": to remove
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AccessKey"])) // dotnet user-secrets set "Jwt:Key": to remove
                 };
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -97,7 +97,7 @@ namespace MicroManagement.Auth.WebAPI
             });
         }
 
-        public void ConfigureGoogleSSO(GoogleOptions options)
+        private void ConfigureGoogleSSO(GoogleOptions options)
         {
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.ClientId = Configuration["google:client-id"]!;
