@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Auth.WebAPI", "MicroManagement.Auth.WebAPI\MicroManagement.Auth.WebAPI.csproj", "{AC81DC71-3343-4705-B6A8-1F63E89431D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Auth.Migrations.SQLite", "MicroManagement.Auth.Migrations.SQLite\MicroManagement.Auth.Migrations.SQLite.csproj", "{98535AF1-375B-4674-B858-ED95735DDF70}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC81DC71-3343-4705-B6A8-1F63E89431D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC81DC71-3343-4705-B6A8-1F63E89431D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC81DC71-3343-4705-B6A8-1F63E89431D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC81DC71-3343-4705-B6A8-1F63E89431D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98535AF1-375B-4674-B858-ED95735DDF70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98535AF1-375B-4674-B858-ED95735DDF70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98535AF1-375B-4674-B858-ED95735DDF70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98535AF1-375B-4674-B858-ED95735DDF70}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {61F451F5-AF4E-4FDB-B793-5D28257B20E6}
+	EndGlobalSection
+EndGlobal
