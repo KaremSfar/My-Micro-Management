@@ -50,7 +50,7 @@ namespace MicroManagement.Auth.WebAPI
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AccessKey"])) // dotnet user-secrets set "Jwt:Key": to remove
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AccessKey"]))
                 };
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
