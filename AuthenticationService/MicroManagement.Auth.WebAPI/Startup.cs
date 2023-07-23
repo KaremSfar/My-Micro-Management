@@ -2,10 +2,12 @@
 using MicroManagement.Auth.WebAPI.Persistence;
 using MicroManagement.Auth.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -52,41 +54,7 @@ namespace MicroManagement.Auth.WebAPI
                 };
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddGoogle(options =>
-            {
-                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.ClientId = Configuration["google:client-id"]!;
-                options.ClientSecret = Configuration["google:client-secret"]!;
-                options.SaveTokens = false;
-
-                options.Events.OnTicketReceived = async ctx =>
-                {
-                    var userManager = ctx.HttpContext.RequestServices.GetService(typeof(UserManager<ApplicationUser>)) as UserManager<ApplicationUser>;
-
-                    var userMail = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                    var firstName = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
-                    var lastName = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
-
-                    var user = await userManager!.FindByEmailAsync(userMail);
-
-                    if (user == null)
-                    {
-                        // Create the user if user is not created yet
-                        var result = await userManager.CreateAsync(new ApplicationUser()
-                        {
-                            UserName = userMail,
-                            Email = userMail,
-                            FirstName = firstName,
-                            LastName = lastName,
-                        });
-
-                        if (result.Succeeded)
-                        {
-                            ctx.Fail("Could not create user");
-                        }
-                    }
-                };
-            });
+            .AddGoogle(ConfigureGoogleSSO);
 
             services.AddAuthorization(b =>
             {
@@ -127,6 +95,42 @@ namespace MicroManagement.Auth.WebAPI
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public void ConfigureGoogleSSO(GoogleOptions options)
+        {
+            options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.ClientId = Configuration["google:client-id"]!;
+            options.ClientSecret = Configuration["google:client-secret"]!;
+            options.SaveTokens = false;
+
+            options.Events.OnTicketReceived = async ctx =>
+            {
+                var userManager = ctx.HttpContext.RequestServices.GetService(typeof(UserManager<ApplicationUser>)) as UserManager<ApplicationUser>;
+
+                var userMail = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var firstName = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+                var lastName = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+
+                var user = await userManager!.FindByEmailAsync(userMail);
+
+                if (user == null)
+                {
+                    // Create the user if user is not created yet
+                    var result = await userManager.CreateAsync(new ApplicationUser()
+                    {
+                        UserName = userMail,
+                        Email = userMail,
+                        FirstName = firstName,
+                        LastName = lastName,
+                    });
+
+                    if (result.Succeeded)
+                    {
+                        ctx.Fail("Could not create user");
+                    }
+                }
+            };
         }
     }
 }

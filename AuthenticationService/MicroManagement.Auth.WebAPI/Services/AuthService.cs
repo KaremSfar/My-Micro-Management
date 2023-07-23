@@ -1,4 +1,5 @@
-﻿using MicroManagement.Auth.WebAPI.Controllers;
+﻿using LanguageExt.Common;
+using MicroManagement.Auth.WebAPI.Controllers;
 using MicroManagement.Auth.WebAPI.DTOs;
 using MicroManagement.Auth.WebAPI.Models;
 using Microsoft.AspNetCore.Identity;
@@ -25,19 +26,21 @@ namespace MicroManagement.Auth.WebAPI.Services
             _userManager = userManager;
         }
 
-        public async Task<JwtAuthResult> AuthenticateAsync(string email, string password)
+        public async Task<Result<JwtAuthResult>> AuthenticateAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                throw new InvalidOperationException("Verify Creds");
+                _logger.LogWarning("Attempted signup for unregistered email: {Email}", email);
+                return new Result<JwtAuthResult>(new InvalidOperationException("Verify Creds"));
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
 
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException("Verify Creds");
+                _logger.LogWarning("Failed login attempt for user: {UserId}", user.Id);
+                return new Result<JwtAuthResult>(new InvalidOperationException("Verify Creds"));
             }
 
             string accessToken = GenerateAccessToken(user);
@@ -60,7 +63,7 @@ namespace MicroManagement.Auth.WebAPI.Services
             return new JwtAuthResult { AccessToken = accessToken, RefreshToken = refreshToken };
         }
 
-        public async Task<JwtAuthResult> RegisterAsync(RegisterDTO model)
+        public async Task<Result<JwtAuthResult>> RegisterAsync(RegisterDTO model)
         {
             var user = new ApplicationUser()
             {
@@ -74,7 +77,7 @@ namespace MicroManagement.Auth.WebAPI.Services
 
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException(result.Errors.First().ToString());
+                return new Result<JwtAuthResult>(new InvalidOperationException(result.Errors.First().ToString()));
             }
 
             string accessToken = GenerateAccessToken(user);
@@ -136,6 +139,8 @@ namespace MicroManagement.Auth.WebAPI.Services
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
+
+        // TODO-Karem: Refresh Tokens should not use the same keys ?
         private string GenerateRefreshToken(ApplicationUser user)
         {
             var claims = new List<Claim>()

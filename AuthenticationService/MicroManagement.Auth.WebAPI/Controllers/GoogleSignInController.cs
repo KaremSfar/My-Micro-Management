@@ -15,12 +15,10 @@ namespace MicroManagement.Auth.WebAPI.Controllers
     [Route("/")]
     public class GoogleSignInController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthService _authenticationService;
 
-        public GoogleSignInController(UserManager<ApplicationUser> userManager, IAuthService authenticationService)
+        public GoogleSignInController(IAuthService authenticationService)
         {
-            _userManager = userManager;
             _authenticationService = authenticationService;
         }
 
@@ -30,7 +28,7 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             return Results.Challenge(
                 properties: new AuthenticationProperties
                 {
-                    RedirectUri = "https://localhost:44325/google/exchange"
+                    RedirectUri = Url.Action(nameof(GetToken))
                 },
                 authenticationSchemes: new List<string> { GoogleDefaults.AuthenticationScheme }
                 );

@@ -10,32 +10,30 @@ namespace MicroManagement.Auth.WebAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService authService, ILogger<AuthController> logger)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _logger = logger;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
-            try
-            {
-                var jwtResponses = await _authService.RegisterAsync(model);
-                return Ok(jwtResponses);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var jwtResponse = await _authService.RegisterAsync(model);
+
+            return jwtResponse.Match<IActionResult>(
+                jwt => Ok(jwtResponse),
+                failed => BadRequest(failed.Message));
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
-            return Ok(await this._authService.AuthenticateAsync(model.Email, model.Password));
+            var authResult = await this._authService.AuthenticateAsync(model.Email, model.Password);
+
+            return authResult.Match<IActionResult>(
+                jwt => Ok(jwt),
+                failed => BadRequest(failed));
         }
 
         [HttpPost("refresh-token")]
