@@ -139,7 +139,8 @@ namespace MicroManagement.Auth.WebAPI.Services
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Email, user.Email!)
+                new Claim(ClaimTypes.Email, user.Email!),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id!)
             };
 
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:AccessKey"]!));
