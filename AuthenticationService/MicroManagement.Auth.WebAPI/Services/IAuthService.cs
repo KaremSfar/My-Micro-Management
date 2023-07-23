@@ -6,9 +6,9 @@ namespace MicroManagement.Auth.WebAPI.Services
 {
     public interface IAuthService
     {
-        Task<Result<JwtAuthResult>> AuthenticateAsync(string email, string password);
-        Task<JwtAuthResult> AuthenticateAsync(string email);
-        Task<JwtAuthResult> RefreshTokenAsync(string refreshToken);
-        Task<Result<JwtAuthResult>> RegisterAsync(RegisterDTO model);
+        Task<Result<JwtTokens>> AuthenticateAsync(string email, string password);
+        Task<JwtTokens> AuthenticateAsync(string email);
+        Task<Result<JwtTokens>> RefreshTokenAsync(string refreshToken);
+        Task<Result<JwtTokens>> RegisterAsync(RegisterDTO model);
     }
 }

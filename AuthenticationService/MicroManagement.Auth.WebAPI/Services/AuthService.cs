@@ -1,4 +1,5 @@
 ﻿using LanguageExt.Common;
+using LanguageExt.Pretty;
 using MicroManagement.Auth.WebAPI.Controllers;
 using MicroManagement.Auth.WebAPI.DTOs;
 using MicroManagement.Auth.WebAPI.Models;
@@ -26,13 +27,13 @@ namespace MicroManagement.Auth.WebAPI.Services
             _userManager = userManager;
         }
 
-        public async Task<Result<JwtAuthResult>> AuthenticateAsync(string email, string password)
+        public async Task<Result<JwtTokens>> AuthenticateAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
                 _logger.LogWarning("Attempted signup for unregistered email: {Email}", email);
-                return new Result<JwtAuthResult>(new InvalidOperationException("Verify Creds"));
+                return new Result<JwtTokens>(new InvalidOperationException("Verify Creds"));
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
@@ -40,16 +41,16 @@ namespace MicroManagement.Auth.WebAPI.Services
             if (!result.Succeeded)
             {
                 _logger.LogWarning("Failed login attempt for user: {UserId}", user.Id);
-                return new Result<JwtAuthResult>(new InvalidOperationException("Verify Creds"));
+                return new Result<JwtTokens>(new InvalidOperationException("Verify Creds"));
             }
 
             string accessToken = GenerateAccessToken(user);
             string refreshToken = GenerateRefreshToken(user);
 
-            return new JwtAuthResult { AccessToken = accessToken, RefreshToken = refreshToken };
+            return new JwtTokens { AccessToken = accessToken, RefreshToken = refreshToken };
         }
 
-        public async Task<JwtAuthResult> AuthenticateAsync(string userMail)
+        public async Task<JwtTokens> AuthenticateAsync(string userMail)
         {
             var user = await _userManager.FindByEmailAsync(userMail);
             if (user == null)
@@ -60,10 +61,10 @@ namespace MicroManagement.Auth.WebAPI.Services
             string accessToken = GenerateAccessToken(user);
             string refreshToken = GenerateRefreshToken(user);
 
-            return new JwtAuthResult { AccessToken = accessToken, RefreshToken = refreshToken };
+            return new JwtTokens { AccessToken = accessToken, RefreshToken = refreshToken };
         }
 
-        public async Task<Result<JwtAuthResult>> RegisterAsync(RegisterDTO model)
+        public async Task<Result<JwtTokens>> RegisterAsync(RegisterDTO model)
         {
             var user = new ApplicationUser()
             {
@@ -77,30 +78,44 @@ namespace MicroManagement.Auth.WebAPI.Services
 
             if (!result.Succeeded)
             {
-                return new Result<JwtAuthResult>(new InvalidOperationException(result.Errors.First().ToString()));
+                return new Result<JwtTokens>(new InvalidOperationException(result.Errors.First().ToString()));
             }
 
             string accessToken = GenerateAccessToken(user);
             string refreshToken = GenerateRefreshToken(user);
 
-            return new JwtAuthResult { AccessToken = accessToken, RefreshToken = refreshToken };
+            return new JwtTokens { AccessToken = accessToken, RefreshToken = refreshToken };
         }
 
-        public async Task<JwtAuthResult> RefreshTokenAsync(string refreshTokenInput)
+        public async Task<Result<JwtTokens>> RefreshTokenAsync(string refreshTokenInput)
         {
-            ClaimsPrincipal tokenClaims = ValidateRefreshToken(refreshTokenInput);
+            try
+            {
+                ClaimsPrincipal tokenClaims = ValidateRefreshToken(refreshTokenInput);
 
-            string userMail = tokenClaims.Claims
-                .Where(c => c.Type == ClaimTypes.Email)
-                .Single()
-                .Value;
+                string userMail = tokenClaims.Claims
+                    .Where(c => c.Type == ClaimTypes.Email)
+                    .Single()
+                    .Value;
 
-            var user = await _userManager.FindByEmailAsync(userMail);
+                var user = await _userManager.FindByEmailAsync(userMail);
 
-            string newAccessToken = GenerateAccessToken(user!);
-            string newRefreshToken = GenerateRefreshToken(user!);
+                if (user == null)
+                {
+                    _logger.LogWarning("Attempted refresh Token for inexistant user: {Email}", userMail);
+                    return new Result<JwtTokens>(new InvalidOperationException("Verify Creds"));
+                }
 
-            return new JwtAuthResult { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
+                string newAccessToken = GenerateAccessToken(user);
+                string newRefreshToken = GenerateRefreshToken(user);
+
+                return new JwtTokens { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning("Attempted refresh for invalid Token: {token}", refreshTokenInput);
+                return new Result<JwtTokens>(ex);
+            }
         }
 
         #region Token Manipulation

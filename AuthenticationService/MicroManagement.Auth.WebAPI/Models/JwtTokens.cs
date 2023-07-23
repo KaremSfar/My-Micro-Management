@@ -1,6 +1,6 @@
-﻿namespace MicroManagement.Auth.WebAPI.DTOs
+﻿namespace MicroManagement.Auth.WebAPI.Models
 {
-    public class JwtAuthResult
+    public class JwtTokens
     {
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }

@@ -22,7 +22,11 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             var jwtResponse = await _authService.RegisterAsync(model);
 
             return jwtResponse.Match<IActionResult>(
-                jwt => Ok(jwtResponse),
+                jwt =>
+                {
+                    AppendRefreshToken(jwt.RefreshToken);
+                    return Ok(new JwtAccessTokenDTO(jwt.AccessToken));
+                },
                 failed => BadRequest(failed.Message));
         }
 
@@ -32,14 +36,39 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             var authResult = await this._authService.AuthenticateAsync(model.Email, model.Password);
 
             return authResult.Match<IActionResult>(
-                jwt => Ok(jwt),
-                failed => BadRequest(failed));
+                jwt =>
+                {
+                    AppendRefreshToken(jwt.RefreshToken);
+                    return Ok(new JwtAccessTokenDTO(jwt.AccessToken));
+                },
+                failed => BadRequest(failed.Message));
         }
 
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenInputDto refreshToken)
         {
-            return Ok(await _authService.RefreshTokenAsync(refreshToken.RefreshToken));
+            var refreshResult = await this._authService.RefreshTokenAsync(refreshToken.RefreshToken);
+
+            return refreshResult.Match<IActionResult>(
+                jwt =>
+                {
+                    AppendRefreshToken(jwt.RefreshToken);
+                    return Ok(new JwtAccessTokenDTO(jwt.AccessToken));
+                },
+                failed => BadRequest(failed.Message));
+        }
+
+        private void AppendRefreshToken(string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, // Ensure the cookie is sent over HTTPS
+                SameSite = SameSiteMode.Strict, // Prevents the cookie from being sent in cross-site requests
+                Expires = DateTime.UtcNow.AddDays(7) // Set the cookie to expire in 7 days
+            };
+
+            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         }
     }
 }
