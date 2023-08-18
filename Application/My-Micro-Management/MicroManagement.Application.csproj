@@ -53,10 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Core\MicroManagement.Core\MicroManagement.Core.csproj" />
 	  <ProjectReference Include="..\..\Service\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj" />
-	  <ProjectReference Include="..\..\Service\Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj" />
-	  <ProjectReference Include="..\..\Service\Persistence\MicroManagement.Persistence.EF\MicroManagement.Persistence.EF.csproj" />
 	  <ProjectReference Include="..\MicroManagement.Services.Mock\MicroManagement.Application.Services.Mock.csproj" />
 	  <ProjectReference Include="..\MicroManagement.Services\MicroManagement.Application.Services.csproj" />
 	</ItemGroup>

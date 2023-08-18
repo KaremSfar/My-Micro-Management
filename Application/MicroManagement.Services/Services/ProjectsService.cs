@@ -3,6 +3,7 @@ using MicroManagement.Core;
 using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,7 +27,10 @@ namespace MicroManagement.Application.Services
 
         public async Task<IEnumerable<ProjectDTO>> GetAll()
         {
-            return Enumerable.Empty<ProjectDTO>();
+            var client = new RestClient(new RestClientOptions("https://localhost:7114"));
+            var projects = await client.GetAsync<List<ProjectDTO>>(new RestRequest("api/projects"));
+
+            return projects ?? Enumerable.Empty<ProjectDTO>();
         }
     }
 }

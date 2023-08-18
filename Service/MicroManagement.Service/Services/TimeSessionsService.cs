@@ -34,8 +34,8 @@ namespace MicroManagement.Services
 
         public async Task<IEnumerable<TimeSessionDTO>> GetAll()
         {
-            return (await _timeSessionsRepo.GetAllAsync()).Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndDate = ts.EndDate, ProjectIds = ts.ProjectIds });
-
+            return (await _timeSessionsRepo.GetAllAsync())
+                .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndDate = ts.EndDate, ProjectIds = ts.ProjectIds });
         }
     }
 }
