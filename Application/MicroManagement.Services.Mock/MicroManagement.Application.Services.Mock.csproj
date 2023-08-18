@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Service\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj" />
     <ProjectReference Include="..\MicroManagement.Services\MicroManagement.Application.Services.csproj" />
   </ItemGroup>
 
