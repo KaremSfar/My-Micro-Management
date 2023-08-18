@@ -15,4 +15,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\MicroManagement.Core\MicroManagement.Core.csproj" />
+    <ProjectReference Include="..\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj" />
+    <ProjectReference Include="..\MicroManagement.Service.Abstractions\MicroManagement.Service.Abstractions.csproj" />
+    <ProjectReference Include="..\Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj" />
+  </ItemGroup>
+
 </Project>

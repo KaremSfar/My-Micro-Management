@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.SQLite.MigrationsApplier", "Service\Persistence\MicroManagement.Persistence.SQLite.MigrationsApplier\MicroManagement.Persistence.SQLite.MigrationsApplier.csproj", "{F53D291C-437C-470B-94F9-B62340D4AB7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Service.Abstractions", "Service\MicroManagement.Service.Abstractions\MicroManagement.Service.Abstractions.csproj", "{65F0C642-D93B-4DEA-A867-DB866B25D5C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{F53D291C-437C-470B-94F9-B62340D4AB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F53D291C-437C-470B-94F9-B62340D4AB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F53D291C-437C-470B-94F9-B62340D4AB7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65F0C642-D93B-4DEA-A867-DB866B25D5C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65F0C642-D93B-4DEA-A867-DB866B25D5C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65F0C642-D93B-4DEA-A867-DB866B25D5C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65F0C642-D93B-4DEA-A867-DB866B25D5C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{FB19DC41-8B04-477B-A2B7-D119C81F4350} = {BAB77EF7-CBEA-4EA9-8B91-7034C2033DE4}
 		{7FCFB30D-2FE8-47E9-8AAA-360CA5D67921} = {BAB77EF7-CBEA-4EA9-8B91-7034C2033DE4}
 		{F53D291C-437C-470B-94F9-B62340D4AB7A} = {BAB77EF7-CBEA-4EA9-8B91-7034C2033DE4}
+		{65F0C642-D93B-4DEA-A867-DB866B25D5C1} = {367DE46E-AC75-4560-AF27-2E19DDADAEED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
