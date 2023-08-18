@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{367D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.DataContracts", "Service\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj", "{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Service", "Service\MicroManagement.Service\MicroManagement.Service.csproj", "{91C9F41E-5B7E-4CE4-B376-0A52BA8B086E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C9F41E-5B7E-4CE4-B376-0A52BA8B086E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C9F41E-5B7E-4CE4-B376-0A52BA8B086E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C9F41E-5B7E-4CE4-B376-0A52BA8B086E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C9F41E-5B7E-4CE4-B376-0A52BA8B086E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{6BFB1843-7F5C-44C5-BEE7-C277A5BA1B4F} = {37958A4B-5455-4E6F-B5A3-87B2E7E9C991}
 		{32A15D7D-E4E4-463A-B5B2-C9C6EC75368E} = {37958A4B-5455-4E6F-B5A3-87B2E7E9C991}
 		{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB} = {367DE46E-AC75-4560-AF27-2E19DDADAEED}
+		{91C9F41E-5B7E-4CE4-B376-0A52BA8B086E} = {367DE46E-AC75-4560-AF27-2E19DDADAEED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
