@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\MicroManagement.Core\MicroManagement.Core.csproj" />
+    <ProjectReference Include="..\..\..\Core\MicroManagement.Core\MicroManagement.Core.csproj" />
     <ProjectReference Include="..\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj" />
   </ItemGroup>
 
