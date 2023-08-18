@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RestSharp" Version="110.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Service\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj" />
     <ProjectReference Include="..\..\Service\Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj" />
   </ItemGroup>
