@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Core", "Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.Abstraction", "Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj", "{E2B84031-B27D-4EFA-91FC-E3FEF4896571}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Application.Services.Abstraction", "Application\MicroManagement.Services.Abstraction\MicroManagement.Application.Services.Abstraction.csproj", "{24733AFD-AE1B-4BA8-8806-1B6DCD69BCE5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Application", "Application\My-Micro-Management\MicroManagement.Application.csproj", "{E3BA0A7B-B337-40CE-8D38-7822B0E5ACF9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Application.Services.Mock", "Application\MicroManagement.Services.Mock\MicroManagement.Application.Services.Mock.csproj", "{34AA4E2F-34B9-46F0-A741-314497947F25}"
@@ -29,7 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthenticationService", "Au
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Auth.WebAPI", "AuthenticationService\MicroManagement.Auth.WebAPI\MicroManagement.Auth.WebAPI.csproj", "{6BFB1843-7F5C-44C5-BEE7-C277A5BA1B4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Auth.Migrations.SQLite", "AuthenticationService\MicroManagement.Auth.Migrations.SQLite\MicroManagement.Auth.Migrations.SQLite.csproj", "{32A15D7D-E4E4-463A-B5B2-C9C6EC75368E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Auth.Migrations.SQLite", "AuthenticationService\MicroManagement.Auth.Migrations.SQLite\MicroManagement.Auth.Migrations.SQLite.csproj", "{32A15D7D-E4E4-463A-B5B2-C9C6EC75368E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{367DE46E-AC75-4560-AF27-2E19DDADAEED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.DataContracts", "Service\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj", "{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +47,6 @@ Global
 		{E2B84031-B27D-4EFA-91FC-E3FEF4896571}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2B84031-B27D-4EFA-91FC-E3FEF4896571}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2B84031-B27D-4EFA-91FC-E3FEF4896571}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24733AFD-AE1B-4BA8-8806-1B6DCD69BCE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24733AFD-AE1B-4BA8-8806-1B6DCD69BCE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24733AFD-AE1B-4BA8-8806-1B6DCD69BCE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24733AFD-AE1B-4BA8-8806-1B6DCD69BCE5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3BA0A7B-B337-40CE-8D38-7822B0E5ACF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3BA0A7B-B337-40CE-8D38-7822B0E5ACF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3BA0A7B-B337-40CE-8D38-7822B0E5ACF9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -79,14 +77,18 @@ Global
 		{32A15D7D-E4E4-463A-B5B2-C9C6EC75368E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32A15D7D-E4E4-463A-B5B2-C9C6EC75368E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32A15D7D-E4E4-463A-B5B2-C9C6EC75368E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{BAB77EF7-CBEA-4EA9-8B91-7034C2033DE4} = {367DE46E-AC75-4560-AF27-2E19DDADAEED}
 		{8C74E1DD-2CDB-4568-8066-83B67481B59E} = {90FDF657-AFED-4D8D-9CE0-4EBEB09BC19D}
 		{E2B84031-B27D-4EFA-91FC-E3FEF4896571} = {BAB77EF7-CBEA-4EA9-8B91-7034C2033DE4}
-		{24733AFD-AE1B-4BA8-8806-1B6DCD69BCE5} = {3F4C89CE-FABE-4709-977C-0A0A52ABD0C0}
 		{E3BA0A7B-B337-40CE-8D38-7822B0E5ACF9} = {3F4C89CE-FABE-4709-977C-0A0A52ABD0C0}
 		{34AA4E2F-34B9-46F0-A741-314497947F25} = {3F4C89CE-FABE-4709-977C-0A0A52ABD0C0}
 		{2AE54201-5A9F-4FC5-A468-5B77E2C498F4} = {3F4C89CE-FABE-4709-977C-0A0A52ABD0C0}
@@ -94,6 +96,7 @@ Global
 		{9DF0770D-81A3-4BD1-89CA-CB346D3F05A7} = {BAB77EF7-CBEA-4EA9-8B91-7034C2033DE4}
 		{6BFB1843-7F5C-44C5-BEE7-C277A5BA1B4F} = {37958A4B-5455-4E6F-B5A3-87B2E7E9C991}
 		{32A15D7D-E4E4-463A-B5B2-C9C6EC75368E} = {37958A4B-5455-4E6F-B5A3-87B2E7E9C991}
+		{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB} = {367DE46E-AC75-4560-AF27-2E19DDADAEED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
