@@ -26,7 +26,7 @@ namespace MicroManagement.Application.Services
 
         public async Task<IEnumerable<ProjectDTO>> GetAll()
         {
-            Enumerable.Empty<ProjectDTO>();
+            return Enumerable.Empty<ProjectDTO>();
         }
     }
 }
