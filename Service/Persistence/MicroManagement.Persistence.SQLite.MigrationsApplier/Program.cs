@@ -13,7 +13,7 @@ using IHost host = Host.CreateDefaultBuilder(args)
         services.AddDbContext<MyMicroManagementDbContext>(options =>
         {
             options.UseSqlite(
-                connectionString: @"Data Source=C:\Repos\Temp\MyDB-dev.db", // FIXME: better connection string and multiple DBs
+                connectionString: @"Data Source=C:\Repos\Temp\MyDB-dev-dev.db", // FIXME: better connection string and multiple DBs
                 sqliteOptionsAction: b => b.MigrationsAssembly("MicroManagement.Persistence.SQLite.MigrationsApplier"));
         });
     })

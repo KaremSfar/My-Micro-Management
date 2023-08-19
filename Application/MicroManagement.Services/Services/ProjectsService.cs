@@ -22,7 +22,12 @@ namespace MicroManagement.Application.Services
 
         public async Task<ProjectDTO> AddProject(ProjectDTO addProjectDto)
         {
-            return addProjectDto;
+            var client = new RestClient(new RestClientOptions("https://localhost:7114"));
+            var project = await client.PostAsync<ProjectDTO>(
+                new RestRequest("api/projects", Method.Post)
+                    .AddBody(addProjectDto));
+
+            return project;
         }
 
         public async Task<IEnumerable<ProjectDTO>> GetAll()

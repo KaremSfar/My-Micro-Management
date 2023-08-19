@@ -28,11 +28,14 @@ namespace MicroManagement.Service
             services.AddTransient<IProjectsRepository, SQLiteProjectsRepository>();
             services.AddTransient<IProjectsService, ProjectsService>();
 
+            services.AddTransient<ITimeSessionsRepository, SQLiteTimeSessionsRepository>();
+            services.AddTransient<ITimeSessionsService, TimeSessionsService>();
+
             // TODO-KAREM: this is now here as we're option for a Local SQLite DB, 
             // when, and if, we're getting this project to a client-service app, remove these
             services.AddDbContext<MyMicroManagementDbContext>(options =>
             {
-                options.UseSqlite(@"Data Source=C:\Repos\Temp\MyDB-dev.db");
+                options.UseSqlite(@"Data Source=C:\Repos\Temp\MyDB-dev-dev.db");
             });
         }
 

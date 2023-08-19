@@ -1,7 +1,7 @@
 ﻿using MicroManagement.Application.Services.Abstraction;
-using MicroManagement.Core;
 using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Services.Abstraction.DTOs;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +18,20 @@ namespace MicroManagement.Application.Services
 
         public async Task<TimeSessionDTO> AddTimeSession(TimeSessionDTO timeSessionDTO)
         {
-            return timeSessionDTO;
+            var client = new RestClient(new RestClientOptions("https://localhost:7114"));
+            var timeSession = await client.PostAsync<TimeSessionDTO>(
+                new RestRequest("api/timeSessions", Method.Post)
+                    .AddBody(timeSessionDTO));
+
+            return timeSession;
         }
 
         public async Task<IEnumerable<TimeSessionDTO>> GetAll()
         {
-            return Enumerable.Empty<TimeSessionDTO>();
+            var client = new RestClient(new RestClientOptions("https://localhost:7114"));
+            var projects = await client.GetAsync<List<TimeSessionDTO>>(new RestRequest("api/timeSessions"));
+
+            return projects ?? Enumerable.Empty<TimeSessionDTO>();
         }
     }
 }
