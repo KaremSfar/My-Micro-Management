@@ -12,43 +12,18 @@ namespace MicroManagement.Service
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            CreateHostBuilder(args).Build().Run();
+        }
 
-            // Add services to the container.
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            var app = Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            builder.Services.AddTransient<IProjectsRepository, SQLiteProjectsRepository>();
-            builder.Services.AddTransient<IProjectsService, ProjectsService>();
-
-            // TODO-KAREM: this is now here as we're option for a Local SQLite DB, 
-            // when, and if, we're getting this project to a client-service app, remove these
-            builder.Services.AddDbContext<MyMicroManagementDbContext>(options =>
-            {
-                options.UseSqlite(@"Data Source=C:\Repos\Temp\MyDB-dev.db");
-            });
-
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
-            app.Run();
+            return app;
         }
     }
 }
