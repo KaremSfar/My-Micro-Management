@@ -14,7 +14,13 @@ namespace MicroManagement.Persistence.EF.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
+        public Guid UserId { get; set; }
+
+        [Required]
         public DateTime StartTime { get; set; }
+
+        [Required]
         public DateTime EndDate { get; set; }
 
         public virtual ICollection<ProjectEntity> Projects { get; set; } = new List<ProjectEntity>();

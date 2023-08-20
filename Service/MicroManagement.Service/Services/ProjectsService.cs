@@ -21,17 +21,17 @@ namespace MicroManagement.Services
             _projectsRepo = projectsRepo;
         }
 
-        public async Task<ProjectDTO> AddProject(ProjectDTO addProjectDto)
+        public async Task<ProjectDTO> AddProject(Guid UserId, ProjectDTO addProjectDto)
         {
-            var projectToAdd = new Project(addProjectDto.Id, addProjectDto.Name, addProjectDto.Color);
+            var projectToAdd = new Project(addProjectDto.Id, UserId, addProjectDto.Name, addProjectDto.Color);
 
             await _projectsRepo.AddProjectAsync(projectToAdd);
             return addProjectDto;
         }
 
-        public async Task<IEnumerable<ProjectDTO>> GetAll()
+        public async Task<IEnumerable<ProjectDTO>> GetAll(Guid UserId)
         {
-            var projects = await _projectsRepo.GetAllAsync();
+            var projects = await _projectsRepo.GetAllAsync(UserId);
             return projects.Select(t => new ProjectDTO() { Id = t.Id, Name = t.Name, Color = t.Color });
         }
     }

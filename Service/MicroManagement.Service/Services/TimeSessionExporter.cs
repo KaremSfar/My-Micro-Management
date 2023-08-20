@@ -17,8 +17,8 @@ namespace MicroManagement.Services
 
         public async Task<string> ExportTimeSession()
         {
-            var allSession = await _timeService.GetAll();
-            var allProjects = (await _projectsService.GetAll())
+            var allSession = await _timeService.GetAll(Guid.NewGuid()); // TODO-KAREM
+            var allProjects = (await _projectsService.GetAll(Guid.NewGuid()))
                 .ToDictionary(p => p.Id, p => p.Name);
 
             var sessions = from timeSession in allSession
