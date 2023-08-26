@@ -9,7 +9,7 @@ namespace MicroManagement.Persistence.Abstraction.Repositories
 {
     public interface IProjectsRepository
     {
-        Task<IEnumerable<Project>> GetAllAsync(Guid UserId);
+        Task<IEnumerable<Project>> GetAllAsync(Guid userId);
         Task AddProjectAsync(Project project);
         Task DeleteProjectAsync(Guid projectId);
     }

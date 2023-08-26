@@ -9,7 +9,7 @@ namespace MicroManagement.Persistence.Abstraction.Repositories
 {
     public interface ITimeSessionsRepository
     {
-        Task<IEnumerable<TimeSession>> GetAllAsync(Guid UserId);
+        Task<IEnumerable<TimeSession>> GetAllAsync(Guid userId);
         Task AddAsync(TimeSession timeSession);
     }
 }

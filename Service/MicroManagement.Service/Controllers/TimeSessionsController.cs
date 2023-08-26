@@ -24,7 +24,7 @@ namespace MicroManagement.Service.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var timeSessions = await _timeSessionsService.GetAll(GetUserId);
+            var timeSessions = await _timeSessionsService.GetAll(GetUserId());
             return Ok(timeSessions);
         }
 
@@ -32,12 +32,12 @@ namespace MicroManagement.Service.Controllers
         public async Task<IActionResult> Post(TimeSessionDTO timeSession)
         {
             var addedTimeSession = await _timeSessionsService
-                .AddTimeSession(GetUserId, timeSession);
+                .AddTimeSession(GetUserId(), timeSession);
 
             return Ok(addedTimeSession);
         }
 
-        private Guid GetUserId
+        private Guid GetUserId()
             => Guid.Parse(User.Identities.First().Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
     }
 }

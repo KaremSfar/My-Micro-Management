@@ -42,11 +42,11 @@ namespace MicroManagement.Persistence.EF.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Project>> GetAllAsync(Guid UserId)
+        public async Task<IEnumerable<Project>> GetAllAsync(Guid userId)
         {
             return await _dbContext
                 .Projects
-                .Where(p => p.UserId.ToString() == UserId.ToString())
+                .Where(p => p.UserId.ToString() == userId.ToString())
                 .Select(p => p.Adapt<Project>())
                 .ToListAsync();
         }

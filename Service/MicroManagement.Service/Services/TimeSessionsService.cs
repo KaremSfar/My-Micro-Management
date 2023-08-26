@@ -19,11 +19,11 @@ namespace MicroManagement.Services
             _timeSessionsRepo = timeSessionsRepo;
         }
 
-        public async Task<TimeSessionDTO> AddTimeSession(Guid UserId, TimeSessionDTO timeSessionDTO)
+        public async Task<TimeSessionDTO> AddTimeSession(Guid userId, TimeSessionDTO timeSessionDTO)
         {
             var timeSession = new TimeSession()
             {
-                UserId = UserId,
+                UserId = userId,
                 StartTime = timeSessionDTO.StartTime,
                 EndDate = timeSessionDTO.EndDate,
                 ProjectIds = timeSessionDTO.ProjectIds,
@@ -33,9 +33,9 @@ namespace MicroManagement.Services
             return timeSessionDTO;
         }
 
-        public async Task<IEnumerable<TimeSessionDTO>> GetAll(Guid UserId)
+        public async Task<IEnumerable<TimeSessionDTO>> GetAll(Guid userId)
         {
-            return (await _timeSessionsRepo.GetAllAsync(UserId))
+            return (await _timeSessionsRepo.GetAllAsync(userId))
                 .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndDate = ts.EndDate, ProjectIds = ts.ProjectIds });
         }
     }

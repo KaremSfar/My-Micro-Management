@@ -23,18 +23,18 @@ namespace MicroManagement.Service.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var projects = await _projectsService.GetAll(GetUserId);
+            var projects = await _projectsService.GetAll(GetUserId());
             return Ok(projects);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(ProjectDTO projectDTO)
         {
-            var addedProject = await _projectsService.AddProject(GetUserId, projectDTO);
+            var addedProject = await _projectsService.AddProject(GetUserId(), projectDTO);
             return Ok(addedProject);
         }
 
-        private Guid GetUserId
+        private Guid GetUserId()
             => Guid.Parse(User.Identities.First().Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
     }
 }

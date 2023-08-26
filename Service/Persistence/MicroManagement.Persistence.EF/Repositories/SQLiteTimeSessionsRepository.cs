@@ -41,10 +41,10 @@ namespace MicroManagement.Persistence.EF.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TimeSession>> GetAllAsync(Guid UserId)
+        public async Task<IEnumerable<TimeSession>> GetAllAsync(Guid userId)
         {
             var timeSessionEntities = await _dbSet
-                .Where(t => t.UserId.ToString() == UserId.ToString())
+                .Where(t => t.UserId.ToString() == userId.ToString())
                 .Include(t => t.Projects)
                 .ToListAsync();
 
