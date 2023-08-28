@@ -28,6 +28,7 @@ namespace MicroManagement.Persistence.EF.Repositories
             {
                 StartTime = timeSession.StartTime,
                 EndDate = timeSession.EndDate,
+                UserId = timeSession.UserId,
             };
 
             var projects = await _dbContext
