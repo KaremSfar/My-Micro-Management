@@ -16,6 +16,11 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             _authService = authService;
         }
 
+        /// <summary>
+        /// Endpoint to register a new user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
@@ -30,6 +35,11 @@ namespace MicroManagement.Auth.WebAPI.Controllers
                 failed => BadRequest(failed.Message));
         }
 
+        /// <summary>
+        /// Endpoint to login existing users with basic user mail - password combination
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
@@ -44,12 +54,17 @@ namespace MicroManagement.Auth.WebAPI.Controllers
                 failed => BadRequest(failed.Message));
         }
 
+        /// <summary>
+        /// Refresh token endpoint, based on the given refreshToken returns a new pair of access and refresh tokens
+        /// </summary>
+        /// <param name="refreshToken"></param>
+        /// <returns></returns>
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenInputDto refreshToken)
+        public async Task<ActionResult<JwtAccessTokenDTO>> RefreshToken([FromBody] RefreshTokenInputDto refreshToken)
         {
             var refreshResult = await this._authService.RefreshTokenAsync(refreshToken.RefreshToken);
 
-            return refreshResult.Match<IActionResult>(
+            return refreshResult.Match<ActionResult<JwtAccessTokenDTO>>(
                 jwt =>
                 {
                     AppendRefreshToken(jwt.RefreshToken);
@@ -65,7 +80,6 @@ namespace MicroManagement.Auth.WebAPI.Controllers
                 HttpOnly = true,
                 Secure = true, // Ensure the cookie is sent over HTTPS
                 SameSite = SameSiteMode.Strict, // Prevents the cookie from being sent in cross-site requests
-                Expires = DateTime.UtcNow.AddDays(7) // Set the cookie to expire in 7 days
             };
 
             Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);

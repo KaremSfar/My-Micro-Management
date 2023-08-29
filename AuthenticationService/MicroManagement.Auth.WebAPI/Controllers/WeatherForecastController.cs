@@ -8,10 +8,7 @@ namespace MicroManagement.Auth.WebAPI.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        private static readonly string[] Summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
 
         private readonly ILogger<WeatherForecastController> _logger;
 
@@ -20,6 +17,11 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        ///     Dummy endpoint, guarded with authorization used to test the Authentication services
+        ///     This endpoint should work with JWT bearer policy only
+        /// </summary>
+        /// <returns>A list of random weather forecast</returns>
         [Authorize]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
