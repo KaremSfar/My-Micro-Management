@@ -33,11 +33,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.Abstraction", "Service\Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj", "{7FCFB30D-2FE8-47E9-8AAA-360CA5D67921}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.SQLite.MigrationsApplier", "Service\Persistence\MicroManagement.Persistence.SQLite.MigrationsApplier\MicroManagement.Persistence.SQLite.MigrationsApplier.csproj", "{F53D291C-437C-470B-94F9-B62340D4AB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.Migrations.SQLite", "Service\Persistence\MicroManagement.Persistence.SQLite.MigrationsApplier\MicroManagement.Persistence.Migrations.SQLite.csproj", "{F53D291C-437C-470B-94F9-B62340D4AB7A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Service.Abstractions", "Service\MicroManagement.Service.Abstractions\MicroManagement.Service.Abstractions.csproj", "{65F0C642-D93B-4DEA-A867-DB866B25D5C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Auth.DataContracts", "AuthenticationService\MicroManagement.Auth.DataContracts\MicroManagement.Auth.DataContracts.csproj", "{13680FDA-EFFC-4742-AD0D-E53CCEE64C9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Auth.DataContracts", "AuthenticationService\MicroManagement.Auth.DataContracts\MicroManagement.Auth.DataContracts.csproj", "{13680FDA-EFFC-4742-AD0D-E53CCEE64C9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

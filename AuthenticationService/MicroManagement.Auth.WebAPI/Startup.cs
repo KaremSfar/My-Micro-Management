@@ -1,4 +1,5 @@
-﻿using MicroManagement.Auth.WebAPI.Models;
+﻿using MicroManagement.Auth.WebAPI.DTOs;
+using MicroManagement.Auth.WebAPI.Models;
 using MicroManagement.Auth.WebAPI.Persistence;
 using MicroManagement.Auth.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 
@@ -16,13 +18,17 @@ namespace MicroManagement.Auth.WebAPI
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
+        /// <summary>
+        /// Register Services
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AuthenticationServiceDbContext>(options =>
@@ -50,7 +56,7 @@ namespace MicroManagement.Auth.WebAPI
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AccessKey"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AccessKey"]!))
                 };
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -58,6 +64,7 @@ namespace MicroManagement.Auth.WebAPI
 
             services.AddAuthorization(b =>
             {
+                // Create a new policy (along side default JWT bearer one) to exchange google cookie with JWT Token
                 b.AddPolicy("google-token-exchange", pb =>
                 {
                     pb.AuthenticationSchemes.Clear();
@@ -70,9 +77,21 @@ namespace MicroManagement.Auth.WebAPI
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                // Include Endpoints and Controllers descriptions through XML Comments
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+
+                // Include DataContracts / DTOs descriptions through XML Comments
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetAssembly(typeof(JwtAccessTokenDTO))!.GetName().Name}.xml"));
+            });
         }
 
+        /// <summary>
+        /// Register Middlewares
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Configure the HTTP request pipeline.

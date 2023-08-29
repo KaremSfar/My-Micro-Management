@@ -22,8 +22,12 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             _authenticationService = authenticationService;
         }
 
+        /// <summary>
+        /// Challenges the current user, if not authenticated redirect to Google's authentication page
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("google/google-link")]
-        public async Task<IResult> GoogleLink()
+        public IResult GoogleLink()
         {
             return Results.Challenge(
                 properties: new AuthenticationProperties
@@ -34,7 +38,12 @@ namespace MicroManagement.Auth.WebAPI.Controllers
                 );
         }
 
-        // Try not to get too coupled to this, as it should be removed at a given time
+        /// <summary>
+        /// Endpoint used to exchange the google generated cookie for a pair of JWT Access and refresh token
+        /// This endpoint is used to restrict accepted authentication schemas to only jwt bearer
+        /// [NOTE] Try not to get too coupled to this, as it should be removed at a given time
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Policy = "google-token-exchange")]
         [HttpGet("google/exchange")]
         public async Task<IActionResult> GetToken()

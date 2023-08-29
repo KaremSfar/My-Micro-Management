@@ -2,8 +2,15 @@
 
 namespace MicroManagement.Auth.WebAPI.DTOs
 {
-    public class RefreshTokenInputDto
+    /// <summary>
+    /// Wrapper for the Refresh Token, originally received from the service to refresh the access token
+    /// </summary>
+    public record RefreshTokenInputDto
     {
-        [Required] public string RefreshToken { get; set; }
+        /// <summary>
+        /// The actual Refresh token, JWT with long expiration date
+        /// </summary>
+        [Required]
+        public string? RefreshToken { get; set; }
     }
 }
