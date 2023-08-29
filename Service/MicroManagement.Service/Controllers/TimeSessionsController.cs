@@ -21,6 +21,10 @@ namespace MicroManagement.Service.Controllers
             _timeSessionsService = timeSessionsService;
         }
 
+        /// <summary>
+        /// Endpoint used to return all time sessions of the current logged-in user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -28,6 +32,11 @@ namespace MicroManagement.Service.Controllers
             return Ok(timeSessions);
         }
 
+        /// <summary>
+        /// Endpoint used to add a new time session for a current logged-in user
+        /// </summary>
+        /// <param name="timeSession"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Post(TimeSessionDTO timeSession)
         {

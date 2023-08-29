@@ -21,6 +21,9 @@ namespace MicroManagement.Services
 
         public async Task<TimeSessionDTO> AddTimeSession(Guid userId, TimeSessionDTO timeSessionDTO)
         {
+            // TODO: Some validation could be nice :/ 
+            // - existing project
+            // - non overlapping time sessions
             var timeSession = new TimeSession()
             {
                 UserId = userId,

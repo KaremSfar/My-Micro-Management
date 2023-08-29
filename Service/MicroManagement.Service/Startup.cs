@@ -3,6 +3,7 @@ using MicroManagement.Persistence.EF.Configuration;
 using MicroManagement.Persistence.EF.Repositories;
 using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
+using MicroManagement.Services.Abstraction.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -49,8 +50,11 @@ namespace MicroManagement.Service
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
-                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
-                    $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+                // Include Endpoints and Controllers descriptions through XML Comments
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+
+                // Include DataContracts / DTOs descriptions through XML Comments
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetAssembly(typeof(ProjectDTO))!.GetName().Name}.xml"));
             });
 
             services.AddTransient<IProjectsRepository, SQLiteProjectsRepository>();

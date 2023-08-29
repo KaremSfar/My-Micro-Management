@@ -20,6 +20,10 @@ namespace MicroManagement.Service.Controllers
             _projectsService = projectsService;
         }
 
+        /// <summary>
+        /// Endpoint to return all project for the current logged-in user
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -27,6 +31,11 @@ namespace MicroManagement.Service.Controllers
             return Ok(projects);
         }
 
+        /// <summary>
+        /// Endpoint used to add a project to the current logged-in user's collection 
+        /// </summary>
+        /// <param name="projectDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Post(ProjectDTO projectDTO)
         {
