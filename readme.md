@@ -68,7 +68,7 @@ The migrations should get applied and your database will get created successfull
 
 ##### 2. Set the application's JWT secrets
 - Right click the ```MicroManagement.Service``` project and select *Manage User Secrets*.
-- You will need to specify two secrets related to the JWT signing and validation: ```Jwt:AccessKey``` and the ```Jwt:RefreshKey``` for, respectively, the access tokens and refresh tokens. They need to be **the same** as they were set in the ```MicroManagement.Auth.WebAPI``` project.
+- You will need to specify the secret related to the JWT signing and validation: ```Jwt:AccessKey```. It needs to be **the same** as it was set in the ```MicroManagement.Auth.WebAPI``` project.
 
 ##### 4. Run the application
 You should be able to run the application at this step, using Visual Studio or the command line ```dotnet run```.
