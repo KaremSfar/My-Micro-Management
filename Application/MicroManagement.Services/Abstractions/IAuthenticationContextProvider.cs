@@ -8,6 +8,7 @@ namespace MicroManagement.Application.Services.Abstractions
 {
     public interface IAuthenticationContextProvider
     {
+        // TODO-KAREM: strip out this interface, it should be SetTokens, GetToken, and Reset Tokens
         Task<string> GetAccessToken();
         Task<bool> IsAuthenticated();
 

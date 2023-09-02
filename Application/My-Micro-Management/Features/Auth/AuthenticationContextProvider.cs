@@ -15,6 +15,8 @@ namespace MicroManagement.Application.Common
         private const string AccessTokenKey = "jwt_token";
         private readonly IAuthenticationService _authenticationService = MauiProgram.GetService<IAuthenticationService>();
 
+        private Timer _refreshTimer;
+
         public Task<string> GetAccessToken() => SecureStorage.GetAsync(AccessTokenKey);
 
         public async Task<bool> IsAuthenticated()
@@ -27,11 +29,11 @@ namespace MicroManagement.Application.Common
         {
             await SetTokens(accessToken, refreshToken);
 
-            new Timer(async (state) => { await RefreshTokens(); }, null, 0, (int)TimeSpan.FromMinutes(1).TotalMilliseconds);
+            _refreshTimer = new Timer(async (state) => { await RefreshTokens(); }, null, 0, (int)TimeSpan.FromMinutes(4).TotalMilliseconds);
         }
         public async Task RefreshTokens()
         {
-            var (accessToken, refreshToken) = await _authenticationService.RefreshTokens(await SecureStorage.GetAsync(RefreshTokenKey)).ConfigureAwait(false);
+            var (accessToken, refreshToken) = await _authenticationService.RefreshTokens(await SecureStorage.GetAsync(RefreshTokenKey));
             await SetTokens(accessToken, refreshToken);
         }
 
