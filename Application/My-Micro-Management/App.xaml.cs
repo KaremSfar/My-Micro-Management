@@ -1,13 +1,19 @@
-﻿using My_Micro_Management.Features.Auth;
+﻿using MicroManagement.Application.Common;
+using My_Micro_Management.Features.Auth;
 
 namespace My_Micro_Management;
 
 public partial class App : Application
 {
+    private readonly IAuthenticationContextProvider _authenticationContextProvider = MauiProgram.GetService<IAuthenticationContextProvider>();
+
     public App()
     {
         InitializeComponent();
-        MainPage = new AuthPage();
+        if (_authenticationContextProvider.IsAuthenticated().Result)
+            MainPage = new AppShell();
+        else
+            MainPage = new AuthPage();
     }
 
     protected override Window CreateWindow(IActivationState activationState)

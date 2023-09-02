@@ -11,15 +11,15 @@
 
                 <VerticalStackLayout Margin="0, 15">
                     <Label HorizontalOptions="Start">Email</Label>
-                    <Entry Placeholder="yourname@domain.com" ></Entry>
+                    <Entry Placeholder="yourname@domain.com" Text="{Binding UserMail, Mode=TwoWay}"></Entry>
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Margin="0, 15">
                     <Label HorizontalOptions="Start" >Password</Label>
-                    <Entry Placeholder="Enter your password" IsPassword="True"></Entry>
+                    <Entry Placeholder="Enter your password" IsPassword="True" Text="{Binding Password, Mode=TwoWay}"></Entry>
                 </VerticalStackLayout>
 
-                <Button Text="Log in" Margin="0, 15"></Button>
+                <Button Text="Log in" Margin="0, 15" Clicked="LoginBtn_Clicked"></Button>
             </VerticalStackLayout>
         </Frame>
         <HorizontalStackLayout HorizontalOptions="Center" >

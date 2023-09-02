@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AuthenticationService\MicroManagement.Auth.DataContracts\MicroManagement.Auth.DataContracts.csproj" />
     <ProjectReference Include="..\..\Service\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj" />
     <ProjectReference Include="..\..\Service\Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj" />
   </ItemGroup>
