@@ -1,4 +1,5 @@
 ﻿using MicroManagement.Application.Common;
+using MicroManagement.Application.Services.Abstractions;
 using My_Micro_Management.Features.Auth;
 
 namespace My_Micro_Management;
@@ -9,9 +10,17 @@ public partial class App : Application
 
     public App()
     {
-        InitializeComponent();
-        if (_authenticationContextProvider.IsAuthenticated().Result)
+        this.MainPage = new SplashScreen();
+        InitializeAsync();
+    }
+
+    public async Task InitializeAsync()
+    {
+        if (await _authenticationContextProvider.IsAuthenticated())
+        {
+            await this._authenticationContextProvider.RefreshTokens();
             MainPage = new AppShell();
+        }
         else
             MainPage = new AuthPage();
     }

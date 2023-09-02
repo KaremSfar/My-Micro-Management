@@ -1,5 +1,6 @@
 using MicroManagement.Application.Common;
 using MicroManagement.Application.Services.Abstraction;
+using MicroManagement.Application.Services.Abstractions;
 using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
 using My_Micro_Management.Features.Auth;
@@ -13,7 +14,6 @@ public partial class Navbar : ContentView
 {
     private readonly ITimeSessionsExporter _timeSessionExporter = MauiProgram.GetService<ITimeSessionsExporter>();
     private readonly IAuthenticationContextProvider _authenticationContextProvider = MauiProgram.GetService<IAuthenticationContextProvider>();
-
 
     public Navbar()
     {
