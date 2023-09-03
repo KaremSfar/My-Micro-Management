@@ -9,6 +9,7 @@ namespace MicroManagement.Application.Services.Abstractions
     public interface IAuthenticationService
     {
         Task<(string jwtAccessToken, string jwtRefreshToken)> Login(string email, string password);
+        Task<(string jwtAccessToken, string jwtRefreshToken)> Signup(string email, string firstName, string lastName, string password);
         Task<(string jwtAccessToken, string jwtRefreshToken)> RefreshTokens(string refreshToken);
     }
 }

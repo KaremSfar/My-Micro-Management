@@ -1,4 +1,5 @@
-﻿using MicroManagement.Application.Common;
+﻿using CommunityToolkit.Maui;
+using MicroManagement.Application.Common;
 using MicroManagement.Application.Services;
 using MicroManagement.Application.Services.Abstraction;
 using MicroManagement.Application.Services.Abstractions;
@@ -23,6 +24,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

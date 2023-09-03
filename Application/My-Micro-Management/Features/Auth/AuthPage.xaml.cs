@@ -14,4 +14,15 @@ public partial class AuthPage : ContentPage
         await this._authViewModel.Login();
         Application.Current.MainPage = new AppShell();
     }
+
+    private async void SignupButton_Clicked(object sender, EventArgs e)
+    {
+        await this._authViewModel.Signup();
+        Application.Current.MainPage = new AppShell();
+    }
+
+    private void SignupView_Tapped(object sender, TappedEventArgs e)
+    {
+        _authViewModel.IsSignup = !_authViewModel.IsSignup;
+    }
 }

@@ -23,6 +23,20 @@ namespace My_Micro_Management.Features.Auth
             set { _userMail = value; }
         }
 
+        private string _firstName;
+        public string FirstName
+        {
+            get { return _firstName; }
+            set { _firstName = value; }
+        }
+
+        private string _lastName;
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
         private string _password;
         public string Password
         {
@@ -30,9 +44,22 @@ namespace My_Micro_Management.Features.Auth
             set { _password = value; }
         }
 
+        private bool _isSignup;
+        public bool IsSignup
+        {
+            get { return _isSignup; }
+            set { _isSignup = value; OnPropertyChanged(); }
+        }
+
         public async Task Login()
         {
             var (accessToken, refreshToken) = await this._authenticationService.Login(this.UserMail, this.Password);
+            await this._authenticationContextProvider.Login(accessToken, refreshToken);
+        }
+
+        public async Task Signup()
+        {
+            var (accessToken, refreshToken) = await this._authenticationService.Signup(this.UserMail, this.FirstName, this.LastName, this.Password);
             await this._authenticationContextProvider.Login(accessToken, refreshToken);
         }
 

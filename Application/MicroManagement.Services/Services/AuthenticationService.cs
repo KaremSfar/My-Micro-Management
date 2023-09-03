@@ -45,5 +45,22 @@ namespace MicroManagement.Application.Services.Services
 
             return (accessToken, newRefreshToken);
         }
+
+        public async Task<(string jwtAccessToken, string jwtRefreshToken)> Signup(string email, string firstName, string lastName, string password)
+        {
+            var client = new RestClient(new RestClientOptions("https://localhost:44325"));
+            var response = await client.ExecuteAsync<JwtAccessTokenDTO>(
+                new RestRequest("auth/register", Method.Post)
+                    .AddBody(new RegisterDTO { Email = email, FirstName = firstName, LastName = lastName, Password = password })
+                );
+
+            var accessToken = response.Data?.AccessToken;
+            var newRefreshToken = response.Cookies
+                .Where(x => x.Name == "refreshToken")
+                .Select(x => x.Value.ToString())
+                .FirstOrDefault();
+
+            return (accessToken, newRefreshToken);
+        }
     }
 }
