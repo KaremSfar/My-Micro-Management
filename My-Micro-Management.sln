@@ -39,6 +39,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Service.Abs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Auth.DataContracts", "AuthenticationService\MicroManagement.Auth.DataContracts\MicroManagement.Auth.DataContracts.csproj", "{13680FDA-EFFC-4742-AD0D-E53CCEE64C9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Persistence.Migrations.AzureSQL", "Persistence\MicroManagement.Persistence.Migrations.AzureSQL\MicroManagement.Persistence.Migrations.AzureSQL.csproj", "{610E505F-2634-4880-AAC3-17DD3182E76D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Auth.Migrations.AzureSQL", "AuthenticationService\MicroManagement.Auth.Migrations.AzureSQL\MicroManagement.Auth.Migrations.AzureSQL.csproj", "{14915E28-C72C-424E-B15D-ACA14F6C3289}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +103,14 @@ Global
 		{13680FDA-EFFC-4742-AD0D-E53CCEE64C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13680FDA-EFFC-4742-AD0D-E53CCEE64C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13680FDA-EFFC-4742-AD0D-E53CCEE64C9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{610E505F-2634-4880-AAC3-17DD3182E76D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{610E505F-2634-4880-AAC3-17DD3182E76D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{610E505F-2634-4880-AAC3-17DD3182E76D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{610E505F-2634-4880-AAC3-17DD3182E76D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14915E28-C72C-424E-B15D-ACA14F6C3289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14915E28-C72C-424E-B15D-ACA14F6C3289}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14915E28-C72C-424E-B15D-ACA14F6C3289}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14915E28-C72C-424E-B15D-ACA14F6C3289}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +130,8 @@ Global
 		{F53D291C-437C-470B-94F9-B62340D4AB7A} = {BAB77EF7-CBEA-4EA9-8B91-7034C2033DE4}
 		{65F0C642-D93B-4DEA-A867-DB866B25D5C1} = {367DE46E-AC75-4560-AF27-2E19DDADAEED}
 		{13680FDA-EFFC-4742-AD0D-E53CCEE64C9E} = {37958A4B-5455-4E6F-B5A3-87B2E7E9C991}
+		{610E505F-2634-4880-AAC3-17DD3182E76D} = {BAB77EF7-CBEA-4EA9-8B91-7034C2033DE4}
+		{14915E28-C72C-424E-B15D-ACA14F6C3289} = {37958A4B-5455-4E6F-B5A3-87B2E7E9C991}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
