@@ -2,7 +2,7 @@ name: Build and deploy .NET Core application to Web App micromanagement-auth
 on:
   push:
     branches:
-    - users/k_sfar/add_sql_server_projects
+    - main
     paths:
     - AuthenticationService/**
 env:
