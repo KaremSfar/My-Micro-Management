@@ -63,10 +63,9 @@ namespace MicroManagement.Service
             services.AddTransient<ITimeSessionsRepository, SQLiteTimeSessionsRepository>();
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
 
-            // TODO-KAREM: to turn into an environment based connection string
             services.AddDbContext<MyMicroManagementDbContext>(options =>
             {
-                options.UseSqlite(@"Data Source=C:\Repos\Temp\MyDB-dev-dev.db");
+                options.UseSqlServer(Configuration["Db:ConnectionString"]);
             });
         }
 

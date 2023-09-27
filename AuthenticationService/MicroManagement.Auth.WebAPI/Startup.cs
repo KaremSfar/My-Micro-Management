@@ -33,7 +33,7 @@ namespace MicroManagement.Auth.WebAPI
         {
             services.AddDbContext<AuthenticationServiceDbContext>(options =>
             {
-                options.UseSqlite(@"Data Source=C:\Repos\Temp\MyAuthDB-dev.db");
+                options.UseSqlServer(Configuration["Db:ConnectionString"]);
             });
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
