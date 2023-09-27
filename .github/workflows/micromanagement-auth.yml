@@ -3,6 +3,8 @@ on:
   push:
     branches:
     - users/k_sfar/add_sql_server_projects
+    paths:
+    - AuthenticationService/**
 env:
   AZURE_WEBAPP_NAME: micromanagement-auth
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
