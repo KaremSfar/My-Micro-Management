@@ -19,6 +19,7 @@ public partial class App : Application
         if (await _authenticationContextProvider.IsAuthenticated())
         {
             await this._authenticationContextProvider.RefreshTokens();
+            this._authenticationContextProvider.StartTokensAutoRefresh();
             MainPage = new AppShell();
         }
         else
