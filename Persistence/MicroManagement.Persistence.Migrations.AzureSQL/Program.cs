@@ -11,7 +11,9 @@ using IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddDbContext<MyMicroManagementDbContext>(options =>
         {
-            options.UseSqlServer("ConnectionString");
+            options.UseSqlServer(
+                connectionString: "ConnectionString",
+                sqlServerOptionsAction: (b) => b.MigrationsAssembly("MicroManagement.Persistence.Migrations.AzureSQL"));
         });
     })
     .Build();

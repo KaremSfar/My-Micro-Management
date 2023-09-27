@@ -11,7 +11,8 @@ using IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddDbContext<AuthenticationServiceDbContext>(options =>
         {
-            options.UseSqlServer("ConnectionString");
+            options.UseSqlServer("ConnectionString",
+                (b) => { b.MigrationsAssembly("MicroManagement.Auth.Migrations.AzureSQL"); });
         });
     })
     .Build();
