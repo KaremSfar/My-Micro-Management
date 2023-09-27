@@ -42,7 +42,7 @@ namespace MicroManagement.Service
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"]!,
                     ValidAudience = Configuration["Jwt:Audience"]!,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AccessKey"]!))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtAccessKey"]!))
                 };
             });
 
@@ -65,7 +65,7 @@ namespace MicroManagement.Service
 
             services.AddDbContext<MyMicroManagementDbContext>(options =>
             {
-                options.UseSqlServer(Configuration["Db:ConnectionString"]);
+                options.UseSqlServer(Configuration["DbConnectionString"]);
             });
         }
 

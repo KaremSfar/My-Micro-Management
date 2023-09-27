@@ -121,7 +121,7 @@ namespace MicroManagement.Auth.WebAPI.Services
         #region Token Manipulation
         private ClaimsPrincipal ValidateRefreshToken(string refreshTokenInput)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:RefreshKey"]!));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtRefreshKey"]!));
 
             var validationParam = new TokenValidationParameters()
             {
@@ -143,7 +143,7 @@ namespace MicroManagement.Auth.WebAPI.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id!)
             };
 
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:AccessKey"]!));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtAccessKey"]!));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var tokenOptions = new JwtSecurityToken(
@@ -163,7 +163,7 @@ namespace MicroManagement.Auth.WebAPI.Services
                 new Claim(ClaimTypes.Email, user.Email!)
             };
 
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:RefreshKey"]!));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtRefreshKey"]!));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var tokenOptions = new JwtSecurityToken(

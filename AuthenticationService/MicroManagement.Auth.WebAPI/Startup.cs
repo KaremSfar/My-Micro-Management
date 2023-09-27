@@ -33,7 +33,7 @@ namespace MicroManagement.Auth.WebAPI
         {
             services.AddDbContext<AuthenticationServiceDbContext>(options =>
             {
-                options.UseSqlServer(Configuration["Db:ConnectionString"]);
+                options.UseSqlServer(Configuration["DbConnectionString"]);
             });
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -56,7 +56,7 @@ namespace MicroManagement.Auth.WebAPI
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:AccessKey"]!))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtAccessKey"]!))
                 };
             })
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -119,8 +119,8 @@ namespace MicroManagement.Auth.WebAPI
         private void ConfigureGoogleSSO(GoogleOptions options)
         {
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.ClientId = Configuration["google:client-id"]!;
-            options.ClientSecret = Configuration["google:client-secret"]!;
+            options.ClientId = Configuration["googleclient_id"]!;
+            options.ClientSecret = Configuration["googleclient_secret"]!;
             options.SaveTokens = false;
 
             options.Events.OnTicketReceived = async ctx =>
