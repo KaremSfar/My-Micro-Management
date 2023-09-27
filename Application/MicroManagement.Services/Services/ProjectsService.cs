@@ -1,9 +1,11 @@
 ﻿using MicroManagement.Application.Services.Abstraction;
+using MicroManagement.Application.Services.Abstractions;
 using MicroManagement.Core;
 using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
 using RestSharp;
+using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,13 +18,20 @@ namespace MicroManagement.Application.Services
 {
     public class ProjectsService : IProjectsService
     {
-        public ProjectsService()
+        private readonly IAuthenticationContextProvider _authenticationContextProvider;
+
+        public ProjectsService(IAuthenticationContextProvider authenticationContextProvider)
         {
+            _authenticationContextProvider = authenticationContextProvider;
         }
 
         public async Task<ProjectDTO> AddProject(ProjectDTO addProjectDto)
         {
-            var client = new RestClient(new RestClientOptions("https://localhost:7114"));
+            using var client = new RestClient(new RestClientOptions("https://localhost:7114")
+            {
+                Authenticator = new JwtAuthenticator(await this._authenticationContextProvider.GetAccessToken())
+            });
+
             var project = await client.PostAsync<ProjectDTO>(
                 new RestRequest("api/projects", Method.Post)
                     .AddBody(addProjectDto));
@@ -32,7 +41,11 @@ namespace MicroManagement.Application.Services
 
         public async Task<IEnumerable<ProjectDTO>> GetAll()
         {
-            var client = new RestClient(new RestClientOptions("https://localhost:7114"));
+            using var client = new RestClient(new RestClientOptions("https://localhost:7114")
+            {
+                Authenticator = new JwtAuthenticator(await this._authenticationContextProvider.GetAccessToken())
+            });
+
             var projects = await client.GetAsync<List<ProjectDTO>>(new RestRequest("api/projects"));
 
             return projects ?? Enumerable.Empty<ProjectDTO>();
