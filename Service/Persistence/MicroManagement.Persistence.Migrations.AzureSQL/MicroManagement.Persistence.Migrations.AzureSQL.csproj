@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Service\Persistence\MicroManagement.Persistence.EF\MicroManagement.Persistence.EF.csproj" />
+    <ProjectReference Include="..\MicroManagement.Persistence.EF\MicroManagement.Persistence.EF.csproj" />
   </ItemGroup>
 
 </Project>
