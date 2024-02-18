@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 interface IAuthContext {
     accessToken: string | null;
+    isLoading: boolean;
     setAccessToken: (token: string | null) => void;
     login: (email: string, password: string) => Promise<void>;
     refreshAuthToken: () => Promise<void>;
@@ -12,6 +13,7 @@ const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
     const login = async (email: string, password: string) => {
         const response = await fetch('https://localhost:44325/auth/login', {
@@ -25,6 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const refreshAuthToken = async () => {
+        setIsLoading(true);
         try {
             const response = await fetch('https://localhost:44325/auth/refresh-token', {
                 method: 'POST',
@@ -44,6 +47,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             console.error("error.message");
             // Handle absence or invalidity of refresh token here
             // For example, redirect to login page or show a login prompt
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -53,7 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ accessToken, setAccessToken, login, refreshAuthToken }}>
+        <AuthContext.Provider value={{ accessToken, setAccessToken, login, refreshAuthToken, isLoading }}>
             {children}
         </AuthContext.Provider>
     );

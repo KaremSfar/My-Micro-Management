@@ -1,16 +1,12 @@
 import React, { useState, FormEvent } from 'react';
 import { useAuth } from './AuthContext';
 
-interface LoginFormProps {
-  onLogin: (email: string, password: string) => void;
-}
-
-const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
+const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
       await login(email, password);
@@ -27,7 +23,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6"onSubmit={handleSubmit} >
+          <form className="space-y-6" onSubmit={handleSubmit} >
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
               <div className="mt-2">
@@ -45,7 +41,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             </div>
 
             <div>
-              <button type="submit"  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
+              <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
             </div>
           </form>
         </div>
