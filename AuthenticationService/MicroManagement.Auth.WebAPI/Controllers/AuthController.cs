@@ -60,9 +60,16 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         /// <param name="refreshToken"></param>
         /// <returns></returns>
         [HttpPost("refresh-token")]
-        public async Task<ActionResult<JwtAccessTokenDTO>> RefreshToken([FromBody] RefreshTokenInputDto refreshToken)
+        public async Task<ActionResult<JwtAccessTokenDTO>> RefreshToken()
         {
-            var refreshResult = await this._authService.RefreshTokenAsync(refreshToken.RefreshToken);
+            var refreshTokenCookie = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshTokenCookie))
+            {
+                return BadRequest("Refresh token is missing.");
+            }
+
+            var refreshResult = await this._authService.RefreshTokenAsync(refreshTokenCookie);
 
             return refreshResult.Match<ActionResult<JwtAccessTokenDTO>>(
                 jwt =>
@@ -77,9 +84,9 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = true,
                 Secure = true, // Ensure the cookie is sent over HTTPS
-                SameSite = SameSiteMode.Strict, // Prevents the cookie from being sent in cross-site requests
+                SameSite = SameSiteMode.None, // Prevents the cookie from being sent in cross-site requests
+                Expires = DateTimeOffset.UtcNow.AddDays(7)
             };
 
             Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
