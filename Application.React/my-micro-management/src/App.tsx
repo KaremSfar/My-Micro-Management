@@ -3,6 +3,7 @@ import './App.css';
 import { useAuth } from './Auth/AuthContext';
 import LoginForm from './Auth/LoginForm';
 import Dashboard from './Pages/Dashboard';
+import Layout from './Components/Layout';
 
 // LEARN: React components are usually functions that return tsx code
 function App() {
@@ -21,7 +22,7 @@ function App() {
           :
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={accessToken ? <Dashboard /> : <Navigate to="/login" replace />} />
+              <Route path="/" element={accessToken ? <Layout><Dashboard /></Layout> : <Navigate to="/login" replace />} />
               <Route path="/login" element={accessToken ? <Navigate to="/" replace /> : <LoginForm />} />
             </Routes>
           </BrowserRouter>}
