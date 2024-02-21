@@ -62,14 +62,14 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         [HttpPost("refresh-token")]
         public async Task<ActionResult<JwtAccessTokenDTO>> RefreshToken()
         {
-            var refreshTokenCookie = Request.Cookies["refreshToken"];
+            var refreshToken = Request.Cookies["refreshToken"];
 
-            if (string.IsNullOrEmpty(refreshTokenCookie))
+            if (string.IsNullOrEmpty(refreshToken))
             {
                 return BadRequest("Refresh token is missing.");
             }
 
-            var refreshResult = await this._authService.RefreshTokenAsync(refreshTokenCookie);
+            var refreshResult = await this._authService.RefreshTokenAsync(refreshToken);
 
             return refreshResult.Match<ActionResult<JwtAccessTokenDTO>>(
                 jwt =>
