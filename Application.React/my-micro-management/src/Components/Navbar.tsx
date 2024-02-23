@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Avatar from './Avatar';
 
 const Navbar = () => {
     return (
@@ -19,9 +20,7 @@ const Navbar = () => {
                         <path d="M0.59375 37.4062H37.4062M2.00962 17.5841L10.5048 10.5048L16.1683 14.7524L35.9903 0.59375V30.3156H2.00965L2.00962 17.5841Z" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </Link>
-                <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                    <svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path></svg>
-                </div>
+                <Avatar />
             </div>
         </nav>
     );

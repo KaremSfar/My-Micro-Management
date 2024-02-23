@@ -7,6 +7,7 @@ interface IAuthContext {
     setAccessToken: (token: string | null) => void;
     login: (email: string, password: string) => Promise<void>;
     refreshAuthToken: () => Promise<void>;
+    logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
@@ -44,7 +45,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             // Optionally, handle successful refresh (e.g., update UI or state)
 
         } catch (error) {
-            console.error("error.message");
             // Handle absence or invalidity of refresh token here
             // For example, redirect to login page or show a login prompt
         } finally {
@@ -52,13 +52,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const logout = async () => {
+        await fetch('https://localhost:44325/auth/logout', {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        setAccessToken(null);
+    }
+
     // Attempt to refresh the token on app startup
     useEffect(() => {
         refreshAuthToken();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ accessToken, setAccessToken, login, refreshAuthToken, isLoading }}>
+        <AuthContext.Provider value={{ accessToken, setAccessToken, login, refreshAuthToken, isLoading, logout }}>
             {children}
         </AuthContext.Provider>
     );

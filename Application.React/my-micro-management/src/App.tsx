@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div className="bg-gray-200 min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 to-orange-400">
-      <div className="w-3/4 h-3/4 bg-white border border-gray-300 rounded-lg shadow-xl p-8 m-4 overflow-auto">
+      <div style={{ height: '75vh' }} className="w-3/4 flex justify-center items-center bg-white border border-gray-300 rounded-lg shadow-xl p-8 m-4">
         {isLoading ?
           <div className="flex justify-center items-center">
             <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">

@@ -55,6 +55,17 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Endpoint to logout the user
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            AppendRefreshToken(string.Empty);
+            return Ok();
+        }
+
+        /// <summary>
         /// Refresh token endpoint, based on the given refreshToken returns a new pair of access and refresh tokens
         /// </summary>
         /// <param name="refreshToken"></param>
