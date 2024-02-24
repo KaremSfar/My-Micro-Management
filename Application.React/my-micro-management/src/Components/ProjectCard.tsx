@@ -1,9 +1,20 @@
+import { useStopwatch } from 'react-timer-hook';
+import { PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
+
 interface IProjectProps {
     projectName: string;
     projectColor: string;
 }
 
 function ProjectCard(props: IProjectProps) {
+    const {
+        seconds,
+        minutes,
+        hours,
+        start,
+        isRunning,
+        pause,
+    } = useStopwatch();
 
     const colorRgb = hexToRgb(props.projectColor);
     const darkerShade = darkerColor(colorRgb);
@@ -12,11 +23,27 @@ function ProjectCard(props: IProjectProps) {
     const borderColor = `rgb(${darkerShade[0]}, ${darkerShade[1]}, ${darkerShade[2]})`;
     const color = borderColor;
 
-    return <div className="h-32 w-48 border-2 rounded-lg shadow-md" style={{ backgroundColor, borderColor }}>
-        <div className="flex flex-col justify-items font-bold" style={{ color }}>
-            <span className="p-2">
-                {props.projectName}
-            </span>
+    return <div className="min-h-32 sm:min-w-48 border-2 rounded-lg shadow-md min-w-full" style={{ backgroundColor, borderColor }}>
+        <div className="flex flex-col h-full justify-items font-bold p-2">
+            <div className="grow flex flex-col h-full">
+                <span className="w-full" style={{ color }}>
+                    {props.projectName}
+                </span>
+                <span className="self-center py-4 text-white text-xl">
+                    {minutes + seconds + hours === 0 ?
+                        "--:--" :
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+                    }
+                </span>
+            </div>
+            <div className="self-end flex w-full justify-between" style={{ color }}>
+                <span>00:00:00</span>
+                <button className=" ">
+                    {isRunning
+                        ? <PauseIcon onClick={pause} className="h-6 w-6"></PauseIcon>
+                        : <PlayIcon onClick={start} className="h-6 w-6"></PlayIcon>}
+                </button>
+            </div>
         </div>
     </div>
 }
