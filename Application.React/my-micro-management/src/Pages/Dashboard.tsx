@@ -1,7 +1,14 @@
+import ProjectCard from "../Components/ProjectCard";
+
 function Dashboard() {
     return (
-        <div className="w-full h-full border border-black lg p-2 my-2">
-            <h1>Dashboard</h1>
+        <div className="flex flex-wrap justify-start border border-black lg my-8 gap-4">
+            <ProjectCard projectName="External Sollicitations" projectColor="#ff7675"/>
+            <ProjectCard projectName="Pull Requests" projectColor="#74b9ff"/>
+            <ProjectCard projectName="Internal Sollicitations" projectColor="#ff7675"/>
+            <ProjectCard projectName="Bug Fixes" projectColor="#a29bfe"/>
+            <ProjectCard projectName="Documentation Writing" projectColor="#ff7675"/>
+            <ProjectCard projectName="Some other thing" projectColor="#ff7675"/>
         </div>
     );
 }
