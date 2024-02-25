@@ -26,7 +26,7 @@ function Dashboard() {
 
 
     return (
-        <div className="flex flex-wrap justify-start border border-black lg my-8 gap-4 overflow-auto">
+        <div className="grid  lg:grid-cols-4 grid-cols-1 justify-start border border-black lg my-8 gap-4 overflow-auto">
             {projects.map((project) => (
                 <ProjectCard
                     key={project.id}
