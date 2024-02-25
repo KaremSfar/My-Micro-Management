@@ -23,20 +23,18 @@ function ProjectCard(props: IProjectProps) {
     const borderColor = `rgb(${darkerShade[0]}, ${darkerShade[1]}, ${darkerShade[2]})`;
     const color = borderColor;
 
-    return <div className="min-h-32 sm:min-w-48 border-2 rounded-lg shadow-md min-w-full" style={{ backgroundColor, borderColor }}>
-        <div className="flex flex-col h-full justify-items font-bold p-2">
-            <div className="grow flex flex-col h-full">
-                <span className="w-full" style={{ color }}>
-                    {props.projectName}
-                </span>
-                <span className="self-center py-4 text-white text-xl">
-                    {minutes + seconds + hours === 0 ?
-                        "--:--" :
-                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
-                    }
-                </span>
-            </div>
-            <div className="self-end flex w-full justify-between" style={{ color }}>
+    return <div className="lg:aspect-[4/3] sm:min-w-48 border-2 rounded-lg shadow-md min-w-full" style={{ backgroundColor, borderColor }}>
+        <div className="flex flex-col h-full justify-between font-bold p-2">
+            <span className="w-full" style={{ color }}>
+                {props.projectName}
+            </span>
+            <span className="w-full text-center py-4 text-white text-xl">
+                {minutes + seconds + hours === 0 ?
+                    "--:--" :
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+                }
+            </span>
+            <div className="flex w-full justify-between" style={{ color }}>
                 <span>00:00:00</span>
                 <button className=" ">
                     {isRunning
