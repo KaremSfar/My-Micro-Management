@@ -10,7 +10,6 @@ import Analytics from './Pages/Analytics';
 function App() {
   const { accessToken, isLoading } = useAuth(); // Use the useAuth hook to access the accessToken
 
-
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 to-orange-400">
       <div className="border-2 border-black sm:h-[75vh] w-3/4 flex justify-center items-center bg-white rounded-lg shadow-xl p-5 m-4">

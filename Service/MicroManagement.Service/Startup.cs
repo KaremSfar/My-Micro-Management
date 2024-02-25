@@ -67,6 +67,16 @@ namespace MicroManagement.Service
             {
                 options.UseSqlServer(Configuration["DbConnectionString"]);
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalReact", builder =>
+                {
+                    builder.WithOrigins("https://localhost:3000")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -77,10 +87,14 @@ namespace MicroManagement.Service
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
+                app.UseCors("AllowLocalReact");
+            }
+            else
+            {
+                app.UseCors();
             }
 
             app.UseRouting();
-            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();

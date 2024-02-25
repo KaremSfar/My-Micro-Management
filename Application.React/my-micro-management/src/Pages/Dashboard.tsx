@@ -1,14 +1,39 @@
+import { useEffect, useState } from "react";
 import ProjectCard from "../Components/ProjectCard";
+import { ProjectDTO } from "../DTOs/ProjectDto";
+import { useAuth } from "../Auth/AuthContext";
 
 function Dashboard() {
+    const { accessToken } = useAuth();
+
+    const [projects, setProjects] = useState<ProjectDTO[]>([]);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            const response = await fetch('https://localhost:7114/api/projects', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`, // Set the Authorization header
+                }
+            });
+            const data: ProjectDTO[] = await response.json();
+            setProjects(data); // Assuming the API response is an array of project objects
+        };
+
+        fetchProjects();
+    }, [accessToken]); // Empty dependency array means this effect runs once on mount
+
+
     return (
         <div className="flex flex-wrap justify-start border border-black lg my-8 gap-4 overflow-auto">
-            <ProjectCard projectName="External Sollicitations" projectColor="#ff7675"/>
-            <ProjectCard projectName="Pull Requests" projectColor="#74b9ff"/>
-            <ProjectCard projectName="Internal Sollicitations" projectColor="#ffbe76"/>
-            <ProjectCard projectName="Bug Fixes" projectColor="#a29bfe"/>
-            <ProjectCard projectName="Documentation Writing" projectColor="#badc58"/>
-            <ProjectCard projectName="Some other thing" projectColor="#686de0"/>
+            {projects.map((project) => (
+                <ProjectCard
+                    key={project.id}
+                    projectName={project.name}
+                    projectColor={project.color}
+                />
+            ))}
         </div>
     );
 }
