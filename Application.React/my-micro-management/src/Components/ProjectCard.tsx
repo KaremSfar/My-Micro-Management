@@ -23,7 +23,7 @@ function ProjectCard(props: IProjectProps) {
     const borderColor = `rgb(${darkerShade[0]}, ${darkerShade[1]}, ${darkerShade[2]})`;
     const color = borderColor;
 
-    return <div className="lg:aspect-[4/3] sm:min-w-48 border-2 rounded-lg shadow-md min-w-full" style={{ backgroundColor, borderColor }}>
+    return <div className="lg:aspect-[5/3] sm:min-w-48 border-2 rounded-lg shadow-md min-w-full" style={{ backgroundColor, borderColor }}>
         <div className="flex flex-col h-full justify-between font-bold p-2">
             <span className="w-full" style={{ color }}>
                 {props.projectName}
