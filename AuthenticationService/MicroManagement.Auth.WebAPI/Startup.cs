@@ -85,6 +85,17 @@ namespace MicroManagement.Auth.WebAPI
                 // Include DataContracts / DTOs descriptions through XML Comments
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetAssembly(typeof(JwtAccessTokenDTO))!.GetName().Name}.xml"));
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalReact", builder =>
+                {
+                    builder.WithOrigins("https://localhost:3000")
+                        .AllowCredentials()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
         }
 
         /// <summary>
@@ -100,10 +111,14 @@ namespace MicroManagement.Auth.WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
+                app.UseCors("AllowLocalReact");
+            }
+            else
+            {
+                app.UseCors();
             }
 
             app.UseRouting();
-            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
