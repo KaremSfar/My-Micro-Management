@@ -5,6 +5,8 @@ on:
     - main
     paths:
     - Service/**
+  workflow_dispatch:
+  
 env:
   AZURE_WEBAPP_NAME: micomanagement-service
   AZURE_WEBAPP_PACKAGE_PATH: ./publish

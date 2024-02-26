@@ -5,6 +5,8 @@ on:
     - main
     paths:
     - AuthenticationService/**
+  workflow_dispatch:
+  
 env:
   AZURE_WEBAPP_NAME: micromanagement-auth
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
