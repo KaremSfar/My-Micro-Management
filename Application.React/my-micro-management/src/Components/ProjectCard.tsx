@@ -1,5 +1,6 @@
 import { useStopwatch } from 'react-timer-hook';
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
 
 interface IProjectProps {
     projectName: string;
@@ -8,6 +9,7 @@ interface IProjectProps {
 
 function ProjectCard(props: IProjectProps) {
     const {
+        totalSeconds,
         seconds,
         minutes,
         hours,
@@ -23,6 +25,19 @@ function ProjectCard(props: IProjectProps) {
     const borderColor = `rgb(${darkerShade[0]}, ${darkerShade[1]}, ${darkerShade[2]})`;
     const color = borderColor;
 
+    const [totalTimeToday, setTotalTimeToday] = useState<number>(0);
+
+    useEffect(() => {
+        const incrementTotalTime = () => {
+            setTotalTimeToday((prevTotal: number) => prevTotal + 1);
+        };
+
+        if (seconds > 0)
+            incrementTotalTime();
+
+    }, [seconds]);
+
+
     return <div onClick={isRunning ? pause : start}
         className="lg:aspect-[5/3] sm:min-w-48 border-2 rounded-lg shadow-md min-w-full m-1 hover:scale-[1.01] transition-transform hover:cursor-pointer"
         style={{ backgroundColor, borderColor }}>
@@ -37,7 +52,7 @@ function ProjectCard(props: IProjectProps) {
                 }
             </span>
             <div className="flex w-full justify-between" style={{ color }}>
-                <span>00:00:00</span>
+                <span>{formatTime(totalTimeToday)}</span>
                 <button className=" ">
                     {isRunning
                         ? <PauseIcon onClick={pause} className="h-6 w-6"></PauseIcon>
@@ -62,3 +77,9 @@ const hexToRgb = (hex: string): number[] => {
 const darkerColor = (rbg: number[]): number[] => {
     return rbg.map(x => x * 0.6);
 }
+
+const formatTime = (totalSeconds: number) => {
+    const date = new Date(0);
+    date.setSeconds(totalSeconds);
+    return date.toISOString().substring(11, 19);
+};

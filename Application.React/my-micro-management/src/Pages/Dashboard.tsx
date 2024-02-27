@@ -10,7 +10,7 @@ function Dashboard() {
 
     useEffect(() => {
         const fetchProjects = async () => {
-            const response = await fetch('https://localhost:7114/api/projects', {
+            const response = await fetch('https://micomanagement-service.azurewebsites.net/api/projects', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

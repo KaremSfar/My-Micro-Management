@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
     const login = async (email: string, password: string) => {
-        const response = await fetch('https://localhost:44325/auth/login', {
+        const response = await fetch('https://micromanagement-auth.azurewebsites.net/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const refreshAuthToken = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('https://localhost:44325/auth/refresh-token', {
+            const response = await fetch('https://micromanagement-auth.azurewebsites.net/auth/refresh-token', {
                 method: 'POST',
                 credentials: 'include', // Necessary to send the HttpOnly cookie
             });
