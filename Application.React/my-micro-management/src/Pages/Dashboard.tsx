@@ -38,6 +38,7 @@ function Dashboard() {
                     key={project.id}
                     projectName={project.name}
                     projectColor={project.color}
+                    projectId={project.id}
                     isCurrentProjectRunning={runningProjectId === project.id}
                     onStart={() => handleStart(project.id)}
                 />

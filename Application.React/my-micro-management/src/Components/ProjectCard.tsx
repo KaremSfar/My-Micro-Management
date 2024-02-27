@@ -1,10 +1,12 @@
 import { useStopwatch } from 'react-timer-hook';
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
+import { useAuth } from '../Auth/AuthContext';
 
 interface IProjectCardProps {
     projectName: string;
     projectColor: string;
+    projectId: string;
     isCurrentProjectRunning: boolean;
     onStart: () => void;
 }
@@ -50,6 +52,47 @@ function ProjectCard(props: IProjectCardProps) {
         start();
         props.onStart();
     }
+
+    const { accessToken } = useAuth();
+
+    useEffect(() => {
+        const createTimeSession = async () => {
+            const endDate = new Date().toISOString();
+            const startTime = new Date(new Date().getTime() - seconds * 1000).toISOString();
+
+            const body = {
+                startTime,
+                endDate,
+                projectIds: [
+                    props.projectId
+                ]
+            };
+
+            try {
+                const response = await fetch('https://micomanagement-service.azurewebsites.net/api/timeSessions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log('Time session created:', data);
+            } catch (error) {
+                console.error('Failed to create time session:', error);
+            }
+        };
+
+        if (!props.isCurrentProjectRunning && isRunning && seconds > 10) {
+            createTimeSession();
+        }
+    }, [props.isCurrentProjectRunning, isRunning]);
 
     return <div onClick={isRunning ? pause : handleStart}
         className="lg:aspect-[5/3] sm:min-w-48 border-2 rounded-lg shadow-md min-w-full m-1 hover:scale-[1.01] transition-transform hover:cursor-pointer"
