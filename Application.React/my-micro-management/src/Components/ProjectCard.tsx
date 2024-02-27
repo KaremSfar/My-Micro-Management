@@ -2,20 +2,21 @@ import { useStopwatch } from 'react-timer-hook';
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 
-interface IProjectProps {
+interface IProjectCardProps {
     projectName: string;
     projectColor: string;
+    isCurrentProjectRunning: boolean;
+    onStart: () => void;
 }
 
-function ProjectCard(props: IProjectProps) {
+function ProjectCard(props: IProjectCardProps) {
     const {
-        totalSeconds,
         seconds,
         minutes,
-        hours,
         start,
         isRunning,
         pause,
+        reset
     } = useStopwatch();
 
     const colorRgb = hexToRgb(props.projectColor);
@@ -37,8 +38,20 @@ function ProjectCard(props: IProjectProps) {
 
     }, [seconds]);
 
+    useEffect(() => {
+        if (!props.isCurrentProjectRunning && isRunning) {
+            reset();
+            pause();
+            console.log("Stopped the timer");
+        }
+    }, [props.isCurrentProjectRunning, isRunning, pause, reset])
 
-    return <div onClick={isRunning ? pause : start}
+    const handleStart = () => {
+        start();
+        props.onStart();
+    }
+
+    return <div onClick={isRunning ? pause : handleStart}
         className="lg:aspect-[5/3] sm:min-w-48 border-2 rounded-lg shadow-md min-w-full m-1 hover:scale-[1.01] transition-transform hover:cursor-pointer"
         style={{ backgroundColor, borderColor }}>
         <div className="flex flex-col h-full justify-between font-bold p-2">
@@ -46,7 +59,7 @@ function ProjectCard(props: IProjectProps) {
                 {props.projectName}
             </span>
             <span className="w-full text-center py-4 text-white text-xl">
-                {minutes + seconds + hours === 0 ?
+                {!props.isCurrentProjectRunning ?
                     "--:--" :
                     `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
                 }
@@ -56,7 +69,7 @@ function ProjectCard(props: IProjectProps) {
                 <button className=" ">
                     {isRunning
                         ? <PauseIcon onClick={pause} className="h-6 w-6"></PauseIcon>
-                        : <PlayIcon onClick={start} className="h-6 w-6"></PlayIcon>}
+                        : <PlayIcon onClick={handleStart} className="h-6 w-6"></PlayIcon>}
                 </button>
             </div>
         </div>

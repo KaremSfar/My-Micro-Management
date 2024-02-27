@@ -6,24 +6,30 @@ import { useAuth } from "../Auth/AuthContext";
 function Dashboard() {
     const { accessToken } = useAuth();
 
-    const [projects, setProjects] = useState<ProjectDTO[]>([]);
-
     useEffect(() => {
         const fetchProjects = async () => {
             const response = await fetch('https://micomanagement-service.azurewebsites.net/api/projects', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`, // Set the Authorization header
+                    'Authorization': `Bearer ${accessToken}`,
                 }
             });
             const data: ProjectDTO[] = await response.json();
-            setProjects(data); // Assuming the API response is an array of project objects
+            setProjects(data);
         };
 
         fetchProjects();
-    }, [accessToken]); // Empty dependency array means this effect runs once on mount
+    }, []);
 
+    const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
+
+    const handleStart = (projectId: string) => {
+        console.log("called");
+        setRunningProjectId(projectId);
+    };
+
+    const [projects, setProjects] = useState<ProjectDTO[]>([]);
 
     return (
         <div className="grid lg:grid-cols-4 grid-cols-1 justify-start lg my-8 gap-4 overflow-auto">
@@ -32,6 +38,8 @@ function Dashboard() {
                     key={project.id}
                     projectName={project.name}
                     projectColor={project.color}
+                    isCurrentProjectRunning={runningProjectId === project.id}
+                    onStart={() => handleStart(project.id)}
                 />
             ))}
         </div>
