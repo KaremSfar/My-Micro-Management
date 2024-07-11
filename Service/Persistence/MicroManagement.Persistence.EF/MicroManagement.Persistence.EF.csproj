@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="19.239.0-preview" />
   </ItemGroup>
 
   <ItemGroup>

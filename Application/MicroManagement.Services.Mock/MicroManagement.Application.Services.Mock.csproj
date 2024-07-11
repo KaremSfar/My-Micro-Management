@@ -10,4 +10,8 @@
     <ProjectReference Include="..\MicroManagement.Services\MicroManagement.Application.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Services.Client" Version="19.239.0-preview" />
+  </ItemGroup>
+
 </Project>
