@@ -69,7 +69,7 @@ function ProjectCard(props: IProjectCardProps) {
             };
 
             try {
-                const response = await fetch('https://micomanagement-service.azurewebsites.net/api/timeSessions', {
+                const response = await fetch(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/api/timeSessions`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

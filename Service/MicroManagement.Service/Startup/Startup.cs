@@ -42,7 +42,7 @@ namespace MicroManagement.Service
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"]!,
                     ValidAudience = Configuration["Jwt:Audience"]!,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtAccessKey"]!))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JwtAccessKey"]!))
                 };
             });
 
@@ -57,15 +57,19 @@ namespace MicroManagement.Service
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetAssembly(typeof(ProjectDTO))!.GetName().Name}.xml"));
             });
 
-            services.AddTransient<IProjectsRepository, SQLiteProjectsRepository>();
+            services.AddTransient<IProjectsRepository, SqlProjectsRepository>();
             services.AddTransient<IProjectsService, ProjectsService>();
 
-            services.AddTransient<ITimeSessionsRepository, SQLiteTimeSessionsRepository>();
+            services.AddTransient<ITimeSessionsRepository, SqlTimeSessionsRepository>();
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
 
-            services.AddDbContext<MyMicroManagementDbContext>(options =>
+            services.AddDbContextFactory<MyMicroManagementDbContext>(options =>
             {
-                options.UseSqlServer(Configuration["DbConnectionString"]);
+                // TODO-KAREM: update here if deployed a real db
+                var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
+                var dbPath = Path.Combine(projectRoot, "..", "..", "..", "..", "..", "SQLite", "service.db");
+
+                options.UseSqlite($"DataSource={dbPath}");
             });
 
             services.AddCors(options =>

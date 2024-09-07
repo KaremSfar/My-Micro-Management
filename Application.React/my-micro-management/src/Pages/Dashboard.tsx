@@ -8,7 +8,7 @@ function Dashboard() {
 
     useEffect(() => {
         const fetchProjects = async () => {
-            const response = await fetch('https://micomanagement-service.azurewebsites.net/api/projects', {
+            const response = await fetch(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/api/projects`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

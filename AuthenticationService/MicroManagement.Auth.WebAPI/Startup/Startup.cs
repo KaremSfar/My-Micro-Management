@@ -37,7 +37,7 @@ public class Startup
         {
             // TODO-KAREM: update here if deployed a real db
             var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
-            var dbPath = Path.Combine(projectRoot, "..", "..", "..", "..", "..", "SQLite", "mydatabase.db");
+            var dbPath = Path.Combine(projectRoot, "..", "..", "..", "..", "..", "SQLite", "auth.db");
 
             options.UseSqlite($"DataSource={dbPath}");
         });

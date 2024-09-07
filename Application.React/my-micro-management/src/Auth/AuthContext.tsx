@@ -17,20 +17,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
     const login = async (email: string, password: string) => {
-        const response = await fetch('https://micromanagement-auth.azurewebsites.net/auth/login', {
+        const response = await fetch(`${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
             credentials: 'include'
         });
         const data = await response.json();
-        setAccessToken(data.accessToken); // Assuming your API returns the access token directly
+        setAccessToken(data.accessToken);
     };
 
     const refreshAuthToken = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('https://micromanagement-auth.azurewebsites.net/auth/refresh-token', {
+            const response = await fetch(`${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/auth/refresh-token`, {
                 method: 'POST',
                 credentials: 'include', // Necessary to send the HttpOnly cookie
             });

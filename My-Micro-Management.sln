@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{367D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.DataContracts", "Service\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj", "{1FF43F6D-0B5A-47EB-AD0C-CA2439627BAB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Service", "Service\MicroManagement.Service\MicroManagement.Service.csproj", "{91C9F41E-5B7E-4CE4-B376-0A52BA8B086E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Service.WebAPI", "Service\MicroManagement.Service\MicroManagement.Service.WebAPI.csproj", "{91C9F41E-5B7E-4CE4-B376-0A52BA8B086E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroManagement.Persistence.EF", "Service\Persistence\MicroManagement.Persistence.EF\MicroManagement.Persistence.EF.csproj", "{FB19DC41-8B04-477B-A2B7-D119C81F4350}"
 EndProject

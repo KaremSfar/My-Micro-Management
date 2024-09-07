@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace MicroManagement.Persistence.EF.Repositories
 {
-    public class SQLiteProjectsRepository : IProjectsRepository
+    public class SqlProjectsRepository : IProjectsRepository
     {
         private MyMicroManagementDbContext _dbContext;
 
-        public SQLiteProjectsRepository(MyMicroManagementDbContext dbContext)
+        public SqlProjectsRepository(MyMicroManagementDbContext dbContext)
         {
             _dbContext = dbContext;
         }

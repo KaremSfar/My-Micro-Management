@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace MicroManagement.Persistence.EF.Repositories
 {
-    public class SQLiteTimeSessionsRepository : ITimeSessionsRepository
+    public class SqlTimeSessionsRepository : ITimeSessionsRepository
     {
         private MyMicroManagementDbContext _dbContext;
         private DbSet<TimeSessionEntity> _dbSet => _dbContext.TimeSessions;
 
-        public SQLiteTimeSessionsRepository(MyMicroManagementDbContext dbContext)
+        public SqlTimeSessionsRepository(MyMicroManagementDbContext dbContext)
         {
             _dbContext = dbContext;
         }
