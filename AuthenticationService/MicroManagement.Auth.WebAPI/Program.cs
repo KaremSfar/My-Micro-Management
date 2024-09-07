@@ -1,4 +1,3 @@
-
 namespace MicroManagement.Auth.WebAPI
 {
     public class Program

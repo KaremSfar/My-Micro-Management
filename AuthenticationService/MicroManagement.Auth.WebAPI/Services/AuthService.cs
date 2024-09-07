@@ -143,7 +143,7 @@ namespace MicroManagement.Auth.WebAPI.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id!)
             };
 
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtAccessKey"]!));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:JwtAccessKey"]!));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var tokenOptions = new JwtSecurityToken(
@@ -163,7 +163,7 @@ namespace MicroManagement.Auth.WebAPI.Services
                 new Claim(ClaimTypes.Email, user.Email!)
             };
 
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtRefreshKey"]!));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:JwtRefreshKey"]!));
             var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
             var tokenOptions = new JwtSecurityToken(
