@@ -1,4 +1,5 @@
-﻿using MicroManagement.Persistence.Abstraction.Repositories;
+﻿using MicroManagement.Auth.WebAPI;
+using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Persistence.EF.Configuration;
 using MicroManagement.Persistence.EF.Repositories;
 using MicroManagement.Services;
@@ -63,13 +64,18 @@ namespace MicroManagement.Service
             services.AddTransient<ITimeSessionsRepository, SqlTimeSessionsRepository>();
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
 
+            services.AddHostedService<SqliteInitializationService>();
+
             services.AddDbContextFactory<MyMicroManagementDbContext>(options =>
             {
                 // TODO-KAREM: update here if deployed a real db
                 var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
                 var dbPath = Path.Combine(projectRoot, "..", "..", "..", "..", "..", "SQLite", "service.db");
 
-                options.UseSqlite($"DataSource={dbPath}");
+                options.UseSqlite($"DataSource={dbPath}", options =>
+                {
+                    options.MigrationsAssembly("MicroManagement.Persistence.Migrations.SQLite");
+                });
             });
 
             services.AddCors(options =>

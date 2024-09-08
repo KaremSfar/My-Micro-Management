@@ -121,7 +121,7 @@ namespace MicroManagement.Auth.WebAPI.Services
         #region Token Manipulation
         private ClaimsPrincipal ValidateRefreshToken(string refreshTokenInput)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtRefreshKey"]!));
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:JwtRefreshKey"]!));
 
             var validationParam = new TokenValidationParameters()
             {

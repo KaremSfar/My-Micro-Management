@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ProjectCard from "../Components/ProjectCard";
 import { ProjectDTO } from "../DTOs/ProjectDto";
 import { useAuth } from "../Auth/AuthContext";
+import NewProjectCard from "../Components/NewProjectCard"; // Assuming this is the correct import path
 
 function Dashboard() {
     const { accessToken } = useAuth();
@@ -43,7 +44,9 @@ function Dashboard() {
                     onStart={() => handleStart(project.id)}
                 />
             ))}
+            <NewProjectCard /> {/* Add the NewProjectCard here */}
         </div>
+        
     );
 }
 

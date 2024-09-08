@@ -15,7 +15,6 @@ namespace MicroManagement.Services.Abstraction.DTOs
         /// <summary>
         /// The Id of the Project, currently it's the responsibility of the client to specify it !
         /// </summary>
-        [Required]
         public Guid Id { get; set; }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace MicroManagement.Auth.WebAPI
             if (!dbContext.Database.IsSqlite())
                 throw new InvalidOperationException("WARNING, This service should only be injected for Local Development on SQLite DB!");
 
-            await dbContext.Database.EnsureCreatedAsync();
+            await dbContext.Database.MigrateAsync();
         }
 
         /// <inheritdoc/>

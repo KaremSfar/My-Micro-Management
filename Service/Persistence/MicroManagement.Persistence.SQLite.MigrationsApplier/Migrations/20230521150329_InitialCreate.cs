@@ -15,7 +15,7 @@ namespace MicroManagement.Persistence.SQLite.MigrationsApplier.Migrations
                 name: "ProjectsTable",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, collation: "NOCASE"),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Color = table.Column<string>(type: "TEXT", nullable: false)
                 },
