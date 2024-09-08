@@ -6,12 +6,19 @@ on:
     paths:
     - AuthenticationService/**
   workflow_dispatch:
+    inputs: 
+        environemnt: 
+            description: 'Deployment Environment'
+            required: true
+            default: 'Production'
+  
 env:
   AZURE_WEBAPP_NAME: micromanagement-auth
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
   WORKING_DIRECTORY: ./AuthenticationService/MicroManagement.Auth.WebAPI
+  ASPNETCORE_ENVIRONMENT: ${{github.event.inputs.environment}}
 jobs:
   build:
     runs-on: ubuntu-latest

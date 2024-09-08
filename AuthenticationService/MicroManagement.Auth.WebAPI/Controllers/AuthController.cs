@@ -55,14 +55,32 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         }
 
         /// <summary>
+        /// Endpoint to logout the user
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            AppendRefreshToken(string.Empty);
+            return Ok();
+        }
+
+        /// <summary>
         /// Refresh token endpoint, based on the given refreshToken returns a new pair of access and refresh tokens
         /// </summary>
         /// <param name="refreshToken"></param>
         /// <returns></returns>
         [HttpPost("refresh-token")]
-        public async Task<ActionResult<JwtAccessTokenDTO>> RefreshToken([FromBody] RefreshTokenInputDto refreshToken)
+        public async Task<ActionResult<JwtAccessTokenDTO>> RefreshToken()
         {
-            var refreshResult = await this._authService.RefreshTokenAsync(refreshToken.RefreshToken);
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return BadRequest("Refresh token is missing.");
+            }
+
+            var refreshResult = await this._authService.RefreshTokenAsync(refreshToken);
 
             return refreshResult.Match<ActionResult<JwtAccessTokenDTO>>(
                 jwt =>
@@ -77,9 +95,9 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = true,
                 Secure = true, // Ensure the cookie is sent over HTTPS
-                SameSite = SameSiteMode.Strict, // Prevents the cookie from being sent in cross-site requests
+                SameSite = SameSiteMode.None, // Prevents the cookie from being sent in cross-site requests
+                Expires = DateTimeOffset.UtcNow.AddDays(7)
             };
 
             Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);

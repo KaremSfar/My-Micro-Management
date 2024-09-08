@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>8b560331-917e-4e95-9a7f-2d3fc6c5f613</UserSecretsId>
@@ -25,5 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MicroManagement.Auth.DataContracts\MicroManagement.Auth.DataContracts.csproj" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
