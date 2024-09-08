@@ -2,8 +2,13 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import { Dialog } from '@headlessui/react'; // Add this import
 import { useState } from 'react';
 import NewProjectForm from './NewProjectForm';
+import { ProjectDTO } from '../DTOs/ProjectDto';
 
-function NewProjectCard() {
+interface NewProjectCardProps {
+    onProjectCreated: (project: ProjectDTO) => void;
+}
+
+function NewProjectCard({ onProjectCreated }: NewProjectCardProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleOpenModal = () => {
@@ -32,8 +37,8 @@ function NewProjectCard() {
                         <Dialog.Title className="text-lg font-medium mb-4">Create New Project</Dialog.Title>
                         <NewProjectForm
                             onClose={() => setIsModalOpen(false)}
-                            onProjectCreated={(id: string) => {
-                                // You might want to trigger a refresh of the project list here
+                            onProjectCreated={(project: ProjectDTO) => {
+                                onProjectCreated(project);
                                 setIsModalOpen(false);
                             }}
                         />

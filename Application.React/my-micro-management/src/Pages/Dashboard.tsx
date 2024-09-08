@@ -32,6 +32,10 @@ function Dashboard() {
 
     const [projects, setProjects] = useState<ProjectDTO[]>([]);
 
+    const addNewProject = (newProject: ProjectDTO) => {
+        setProjects((prevProjects) => [...prevProjects, newProject]);
+    };
+
     return (
         <div className="grid lg:grid-cols-4 grid-cols-1 justify-start lg my-8 gap-4 overflow-auto">
             {projects.map((project) => (
@@ -44,7 +48,7 @@ function Dashboard() {
                     onStart={() => handleStart(project.id)}
                 />
             ))}
-            <NewProjectCard /> {/* Add the NewProjectCard here */}
+            <NewProjectCard onProjectCreated={addNewProject} /> {/* Pass the function here */}
         </div>
         
     );

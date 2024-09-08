@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../Auth/AuthContext';
+import { ProjectDTO } from '../DTOs/ProjectDto';
 
 interface NewProjectFormProps {
     onClose: () => void;
-    onProjectCreated: (id: string) => void;
+    onProjectCreated: (addedProject: ProjectDTO) => void;
 }
 
 function NewProjectForm({ onClose, onProjectCreated }: NewProjectFormProps) {
@@ -28,7 +29,7 @@ function NewProjectForm({ onClose, onProjectCreated }: NewProjectFormProps) {
             }
 
             const project = await response.json();
-            onProjectCreated(project.id);
+            onProjectCreated(project as ProjectDTO);
             onClose();
         } catch (error) {
             console.error('Error creating project:', error);
