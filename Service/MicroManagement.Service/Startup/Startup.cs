@@ -2,11 +2,14 @@
 using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Persistence.EF.Configuration;
 using MicroManagement.Persistence.EF.Repositories;
+using MicroManagement.Service.WebAPI.Hubs;
+using MicroManagement.Service.WebAPI.Services;
 using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.WebSockets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
@@ -28,6 +31,8 @@ namespace MicroManagement.Service
             // Add services to the container.
             services.AddControllers();
 
+            services.AddSignalR();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -44,6 +49,19 @@ namespace MicroManagement.Service
                     ValidIssuer = Configuration["Jwt:Issuer"]!,
                     ValidAudience = Configuration["Jwt:Audience"]!,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JwtAccessKey"]!))
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+
+                        context.Token = accessToken;
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
@@ -63,6 +81,7 @@ namespace MicroManagement.Service
 
             services.AddTransient<ITimeSessionsRepository, SqlTimeSessionsRepository>();
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
+            services.AddSingleton<IUserConnectionsProvider, UserConnectionsProvider>();
 
             services.AddHostedService<SqliteInitializationService>();
 
@@ -80,11 +99,9 @@ namespace MicroManagement.Service
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowLocalReact", builder =>
+                options.AddPolicy("allowAll", builder =>
                 {
-                    builder.WithOrigins("https://localhost:3000")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
+                    builder.AllowCredentials().AllowAnyHeader().AllowAnyMethod();
                 });
             });
         }
@@ -97,7 +114,7 @@ namespace MicroManagement.Service
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
-                app.UseCors("AllowLocalReact");
+                app.UseCors("allowAll");
             }
             else
             {
@@ -114,6 +131,7 @@ namespace MicroManagement.Service
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<TimeSessionsHub>("/hub/timesessionshub");
             });
         }
 

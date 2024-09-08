@@ -41,7 +41,7 @@ namespace MicroManagement.Service.Controllers
         public async Task<IActionResult> Post(TimeSessionDTO timeSession)
         {
             var addedTimeSession = await _timeSessionsService
-                .AddTimeSession(GetUserId(), timeSession);
+                .StartTimeSession(GetUserId(), timeSession);
 
             return Ok(addedTimeSession);
         }

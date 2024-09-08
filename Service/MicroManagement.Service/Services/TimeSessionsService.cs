@@ -19,7 +19,7 @@ namespace MicroManagement.Services
             _timeSessionsRepo = timeSessionsRepo;
         }
 
-        public async Task<TimeSessionDTO> AddTimeSession(Guid userId, TimeSessionDTO timeSessionDTO)
+        public async Task<TimeSessionDTO> StartTimeSession(Guid userId, TimeSessionDTO timeSessionDTO)
         {
             // TODO: Some validation could be nice :/ 
             // - existing project
@@ -40,6 +40,11 @@ namespace MicroManagement.Services
         {
             return (await _timeSessionsRepo.GetAllAsync(userId))
                 .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndDate = ts.EndDate, ProjectIds = ts.ProjectIds });
+        }
+
+        public Task<TimeSessionDTO> StopTimeSession(Guid userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
