@@ -50,19 +50,6 @@ namespace MicroManagement.Service
                     ValidAudience = Configuration["Jwt:Audience"]!,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JwtAccessKey"]!))
                 };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"];
-                        var path = context.HttpContext.Request.Path;
-
-                        context.Token = accessToken;
-
-                        return Task.CompletedTask;
-                    }
-                };
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -99,9 +86,12 @@ namespace MicroManagement.Service
 
             services.AddCors(options =>
             {
-                options.AddPolicy("allowAll", builder =>
+                options.AddPolicy("AllowLocalReact", builder =>
                 {
-                    builder.AllowCredentials().AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("https://localhost:3000")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
                 });
             });
         }
@@ -114,7 +104,7 @@ namespace MicroManagement.Service
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
-                app.UseCors("allowAll");
+                app.UseCors("AllowLocalReact");
             }
             else
             {

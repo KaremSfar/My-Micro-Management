@@ -3,9 +3,13 @@ import ProjectCard from "../Components/ProjectCard";
 import { ProjectDTO } from "../DTOs/ProjectDto";
 import { useAuth } from "../Auth/AuthContext";
 import NewProjectCard from "../Components/NewProjectCard"; // Assuming this is the correct import path
+import { HubConnection, HubConnectionBuilder, JsonHubProtocol } from "@microsoft/signalr";
 
 function Dashboard() {
     const { accessToken } = useAuth();
+    const [projects, setProjects] = useState<ProjectDTO[]>([]);
+    const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
+    const [connection, setConnection] = useState<HubConnection | null>(null);
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -16,21 +20,43 @@ function Dashboard() {
                     'Authorization': `Bearer ${accessToken}`,
                 }
             });
+
             const data: ProjectDTO[] = await response.json();
             setProjects(data);
         };
 
-        fetchProjects();
-    }, []);
+        if (accessToken) {
+            fetchProjects();
+        }
+    }, []); // Refetch projects when accessToken changes
 
-    const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
+    useEffect(() => {
+        const connection = new HubConnectionBuilder()
+            .withUrl(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/hub/timesessionshub`, {
+                accessTokenFactory: () => accessToken!
+            })
+            .withAutomaticReconnect()
+            .withHubProtocol(new JsonHubProtocol())
+            .build();
+
+        setConnection(connection);
+
+        connection.start().then(() => {
+            console.log("Connected to WebSocket");
+        }).catch((error) => {
+            console.error("Error connecting to WebSocket:", error);
+        });
+
+        connection.onclose((error) => {
+            console.error("WebSocket connection closed:", error);
+        });
+
+    }, []); // undo
 
     const handleStart = (projectId: string) => {
         console.log("called");
         setRunningProjectId(projectId);
     };
-
-    const [projects, setProjects] = useState<ProjectDTO[]>([]);
 
     const addNewProject = (newProject: ProjectDTO) => {
         setProjects((prevProjects) => [...prevProjects, newProject]);
@@ -48,9 +74,8 @@ function Dashboard() {
                     onStart={() => handleStart(project.id)}
                 />
             ))}
-            <NewProjectCard onProjectCreated={addNewProject} /> {/* Pass the function here */}
+            <NewProjectCard onProjectCreated={addNewProject} />
         </div>
-        
     );
 }
 
