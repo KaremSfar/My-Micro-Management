@@ -20,8 +20,7 @@ namespace MicroManagement.Persistence.EF.Entities
         [Required]
         public DateTime StartTime { get; set; }
 
-        [Required]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public virtual ICollection<ProjectEntity> Projects { get; set; } = new List<ProjectEntity>();
     }

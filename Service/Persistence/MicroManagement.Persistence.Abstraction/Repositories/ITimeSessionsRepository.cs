@@ -11,5 +11,6 @@ namespace MicroManagement.Persistence.Abstraction.Repositories
     {
         Task<IEnumerable<TimeSession>> GetAllAsync(Guid userId);
         Task AddAsync(TimeSession timeSession);
+        Task UpdateAsync(TimeSession timeSession);
     }
 }

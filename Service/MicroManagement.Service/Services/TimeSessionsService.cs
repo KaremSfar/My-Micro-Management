@@ -19,21 +19,22 @@ namespace MicroManagement.Services
             _timeSessionsRepo = timeSessionsRepo;
         }
 
-        public async Task<TimeSessionDTO> StartTimeSession(Guid userId, TimeSessionDTO timeSessionDTO)
+        public async Task<TimeSessionDTO> StartTimeSession(Guid userId, Guid projectId)
         {
-            // TODO: Some validation could be nice :/ 
-            // - existing project
-            // - non overlapping time sessions
             var timeSession = new TimeSession()
             {
                 UserId = userId,
-                StartTime = timeSessionDTO.StartTime,
-                EndDate = timeSessionDTO.EndDate,
-                ProjectIds = timeSessionDTO.ProjectIds,
+                StartTime = DateTime.UtcNow,
+                EndDate = null,
+                ProjectIds = new List<Guid> { projectId },
             };
 
             await _timeSessionsRepo.AddAsync(timeSession);
-            return timeSessionDTO;
+
+            return new TimeSessionDTO
+            {
+                StartTime = timeSession.StartTime
+            };
         }
 
         public async Task<IEnumerable<TimeSessionDTO>> GetAll(Guid userId)
@@ -42,9 +43,24 @@ namespace MicroManagement.Services
                 .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndDate = ts.EndDate, ProjectIds = ts.ProjectIds });
         }
 
-        public Task<TimeSessionDTO> StopTimeSession(Guid userId)
+        public async Task StopTimeSession(Guid userId)
         {
-            throw new NotImplementedException();
+            var timeSessions = (await _timeSessionsRepo.GetAllAsync(userId))
+                .Where(ts => ts.EndDate is null)
+                .ToList();
+
+            if (timeSessions.Count > 1)
+                Console.WriteLine("HAAAAA some time sessions were started while others not stopped");
+
+            var timeSessionsToStop = timeSessions.Select(ts => ts with
+            {
+                EndDate = DateTime.UtcNow
+            }).ToList();
+
+            foreach (var timeSessionToStop in timeSessionsToStop)
+            {
+                await _timeSessionsRepo.UpdateAsync(timeSessionToStop);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LanguageExt.Pipes;
+using MicroManagement.Core;
 using MicroManagement.Service.WebAPI.Services;
 using MicroManagement.Services.Abstraction;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +27,28 @@ public class TimeSessionsHub(IUserConnectionsProvider _userConnectionsProvider, 
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetUserId().ToString());
 
         await base.OnDisconnectedAsync(exception);
+    }
+
+    public async Task TimeSessionStarted(Guid projectId)
+    {
+        var userId = GetUserId();
+
+        await _timeSessionsService.StopTimeSession(userId);
+
+        await Clients.GroupExcept(userId.ToString(), [Context.ConnectionId]).SendAsync("TimeSessionsStopped");
+
+        await _timeSessionsService.StartTimeSession(userId, projectId);
+
+        await Clients.GroupExcept(userId.ToString(), [Context.ConnectionId]).SendAsync("TimeSessionStarted", projectId);
+    }
+
+    public async Task TimeSessionsStopped()
+    {
+        var userId = GetUserId();
+
+        await _timeSessionsService.StopTimeSession(userId);
+
+        await Clients.GroupExcept(userId.ToString(), [Context.ConnectionId]).SendAsync("TimeSessionsStopped");
     }
 
     private Guid GetUserId()

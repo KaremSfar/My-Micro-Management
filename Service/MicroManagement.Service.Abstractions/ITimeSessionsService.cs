@@ -9,8 +9,8 @@ namespace MicroManagement.Services.Abstraction
 {
     public interface ITimeSessionsService
     {
-        Task<TimeSessionDTO> StartTimeSession(Guid userId, TimeSessionDTO timeSessionDTO);
-        Task<TimeSessionDTO> StopTimeSession(Guid userId);
+        Task<TimeSessionDTO> StartTimeSession(Guid userId, Guid projectId);
+        Task StopTimeSession(Guid userId);
         Task<IEnumerable<TimeSessionDTO>> GetAll(Guid userId);
     }
 }

@@ -60,5 +60,23 @@ namespace MicroManagement.Persistence.EF.Repositories
 
             return timesSessions;
         }
+
+        public async Task UpdateAsync(TimeSession timeSession)
+        {
+            var timeSessionEntity = await _dbSet
+                .Where(t => t.UserId.ToString() == timeSession.UserId.ToString())
+                .Where(t => t.StartTime == timeSession.StartTime)
+                .Include(t => t.Projects)
+                .FirstOrDefaultAsync();
+
+            if (timeSessionEntity is null)
+                return;
+
+            timeSessionEntity.EndDate = timeSession.EndDate;
+
+            _dbSet.Update(timeSessionEntity);
+
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

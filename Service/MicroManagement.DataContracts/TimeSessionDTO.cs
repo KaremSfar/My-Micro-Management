@@ -17,8 +17,7 @@ namespace MicroManagement.Services.Abstraction.DTOs
         /// <summary>
         /// End Time of the session 
         /// </summary>
-        [Required]
-        public DateTime EndDate { get; set; } // TODO-KAREM: rename this into EndTime :(
+        public DateTime? EndDate { get; set; } // TODO-KAREM: rename this into EndTime :(
 
         /// <summary>
         /// The projects that were in action during the time session
