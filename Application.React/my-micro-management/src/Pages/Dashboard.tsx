@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProjectCard from "../Components/ProjectCard";
 import { ProjectDTO } from "../DTOs/ProjectDto";
 import { useAuth } from "../Auth/AuthContext";
@@ -9,7 +9,7 @@ function Dashboard() {
     const { accessToken } = useAuth();
     const [projects, setProjects] = useState<ProjectDTO[]>([]);
     const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
-    const [connection, setConnection] = useState<HubConnection | null>(null);
+    const webSocketConnectionRef = useRef<HubConnection | null>(null);
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -31,21 +31,21 @@ function Dashboard() {
     }, []);
 
     useEffect(() => {
-        const connection = new HubConnectionBuilder()
-            .withUrl(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/hub/timesessionshub`, {
-                accessTokenFactory: () => accessToken!
-            })
-            .withAutomaticReconnect()
-            .withHubProtocol(new JsonHubProtocol())
-            .build();
+        let connection = webSocketConnectionRef.current;
 
-        setConnection(connection);
+        if (!connection) {
+            connection = new HubConnectionBuilder()
+                .withUrl(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/hub/timesessionshub`, {
+                    accessTokenFactory: () => accessToken!
+                })
+                .withAutomaticReconnect()
+                .withHubProtocol(new JsonHubProtocol())
+                .build();
 
-        connection.start().then(() => {
-            console.log("Connected to WebSocket");
-        }).catch((error) => {
-            console.error("Error connecting to WebSocket:", error);
-        });
+            webSocketConnectionRef.current = connection;
+
+            connection.start();
+        }
 
         connection.onclose((error) => {
             console.error("WebSocket connection closed:", error);
@@ -59,7 +59,7 @@ function Dashboard() {
 
     const handleStart = (projectId: string) => {
         console.log("called");
-        connection?.send("TimeSessionStarted", projectId);
+        webSocketConnectionRef.current!.send("TimeSessionStarted", projectId);
         setRunningProjectId(projectId);
     };
 
