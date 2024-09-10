@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectCard from "../Components/ProjectCard";
 import { ProjectDTO } from "../DTOs/ProjectDto";
 import { useAuth } from "../Auth/AuthContext";
@@ -29,7 +29,6 @@ function Dashboard() {
     }, []);
 
     const handleStart = (projectId: string) => {
-        console.log("called");
         setRunningProjectId(projectId);
     };
 
@@ -46,6 +45,7 @@ function Dashboard() {
                     projectColor={project.color}
                     projectId={project.id}
                     isCurrentProjectRunning={runningProjectId === project.id}
+                    initialTimeSpentTotal={16}
                     onStart={() => handleStart(project.id)}
                 />
             ))}

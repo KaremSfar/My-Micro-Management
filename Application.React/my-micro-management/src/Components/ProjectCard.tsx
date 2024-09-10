@@ -1,7 +1,5 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
-import { useEffect } from 'react';
 import { useProjectCardColors } from '../hooks/projectCard/useProjectCardColors';
-import { useCreateTimeSession } from '../hooks/projectCard/useCreateTimeSession';
 import { useProjectCardTime } from '../hooks/projectCard/useProjectCardTime';
 
 interface IProjectCardProps {
@@ -9,22 +7,17 @@ interface IProjectCardProps {
     projectColor: string;
     projectId: string;
     isCurrentProjectRunning: boolean;
+    initialTimeSpentTotal: number;
     onStart: () => void;
 }
 
 function ProjectCard(props: IProjectCardProps) {
     const { backgroundColor, borderColor, color } = useProjectCardColors(props.projectColor);
-    const { seconds, minutes, isRunning, pause, handleStart, totalTimeToday } = useProjectCardTime(props.isCurrentProjectRunning, props.onStart);
-    const createTimeSession = useCreateTimeSession(props.projectId);
-
-    useEffect(() => {
-        if (!props.isCurrentProjectRunning && isRunning && seconds > 10) {
-            createTimeSession(seconds);
-        }
-    }, [props.isCurrentProjectRunning, isRunning, seconds, createTimeSession]);
+    const { seconds, minutes, isRunning, pause, handleStartTimer, totalTimeToday } =
+        useProjectCardTime(props.isCurrentProjectRunning, props.initialTimeSpentTotal, props.onStart);
 
     return (
-        <div onClick={isRunning ? pause : handleStart}
+        <div onClick={isRunning ? pause : handleStartTimer}
             className="lg:aspect-[5/3] sm:min-w-48 border-2 rounded-lg shadow-md min-w-full m-1 hover:scale-[1.01] transition-transform hover:cursor-pointer"
             style={{ backgroundColor, borderColor }}>
             <div className="flex flex-col h-full justify-between font-bold p-2">
@@ -42,7 +35,7 @@ function ProjectCard(props: IProjectCardProps) {
                     <button className=" ">
                         {isRunning
                             ? <PauseIcon onClick={pause} className="h-6 w-6"></PauseIcon>
-                            : <PlayIcon onClick={handleStart} className="h-6 w-6"></PlayIcon>}
+                            : <PlayIcon onClick={handleStartTimer} className="h-6 w-6"></PlayIcon>}
                     </button>
                 </div>
             </div>
