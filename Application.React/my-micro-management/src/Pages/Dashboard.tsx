@@ -28,7 +28,7 @@ function Dashboard() {
         if (accessToken) {
             fetchProjects();
         }
-    }, []); // Refetch projects when accessToken changes
+    }, []);
 
     useEffect(() => {
         const connection = new HubConnectionBuilder()
@@ -51,10 +51,15 @@ function Dashboard() {
             console.error("WebSocket connection closed:", error);
         });
 
-    }, []); // undo
+        connection.on("TimeSessionsStopped", () => {
+            setRunningProjectId(projects[0].id);
+        });
+
+    }, [accessToken]);
 
     const handleStart = (projectId: string) => {
         console.log("called");
+        connection?.send("TimeSessionStarted", projectId);
         setRunningProjectId(projectId);
     };
 

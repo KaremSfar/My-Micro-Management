@@ -50,6 +50,21 @@ namespace MicroManagement.Service
                     ValidAudience = Configuration["Jwt:Audience"]!,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JwtAccessKey"]!))
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+
+                        // Set Access token for SignalR hubs
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hub/timesessionshub"))
+                            context.Token = accessToken;
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
