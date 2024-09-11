@@ -6,4 +6,5 @@ export interface ProjectDTO {
     //TO-DO karem remove these fields below from here
     timeSpentCurrentSession: number;
     timeSpentTotal: number;
+    isRunning: boolean;
 }

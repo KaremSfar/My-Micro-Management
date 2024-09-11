@@ -44,10 +44,10 @@ namespace MicroManagement.Persistence.EF.Repositories
 
         public async Task<IEnumerable<TimeSession>> GetAllAsync(Guid userId)
         {
-            var timeSessionEntities = await _dbSet
-                .Where(t => t.UserId.ToString() == userId.ToString())
+            var timeSessionEntities = (await _dbSet
                 .Include(t => t.Projects)
-                .ToListAsync();
+                .ToListAsync())
+                .Where(t => t.UserId.ToString() == userId.ToString());
 
             var timesSessions = new List<TimeSession>();
 
@@ -64,7 +64,7 @@ namespace MicroManagement.Persistence.EF.Repositories
         public async Task UpdateAsync(TimeSession timeSession)
         {
             var timeSessionEntity = await _dbSet
-                .Where(t => t.UserId.ToString() == timeSession.UserId.ToString())
+                .Where(t => t.UserId.ToString() == timeSession.UserId.ToString().ToUpperInvariant())
                 .Where(t => t.StartTime == timeSession.StartTime)
                 .Include(t => t.Projects)
                 .FirstOrDefaultAsync();

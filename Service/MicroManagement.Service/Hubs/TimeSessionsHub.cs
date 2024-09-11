@@ -24,31 +24,21 @@ public class TimeSessionsHub(IUserConnectionsProvider _userConnectionsProvider, 
     {
         await _userConnectionsProvider.RemoveConnection(GetUserId(), Context.ConnectionId);
 
+        if(!await _userConnectionsProvider.HasActiveConnections(GetUserId()))
+            await _timeSessionsService.StopTimeSession(GetUserId());
+
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetUserId().ToString());
 
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task TimeSessionStarted(Guid projectId)
+    public async Task StartTimeSession(Guid projectId)
     {
         var userId = GetUserId();
-
-        await _timeSessionsService.StopTimeSession(userId);
-
-        await Clients.GroupExcept(userId.ToString(), [Context.ConnectionId]).SendAsync("TimeSessionsStopped");
 
         await _timeSessionsService.StartTimeSession(userId, projectId);
 
         await Clients.GroupExcept(userId.ToString(), [Context.ConnectionId]).SendAsync("TimeSessionStarted", projectId);
-    }
-
-    public async Task TimeSessionsStopped()
-    {
-        var userId = GetUserId();
-
-        await _timeSessionsService.StopTimeSession(userId);
-
-        await Clients.GroupExcept(userId.ToString(), [Context.ConnectionId]).SendAsync("TimeSessionsStopped");
     }
 
     private Guid GetUserId()

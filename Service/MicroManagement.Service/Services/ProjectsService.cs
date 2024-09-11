@@ -15,10 +15,12 @@ namespace MicroManagement.Services
     public class ProjectsService : IProjectsService
     {
         private IProjectsRepository _projectsRepo;
+        private ITimeSessionsRepository _timeSessionsRepository;
 
-        public ProjectsService(IProjectsRepository projectsRepo)
+        public ProjectsService(IProjectsRepository projectsRepo, ITimeSessionsRepository timeSessionsRepository)
         {
             _projectsRepo = projectsRepo;
+            _timeSessionsRepository = timeSessionsRepository;
         }
 
         public async Task<ProjectDTO> AddProject(Guid userId, ProjectDTO addProjectDto)
@@ -32,7 +34,28 @@ namespace MicroManagement.Services
         public async Task<IEnumerable<ProjectDTO>> GetAll(Guid userId)
         {
             var projects = await _projectsRepo.GetAllAsync(userId);
-            return projects.Select(t => new ProjectDTO() { Id = t.Id, Name = t.Name, Color = t.Color });
+            var timeSessions = await _timeSessionsRepository.GetAllAsync(userId);
+
+            var timeSessionsPerProject = timeSessions.ToLookup(t => t.ProjectIds.FirstOrDefault());
+
+            var projectsDtos = projects.Select(p =>
+            {
+                var isRunning = timeSessionsPerProject[p.Id].Any(ts => ts.EndDate is null);
+                var timeSpentTotal = timeSessionsPerProject[p.Id]
+                    .Sum(ts => ((ts.EndDate ?? DateTime.UtcNow) - ts.StartTime).TotalSeconds);
+
+                return new ProjectDTO()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Color = p.Color,
+                    IsRunning = isRunning,
+                    TimeSpentTotal = Math.Round(timeSpentTotal),
+                    TimeSpentCurrentSession = isRunning ? Math.Round((DateTime.UtcNow - timeSessionsPerProject[p.Id].First(ts => ts.EndDate is null).StartTime).TotalSeconds) : 0,
+                };
+            });
+
+            return projectsDtos;
         }
     }
 }

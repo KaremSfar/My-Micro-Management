@@ -1,27 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
-export const useProjectCardTime = (isCurrentProjectRunning: boolean, initialTotalSpentTime: number, onStart: () => void) => {
-    const { seconds, minutes, start, isRunning, pause, reset } = useStopwatch();
+export const useProjectCardTime = (isCurrentProjectRunning: boolean, initialTotalSpentTime: number, initialCurrentSpentTime: number, onStart: (fromClick: boolean) => void) => {
+    const { totalSeconds, start, isRunning, pause, reset } = useStopwatch();
     const [totalTimeToday, setTotalTimeToday] = useState<number>(initialTotalSpentTime);
 
     useEffect(() => {
-        if (seconds > 0) {
+        if (totalSeconds > 0) {
             setTotalTimeToday((prevTotal: number) => prevTotal + 1);
         }
-    }, [seconds]);
+    }, [totalSeconds, isCurrentProjectRunning]);
 
-    useEffect(() => {
-        if (!isCurrentProjectRunning && isRunning) {
-            reset();
-            pause();
-        }
-    }, [isCurrentProjectRunning, isRunning, pause, reset]);
-
-    const handleStartTimer = () => {
+    const handleStartTimer = (fromClick: boolean) => {
+        reset();
         start();
-        onStart();
+        onStart(fromClick);
     };
 
-    return { seconds, minutes, isRunning, pause, handleStartTimer, totalTimeToday };
+    return { totalSeconds: totalSeconds + initialCurrentSpentTime, handleStartTimer, totalTimeToday };
 };

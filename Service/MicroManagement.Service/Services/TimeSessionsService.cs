@@ -21,6 +21,8 @@ namespace MicroManagement.Services
 
         public async Task<TimeSessionDTO> StartTimeSession(Guid userId, Guid projectId)
         {
+            await StopTimeSession(userId);
+
             var timeSession = new TimeSession()
             {
                 UserId = userId,

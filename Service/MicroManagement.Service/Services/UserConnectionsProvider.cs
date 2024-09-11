@@ -18,7 +18,7 @@ namespace MicroManagement.Service.WebAPI.Services
 
         public Task RemoveConnection(Guid userId, string connectionId)
         {
-            if (!_usersConnections.TryGetValue(userId, out int userConnections) || userConnections > 1)
+            if (!_usersConnections.TryGetValue(userId, out int userConnections) || userConnections == 0)
                 return Task.CompletedTask;
 
             // Decrement the connection count for the user

@@ -28,5 +28,20 @@ namespace MicroManagement.Services.Abstraction.DTOs
         /// </summary>
         [Required]
         public string? Color { get; set; }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        public bool IsRunning { get; set; }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        public double TimeSpentCurrentSession { get; set; }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        public double TimeSpentTotal { get; set; }
     }
 }
