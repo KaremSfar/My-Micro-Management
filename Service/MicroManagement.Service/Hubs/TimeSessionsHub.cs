@@ -24,7 +24,7 @@ public class TimeSessionsHub(IUserConnectionsProvider _userConnectionsProvider, 
     {
         await _userConnectionsProvider.RemoveConnection(GetUserId(), Context.ConnectionId);
 
-        if(!await _userConnectionsProvider.HasActiveConnections(GetUserId()))
+        if (!await _userConnectionsProvider.HasActiveConnections(GetUserId()))
             await _timeSessionsService.StopTimeSession(GetUserId());
 
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetUserId().ToString());

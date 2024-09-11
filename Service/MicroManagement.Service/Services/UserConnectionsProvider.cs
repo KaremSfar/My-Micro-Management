@@ -35,7 +35,7 @@ namespace MicroManagement.Service.WebAPI.Services
 
         public Task<bool> HasActiveConnections(Guid userId)
         {
-            if (_usersConnections.TryGetValue(userId, out int userConnections) && userConnections > 1)
+            if (_usersConnections.TryGetValue(userId, out int userConnections) && userConnections >= 1)
                 return Task.FromResult(true);
 
             return Task.FromResult(false);

@@ -19,7 +19,7 @@ function ProjectCard(props: IProjectCardProps) {
     const { backgroundColor, borderColor, color } = useProjectCardColors(props.projectColor);
 
     const { totalSeconds, handleStartTimer, totalTimeToday } =
-        useProjectCardTime(props.isCurrentProjectRunning, props.initialTimeSpentTotal, props.initialTimeSpentCurrent, props.onStart);
+        useProjectCardTime(props.isCurrentProjectRunning, props.initialTimeSpentTotal, props.initialTimeSpentCurrent);
 
     // On Mount, if the project is running, start the timer
     useEffect(() => {
@@ -28,8 +28,15 @@ function ProjectCard(props: IProjectCardProps) {
         }
     }, [props.isCurrentProjectRunning]);
 
+    const onClick = () => {
+        if (!props.isCurrentProjectRunning) {
+            handleStartTimer(true);
+            props.onStart(true);
+        }
+    }
+
     return (
-        <div onClick={() => handleStartTimer(true)}
+        <div onClick={onClick}
             className="lg:aspect-[5/3] sm:min-w-48 border-2 rounded-lg shadow-md min-w-full m-1 hover:scale-[1.01] transition-transform hover:cursor-pointer"
             style={{ backgroundColor, borderColor }}>
             <div className="flex flex-col h-full justify-between font-bold p-2">

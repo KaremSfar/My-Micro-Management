@@ -60,9 +60,18 @@ function Dashboard() {
             setRunningProjectId(projectId);
         });
 
+        return () => {
+            connection?.stop();
+            webSocketConnectionRef.current = null;
+        };
+
     }, [accessToken]);
 
     const handleStart = (projectId: string, fromClick: boolean) => {
+        if (projectId === runningProjectId) {
+            return;
+        }
+
         if (fromClick) {
             webSocketConnectionRef.current?.send("StartTimeSession", projectId);
         }
