@@ -36,59 +36,79 @@ function Dashboard() {
     }, []);
 
     useEffect(() => {
-        let connection = webSocketConnectionRef.current;
+        webSocketConnectionRef.current = new HubConnectionBuilder()
+            .withUrl(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/hub/timesessionshub`, {
+                accessTokenFactory: () => accessToken!
+            })
+            .withAutomaticReconnect()
+            .withHubProtocol(new JsonHubProtocol())
+            .build();
 
-        if (!connection) {
-            connection = new HubConnectionBuilder()
-                .withUrl(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/hub/timesessionshub`, {
-                    accessTokenFactory: () => accessToken!
-                })
-                .withAutomaticReconnect()
-                .withHubProtocol(new JsonHubProtocol())
-                .build();
+        webSocketConnectionRef.current.start();
 
-            webSocketConnectionRef.current = connection;
-
-            connection.start();
-        }
-
-        connection.onclose((error) => {
+        webSocketConnectionRef.current.onclose((error) => {
             console.error("WebSocket connection closed:", error);
         });
 
-        connection.on("TimeSessionStarted", (projectId: string) => {
-            setRunningProjectId(projectId);
+        webSocketConnectionRef.current.on("TimeSessionStarted", (projectId: string) => {
+            startProject(projectId);
         });
 
         return () => {
-            connection?.stop();
+            webSocketConnectionRef.current?.stop();
             webSocketConnectionRef.current = null;
         };
 
     }, [accessToken]);
 
-    const handleStart = (projectId: string, fromClick: boolean) => {
+    useEffect(() => {
+        if (!runningProjectId) // Foresight for the stop feature coming soon :)
+            return;
+
+        const interval = setInterval(() => {
+            setProjects(projects => projects.map(project => {
+                const addedTime = +(project.id === runningProjectId);
+
+                if (!addedTime)
+                    return project;
+
+                return {
+                    ...project,
+                    timeSpentCurrentSession: project.timeSpentCurrentSession + addedTime,
+                    timeSpentTotal: project.timeSpentTotal + addedTime,
+                } as ProjectDTO
+            }));
+        }, 1000);
+
+        return () => {
+            if (interval) clearInterval(interval!);
+        };
+
+    }, [runningProjectId]);
+
+    const handleStart = (projectId: string) => {
         if (projectId === runningProjectId) {
             return;
         }
 
-        if (fromClick) {
-            webSocketConnectionRef.current?.send("StartTimeSession", projectId);
-        }
+        webSocketConnectionRef.current?.send("StartTimeSession", projectId);
 
-        for (const project of projects) {
-            if (project.id !== projectId) {
-                project.timeSpentCurrentSession = 0;
-            }
-        }
+        startProject(projectId);
+    };
 
-        setProjects(projects);
+    const startProject: (projectId: string) => void = (projectId: string) => {
+        setProjects(prevProjects => prevProjects.map(project => ({
+            ...project,
+            timeSpentCurrentSession: 0,
+        })));
+
         setRunningProjectId(projectId);
     };
 
     const addNewProject = (newProject: ProjectDTO) => {
         setProjects((prevProjects) => [...prevProjects, newProject]);
     };
+
 
     return (
         <div className="grid lg:grid-cols-4 grid-cols-1 justify-start lg my-8 gap-4 overflow-auto">
@@ -99,9 +119,9 @@ function Dashboard() {
                     projectColor={project.color}
                     projectId={project.id}
                     isCurrentProjectRunning={runningProjectId === project.id}
-                    initialTimeSpentTotal={project.timeSpentTotal}
-                    initialTimeSpentCurrent={project.timeSpentCurrentSession}
-                    onStart={(fromClick) => handleStart(project.id, fromClick)}
+                    timeSpentTotal={project.timeSpentTotal}
+                    timeSpentCurrently={project.timeSpentCurrentSession}
+                    onStart={() => handleStart(project.id)}
                 />
             ))}
             <NewProjectCard onProjectCreated={addNewProject} />
