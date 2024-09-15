@@ -37,7 +37,7 @@ namespace MicroManagement.Service.Controllers
         /// <param name="projectDTO"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Post(ProjectDTO projectDTO)
+        public async Task<IActionResult> Post(CreateProjectDTO projectDTO)
         {
             var addedProject = await _projectsService.AddProject(GetUserId(), projectDTO);
             return Ok(addedProject);

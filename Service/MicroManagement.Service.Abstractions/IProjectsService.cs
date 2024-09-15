@@ -9,7 +9,7 @@ namespace MicroManagement.Services.Abstraction
 {
     public interface IProjectsService
     {
-        Task<IEnumerable<ProjectDTO>> GetAll(Guid userId);
-        Task<ProjectDTO> AddProject(Guid userId, ProjectDTO projectToAdd);
+        Task<IEnumerable<ProjectSessionDTO>> GetAll(Guid userId);
+        Task<GetProjectDTO> AddProject(Guid userId, CreateProjectDTO projectToAdd);
     }
 }

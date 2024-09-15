@@ -2,10 +2,10 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import { Dialog } from '@headlessui/react'; // Add this import
 import { useState } from 'react';
 import NewProjectForm from './NewProjectForm';
-import { ProjectDTO } from '../DTOs/ProjectDto';
+import { GetProjectDto } from '../DTOs/ProjectDto';
 
 interface NewProjectCardProps {
-    onProjectCreated: (project: ProjectDTO) => void;
+    onProjectCreated: (project: GetProjectDto) => void;
 }
 
 function NewProjectCard({ onProjectCreated }: NewProjectCardProps) {
@@ -38,7 +38,7 @@ function NewProjectCard({ onProjectCreated }: NewProjectCardProps) {
                         <Dialog.Title className="text-lg font-medium mb-4">Create New Project</Dialog.Title>
                         <NewProjectForm
                             onClose={() => setIsModalOpen(false)}
-                            onProjectCreated={(project: ProjectDTO) => {
+                            onProjectCreated={(project: GetProjectDto) => {
                                 onProjectCreated(project);
                                 setIsModalOpen(false);
                             }}

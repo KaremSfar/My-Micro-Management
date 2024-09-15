@@ -2,11 +2,14 @@
 using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Persistence.EF.Configuration;
 using MicroManagement.Persistence.EF.Repositories;
+using MicroManagement.Service.WebAPI.Hubs;
+using MicroManagement.Service.WebAPI.Services;
 using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.WebSockets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
@@ -28,6 +31,8 @@ namespace MicroManagement.Service
             // Add services to the container.
             services.AddControllers();
 
+            services.AddSignalR();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -45,6 +50,21 @@ namespace MicroManagement.Service
                     ValidAudience = Configuration["Jwt:Audience"]!,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JwtAccessKey"]!))
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+
+                        // Set Access token for SignalR hubs
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hub/timesessionshub"))
+                            context.Token = accessToken;
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -55,7 +75,7 @@ namespace MicroManagement.Service
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 
                 // Include DataContracts / DTOs descriptions through XML Comments
-                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetAssembly(typeof(ProjectDTO))!.GetName().Name}.xml"));
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetAssembly(typeof(ProjectSessionDTO))!.GetName().Name}.xml"));
             });
 
             services.AddTransient<IProjectsRepository, SqlProjectsRepository>();
@@ -63,6 +83,7 @@ namespace MicroManagement.Service
 
             services.AddTransient<ITimeSessionsRepository, SqlTimeSessionsRepository>();
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
+            services.AddSingleton<IUserConnectionsProvider, UserConnectionsProvider>();
 
             services.AddHostedService<SqliteInitializationService>();
 
@@ -83,8 +104,9 @@ namespace MicroManagement.Service
                 options.AddPolicy("AllowLocalReact", builder =>
                 {
                     builder.WithOrigins("https://localhost:3000")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
                 });
             });
         }
@@ -114,6 +136,7 @@ namespace MicroManagement.Service
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<TimeSessionsHub>("/hub/timesessionshub");
             });
         }
 

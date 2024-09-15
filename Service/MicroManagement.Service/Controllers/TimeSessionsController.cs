@@ -32,20 +32,6 @@ namespace MicroManagement.Service.Controllers
             return Ok(timeSessions);
         }
 
-        /// <summary>
-        /// Endpoint used to add a new time session for a current logged-in user
-        /// </summary>
-        /// <param name="timeSession"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> Post(TimeSessionDTO timeSession)
-        {
-            var addedTimeSession = await _timeSessionsService
-                .AddTimeSession(GetUserId(), timeSession);
-
-            return Ok(addedTimeSession);
-        }
-
         private Guid GetUserId()
             => Guid.Parse(User.Identities.First().Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
     }

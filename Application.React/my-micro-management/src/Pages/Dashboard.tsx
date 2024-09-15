@@ -1,39 +1,57 @@
-import { useEffect, useState } from "react";
 import ProjectCard from "../Components/ProjectCard";
-import { ProjectDTO } from "../DTOs/ProjectDto";
-import { useAuth } from "../Auth/AuthContext";
+import { GetProjectDto, ProjectSessionDTO } from "../DTOs/ProjectDto";
 import NewProjectCard from "../Components/NewProjectCard"; // Assuming this is the correct import path
+import { useProjects } from "../hooks/dashboard/useProjects";
+import { useWebSocket } from "../hooks/dashboard/useWebSocket";
+import { useTimer } from "../hooks/dashboard/useTimer";
 
 function Dashboard() {
-    const { accessToken } = useAuth();
+    const { projects, setProjects, runningProjectId, setRunningProjectId } = useProjects();
 
-    useEffect(() => {
-        const fetchProjects = async () => {
-            const response = await fetch(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/api/projects`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
-                }
-            });
-            const data: ProjectDTO[] = await response.json();
-            setProjects(data);
-        };
+    useTimer(runningProjectId, setProjects);
 
-        fetchProjects();
-    }, []);
+    const startProject: (projectId: string) => void = (projectId: string) => {
+        setProjects(prevProjects => prevProjects.map(project => ({
+            ...project,
+            timeSpentCurrentSession: 0,
+        })));
 
-    const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
-
-    const handleStart = (projectId: string) => {
-        console.log("called");
         setRunningProjectId(projectId);
     };
 
-    const [projects, setProjects] = useState<ProjectDTO[]>([]);
+    const stopProjects: () => void = () => {
+        setProjects(prevProjects => prevProjects.map(project => ({
+            ...project,
+            timeSpentCurrentSession: 0,
+        })));
 
-    const addNewProject = (newProject: ProjectDTO) => {
-        setProjects((prevProjects) => [...prevProjects, newProject]);
+        setRunningProjectId(null);
+    };
+
+    const webSocketConnectionRef = useWebSocket(startProject, stopProjects);
+
+    const handleProjectClick = (projectId: string) => {
+        // When clicking on a same project - we stop the session
+        if (projectId === runningProjectId) {
+            webSocketConnectionRef.current?.send("StopTimeSessions");
+            stopProjects();
+        }
+        else { // Other wise we start a new one
+            webSocketConnectionRef.current?.send("StartTimeSession", projectId);
+
+            startProject(projectId);
+        }
+    };
+
+    const addNewProject = (newProject: GetProjectDto) => {
+        const addedProject = {
+            ...newProject,
+            isRunning: false,
+            timeSpentCurrentSession: 0,
+            timeSpentTotal: 0
+        } as ProjectSessionDTO;
+
+        setProjects((prevProjects) => [...prevProjects, addedProject]);
     };
 
     return (
@@ -44,13 +62,14 @@ function Dashboard() {
                     projectName={project.name}
                     projectColor={project.color}
                     projectId={project.id}
-                    isCurrentProjectRunning={runningProjectId === project.id}
-                    onStart={() => handleStart(project.id)}
+                    isRunning={runningProjectId === project.id}
+                    timeSpentTotal={project.timeSpentTotal}
+                    timeSpentCurrently={project.timeSpentCurrentSession}
+                    onClick={() => handleProjectClick(project.id)}
                 />
             ))}
-            <NewProjectCard onProjectCreated={addNewProject} /> {/* Pass the function here */}
+            <NewProjectCard onProjectCreated={addNewProject} />
         </div>
-        
     );
 }
 

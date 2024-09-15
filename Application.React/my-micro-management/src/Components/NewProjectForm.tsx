@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../Auth/AuthContext';
-import { ProjectDTO } from '../DTOs/ProjectDto';
+import { CreateProjectDTO, GetProjectDto } from '../DTOs/ProjectDto';
 
 interface NewProjectFormProps {
     onClose: () => void;
-    onProjectCreated: (addedProject: ProjectDTO) => void;
+    onProjectCreated: (addedProject: GetProjectDto) => void;
 }
 
 function NewProjectForm({ onClose, onProjectCreated }: NewProjectFormProps) {
@@ -21,7 +21,7 @@ function NewProjectForm({ onClose, onProjectCreated }: NewProjectFormProps) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${accessToken}`
                 },
-                body: JSON.stringify({ name: projectName, color: projectColor })
+                body: JSON.stringify({ name: projectName, color: projectColor } as CreateProjectDTO)
             });
 
             if (!response.ok) {
@@ -29,7 +29,7 @@ function NewProjectForm({ onClose, onProjectCreated }: NewProjectFormProps) {
             }
 
             const project = await response.json();
-            onProjectCreated(project as ProjectDTO);
+            onProjectCreated(project as GetProjectDto);
             onClose();
         } catch (error) {
             console.error('Error creating project:', error);
