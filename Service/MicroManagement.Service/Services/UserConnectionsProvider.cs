@@ -8,27 +8,19 @@ namespace MicroManagement.Service.WebAPI.Services
 
         public Task AddConnection(Guid userId, string connectionId)
         {
-            _usersConnections.AddOrUpdate(userId, 1, (key, userConnections) =>
-            {
-                return userConnections + 1;
-            });
+            _usersConnections.AddOrUpdate(userId, 1, (key, userConnections) => userConnections + 1);
 
             return Task.CompletedTask;
         }
 
         public Task RemoveConnection(Guid userId, string connectionId)
         {
-            if (!_usersConnections.TryGetValue(userId, out int userConnections) || userConnections == 0)
-                return Task.CompletedTask;
-
             // Decrement the connection count for the user
-            _usersConnections.TryUpdate(userId, userConnections - 1, userConnections);
+            int newCount = _usersConnections.AddOrUpdate(userId, addValue: 0, (userId, numberOfConnections) => numberOfConnections - 1);
 
-            // In case all users disconnected
-            if (userConnections - 1 == 0)
-            {
-                _usersConnections.Remove(userId, out _);
-            }
+            if (newCount <= 0)
+                _usersConnections.TryRemove(new(userId, newCount));
+
 
             return Task.CompletedTask;
         }
