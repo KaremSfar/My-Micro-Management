@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { ProjectDTO } from "../../DTOs/ProjectDto";
+import { ProjectSessionDTO } from "../../DTOs/ProjectDto";
 import { useAuth } from "../../Auth/AuthContext";
 
 export const useProjects = () => {
     const { accessToken } = useAuth();
 
-    const [projects, setProjects] = useState<ProjectDTO[]>([]);
+    const [projects, setProjects] = useState<ProjectSessionDTO[]>([]);
     const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
 
     useEffect(() => {
@@ -22,7 +22,7 @@ export const useProjects = () => {
                     }
                 });
 
-                const data: ProjectDTO[] = await response.json();
+                const data: ProjectSessionDTO[] = await response.json();
                 setProjects(data);
 
                 const runningProject = data.find(p => p.isRunning);

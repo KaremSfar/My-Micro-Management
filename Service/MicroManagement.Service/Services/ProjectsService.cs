@@ -23,15 +23,16 @@ namespace MicroManagement.Services
             _timeSessionsRepository = timeSessionsRepository;
         }
 
-        public async Task<ProjectDTO> AddProject(Guid userId, ProjectDTO addProjectDto)
+        public async Task<GetProjectDTO> AddProject(Guid userId, CreateProjectDTO addProjectDto)
         {
             var projectToAdd = new Project(Guid.NewGuid(), userId, addProjectDto.Name, addProjectDto.Color);
 
             await _projectsRepo.AddProjectAsync(projectToAdd);
-            return addProjectDto;
+
+            return new GetProjectDTO { Id = projectToAdd.Id, Name = projectToAdd.Name, Color = projectToAdd.Color };
         }
 
-        public async Task<IEnumerable<ProjectDTO>> GetAll(Guid userId)
+        public async Task<IEnumerable<ProjectSessionDTO>> GetAll(Guid userId)
         {
             var projects = await _projectsRepo.GetAllAsync(userId);
             var timeSessions = await _timeSessionsRepository.GetAllAsync(userId);
@@ -44,7 +45,7 @@ namespace MicroManagement.Services
                 var timeSpentTotal = timeSessionsPerProject[p.Id]
                     .Sum(ts => ((ts.EndDate ?? DateTime.UtcNow) - ts.StartTime).TotalSeconds);
 
-                return new ProjectDTO()
+                return new ProjectSessionDTO()
                 {
                     Id = p.Id,
                     Name = p.Name,

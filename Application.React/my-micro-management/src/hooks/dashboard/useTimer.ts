@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { ProjectDTO } from "../../DTOs/ProjectDto";
+import { ProjectSessionDTO } from "../../DTOs/ProjectDto";
 
-export const useTimer = (runningProjectId: string | null, setProjects: React.Dispatch<React.SetStateAction<ProjectDTO[]>>) => {
+export const useTimer = (runningProjectId: string | null, setProjects: React.Dispatch<React.SetStateAction<ProjectSessionDTO[]>>) => {
     useEffect(() => {
         if (!runningProjectId) return;
 
@@ -14,7 +14,7 @@ export const useTimer = (runningProjectId: string | null, setProjects: React.Dis
                         ...project,
                         timeSpentCurrentSession: project.timeSpentCurrentSession + 1,
                         timeSpentTotal: project.timeSpentTotal + 1,
-                    } as ProjectDTO;
+                    } as ProjectSessionDTO;
                 })
             );
         }, 1000);

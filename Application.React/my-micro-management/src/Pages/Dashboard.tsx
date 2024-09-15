@@ -1,5 +1,5 @@
 import ProjectCard from "../Components/ProjectCard";
-import { ProjectDTO } from "../DTOs/ProjectDto";
+import { GetProjectDto, ProjectSessionDTO } from "../DTOs/ProjectDto";
 import NewProjectCard from "../Components/NewProjectCard"; // Assuming this is the correct import path
 import { useProjects } from "../hooks/dashboard/useProjects";
 import { useWebSocket } from "../hooks/dashboard/useWebSocket";
@@ -43,8 +43,15 @@ function Dashboard() {
         }
     };
 
-    const addNewProject = (newProject: ProjectDTO) => {
-        setProjects((prevProjects) => [...prevProjects, newProject]);
+    const addNewProject = (newProject: GetProjectDto) => {
+        const addedProject = {
+            ...newProject,
+            isRunning: false,
+            timeSpentCurrentSession: 0,
+            timeSpentTotal: 0
+        } as ProjectSessionDTO;
+
+        setProjects((prevProjects) => [...prevProjects, addedProject]);
     };
 
     return (
