@@ -20,6 +20,24 @@ public class TimeSessionsHub(IUserConnectionsProvider _userConnectionsProvider, 
         await base.OnConnectedAsync();
     }
 
+    public async Task StartTimeSession(Guid projectId)
+    {
+        var userId = GetUserId();
+
+        await _timeSessionsService.StartTimeSession(userId, projectId);
+
+        await Clients.GroupExcept(userId.ToString(), [Context.ConnectionId]).SendAsync("TimeSessionStarted", projectId);
+    }
+
+    public async Task StopTimeSessions()
+    {
+        var userId = GetUserId();
+
+        await _timeSessionsService.StopTimeSession(userId);
+
+        await Clients.GroupExcept(userId.ToString(), [Context.ConnectionId]).SendAsync("TimeSessionsStopped");
+    }
+
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         await _userConnectionsProvider.RemoveConnection(GetUserId(), Context.ConnectionId);
@@ -30,15 +48,6 @@ public class TimeSessionsHub(IUserConnectionsProvider _userConnectionsProvider, 
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, GetUserId().ToString());
 
         await base.OnDisconnectedAsync(exception);
-    }
-
-    public async Task StartTimeSession(Guid projectId)
-    {
-        var userId = GetUserId();
-
-        await _timeSessionsService.StartTimeSession(userId, projectId);
-
-        await Clients.GroupExcept(userId.ToString(), [Context.ConnectionId]).SendAsync("TimeSessionStarted", projectId);
     }
 
     private Guid GetUserId()

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { HubConnection, HubConnectionBuilder, JsonHubProtocol } from "@microsoft/signalr";
 import { useAuth } from "../../Auth/AuthContext";
 
-export const useWebSocket = (startProject: (projectId: string) => void) => {
+export const useWebSocket = (startProject: (projectId: string) => void, stopProjects: () => void) => {
     const { accessToken } = useAuth();
     const webSocketConnectionRef = useRef<HubConnection | null>(null);
 
@@ -23,6 +23,10 @@ export const useWebSocket = (startProject: (projectId: string) => void) => {
             startProject(projectId);
         });
 
+        webSocketConnectionRef.current.on("TimeSessionsStopped", () => {
+            stopProjects();
+        });
+
         webSocketConnectionRef.current.onclose((error) => {
             console.error("WebSocket connection closed:", error);
         });
@@ -31,7 +35,7 @@ export const useWebSocket = (startProject: (projectId: string) => void) => {
             webSocketConnectionRef.current?.stop();
             webSocketConnectionRef.current = null;
         };
-    }, [accessToken, startProject]);
+    }, [accessToken]);
 
     return webSocketConnectionRef;
 };

@@ -1,4 +1,4 @@
-import { PlayIcon } from '@heroicons/react/24/outline';
+import { PlayIcon, StopIcon } from '@heroicons/react/24/outline';
 import { useProjectCardColors } from '../hooks/projectCard/useProjectCardColors';
 
 interface IProjectCardProps {
@@ -6,7 +6,7 @@ interface IProjectCardProps {
     projectColor: string;
     projectId: string;
 
-    isCurrentProjectRunning: boolean;
+    isRunning: boolean;
     timeSpentTotal: number;
     timeSpentCurrently: number;
 
@@ -25,7 +25,7 @@ function ProjectCard(props: IProjectCardProps) {
                     {props.projectName}
                 </span>
                 <span className="w-full text-center py-4 text-white text-xl">
-                    {!props.isCurrentProjectRunning ?
+                    {!props.isRunning ?
                         "--:--" :
                         `${String(Math.floor(props.timeSpentCurrently / 60)).padStart(2, '0')}:${String(props.timeSpentCurrently % 60).padStart(2, '0')}`
                     }
@@ -33,7 +33,7 @@ function ProjectCard(props: IProjectCardProps) {
                 <div className="flex w-full justify-between" style={{ color }}>
                     <span>{formatTime(props.timeSpentTotal)}</span>
                     <button className=" ">
-                        <PlayIcon className="h-6 w-6"></PlayIcon>
+                        {!props.isRunning ? <PlayIcon className="h-6 w-6"></PlayIcon> : <StopIcon className="h-6 w-6"></StopIcon>}
                     </button>
                 </div>
             </div>

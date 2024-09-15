@@ -19,16 +19,28 @@ function Dashboard() {
         setRunningProjectId(projectId);
     };
 
-    const webSocketConnectionRef = useWebSocket(startProject);
+    const stopProjects: () => void = () => {
+        setProjects(prevProjects => prevProjects.map(project => ({
+            ...project,
+            timeSpentCurrentSession: 0,
+        })));
+
+        setRunningProjectId(null);
+    };
+
+    const webSocketConnectionRef = useWebSocket(startProject, stopProjects);
 
     const handleProjectClick = (projectId: string) => {
+        // When clicking on a same project - we stop the session
         if (projectId === runningProjectId) {
-            return;
+            webSocketConnectionRef.current?.send("StopTimeSessions");
+            stopProjects();
         }
+        else { // Other wise we start a new one
+            webSocketConnectionRef.current?.send("StartTimeSession", projectId);
 
-        webSocketConnectionRef.current?.send("StartTimeSession", projectId);
-
-        startProject(projectId);
+            startProject(projectId);
+        }
     };
 
     const addNewProject = (newProject: ProjectDTO) => {
@@ -43,7 +55,7 @@ function Dashboard() {
                     projectName={project.name}
                     projectColor={project.color}
                     projectId={project.id}
-                    isCurrentProjectRunning={runningProjectId === project.id}
+                    isRunning={runningProjectId === project.id}
                     timeSpentTotal={project.timeSpentTotal}
                     timeSpentCurrently={project.timeSpentCurrentSession}
                     onClick={() => handleProjectClick(project.id)}
