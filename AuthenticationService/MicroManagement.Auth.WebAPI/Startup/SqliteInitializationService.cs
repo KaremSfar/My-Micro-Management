@@ -1,5 +1,6 @@
 ﻿
 using MicroManagement.Auth.WebAPI.Persistence;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace MicroManagement.Auth.WebAPI
@@ -17,6 +18,14 @@ namespace MicroManagement.Auth.WebAPI
             if (!dbContext.Database.IsSqlite())
                 throw new InvalidOperationException("WARNING, This service should only be injected for Local Development on SQLite DB!");
 
+            var dbPath = GetSqliteDatabaseFilePath(dbContext);
+
+            if (!File.Exists(dbPath))
+            {
+                // Create the empty database file to allow migrations to run
+                File.Create(dbPath).Dispose();
+            }
+
             await dbContext.Database.EnsureCreatedAsync();
         }
 
@@ -24,5 +33,13 @@ namespace MicroManagement.Auth.WebAPI
         public Task StopAsync(CancellationToken cancellationToken)
             => Task.CompletedTask;
 
+
+        private string GetSqliteDatabaseFilePath(DbContext dbContext)
+        {
+            var connectionString = dbContext.Database.GetConnectionString();
+
+            var builder = new SqliteConnectionStringBuilder(connectionString);
+            return builder.DataSource;
+        }
     }
 }

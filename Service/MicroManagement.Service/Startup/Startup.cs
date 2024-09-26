@@ -91,7 +91,7 @@ namespace MicroManagement.Service
             {
                 // TODO-KAREM: update here if deployed a real db
                 var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
-                var dbPath = Path.Combine(projectRoot, "..", "..", "..", "..", "..", "SQLite", "service.db");
+                var dbPath = Path.Combine(projectRoot, "service.db");
 
                 options.UseSqlite($"DataSource={dbPath}", options =>
                 {
