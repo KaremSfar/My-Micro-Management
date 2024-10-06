@@ -103,7 +103,7 @@ namespace MicroManagement.Service
             {
                 options.AddPolicy("AllowLocalReact", builder =>
                 {
-                    builder.WithOrigins("https://localhost:3000")
+                    builder.WithOrigins("https://localhost:3000", "http://172.213.209.28")
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .AllowCredentials();
