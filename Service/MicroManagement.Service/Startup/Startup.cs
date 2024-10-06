@@ -131,8 +131,6 @@ namespace MicroManagement.Service
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseHttpsRedirection();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
