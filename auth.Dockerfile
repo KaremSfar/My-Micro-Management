@@ -4,9 +4,15 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the entire solution and restore dependencies
-COPY . ./
+# Copy the solution file and project files first to restore dependencies
+COPY ./My-Micro-Management.sln ./
+COPY ./*.csproj ./
+
+# Restore dependencies only
 RUN dotnet restore ./My-Micro-Management.sln
+
+# Copy the remaining source files
+COPY . ./
 
 # Publish the specific Web API project
 RUN dotnet publish ./AuthenticationService/MicroManagement.Auth.WebAPI/MicroManagement.Auth.WebAPI.csproj -c Release -o /out
@@ -22,7 +28,7 @@ WORKDIR /app
 COPY --from=build /out .
 
 # Expose the port the application will run on
-EXPOSE 80
+EXPOSE 82
 
 # Define the entry point for the container
 ENTRYPOINT ["dotnet", "MicroManagement.Auth.WebAPI.dll", "--urls", "http://0.0.0.0:82"]

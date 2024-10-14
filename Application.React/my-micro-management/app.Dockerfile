@@ -26,7 +26,7 @@ FROM nginx:alpine AS runtime
 # Copying the built output to the Nginx default serve directory
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Exposing port 82 to match any external service configuration needs
+# Exposing port 80 to match any external service configuration needs
 EXPOSE 80
 
 # Starting Nginx server in the foreground to ensure container remains running
