@@ -6,13 +6,12 @@ WORKDIR /app
 
 # Copy the solution file and project files first to restore dependencies
 COPY ./My-Micro-Management.sln ./
-COPY ./*.csproj ./
-
-# Restore dependencies only
-RUN dotnet restore ./My-Micro-Management.sln
 
 # Copy the remaining source files
 COPY . ./
+
+# Restore dependencies only
+RUN dotnet restore ./My-Micro-Management.sln
 
 # Publish the specific Web API project
 RUN dotnet publish ./AuthenticationService/MicroManagement.Auth.WebAPI/MicroManagement.Auth.WebAPI.csproj -c Release -o /out

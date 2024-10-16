@@ -98,10 +98,11 @@ public class Startup
         {
             options.AddPolicy("AllowLocalReact", builder =>
             {
-                builder.WithOrigins("https://localhost:3000", "http://172.213.209.28")
-                    .AllowCredentials()
+                builder
+                    .WithOrigins("http://localhost", "http://localhost/", "http://localhost:80")
+                    .AllowAnyHeader()
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowCredentials();
             });
         });
     }
@@ -119,14 +120,11 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseDeveloperExceptionPage();
-            app.UseCors("AllowLocalReact");
-        }
-        else
-        {
-            app.UseCors();
         }
 
         app.UseRouting();
+
+        app.UseCors("AllowLocalReact");
 
         app.UseAuthentication();
         app.UseAuthorization();

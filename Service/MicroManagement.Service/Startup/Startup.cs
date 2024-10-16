@@ -103,10 +103,11 @@ namespace MicroManagement.Service
             {
                 options.AddPolicy("AllowLocalReact", builder =>
                 {
-                    builder.WithOrigins("https://localhost:3000", "http://172.213.209.28")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
+                    builder
+                        .WithOrigins("http://localhost", "http://localhost/", "http://localhost:80")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                 });
             });
         }
@@ -119,14 +120,11 @@ namespace MicroManagement.Service
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
-                app.UseCors("AllowLocalReact");
-            }
-            else
-            {
-                app.UseCors();
             }
 
             app.UseRouting();
+
+            app.UseCors("AllowLocalReact");
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -137,6 +135,5 @@ namespace MicroManagement.Service
                 endpoints.MapHub<TimeSessionsHub>("/hub/timesessionshub");
             });
         }
-
     }
 }
