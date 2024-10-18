@@ -10,6 +10,7 @@ services:
     depends_on:
       - auth
       - service
+    
 
   auth:
     build:
@@ -19,6 +20,8 @@ services:
       - "82:82"  # Bind port 82 on the host to port 82 in the auth container
     depends_on:
       - service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
 
   service:
     build:
@@ -26,3 +29,5 @@ services:
       dockerfile: service.Dockerfile
     ports:
       - "81:81"  # Bind port 81 on the host to port 81 in the service container
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
