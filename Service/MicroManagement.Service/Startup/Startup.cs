@@ -91,7 +91,7 @@ namespace MicroManagement.Service
             {
                 // TODO-KAREM: update here if deployed a real db
                 var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
-                var dbPath = Path.Combine(projectRoot, "..", "..", "..", "..", "..", "SQLite", "service.db");
+                var dbPath = Path.Combine(projectRoot, "service.db");
 
                 options.UseSqlite($"DataSource={dbPath}", options =>
                 {
@@ -103,10 +103,11 @@ namespace MicroManagement.Service
             {
                 options.AddPolicy("AllowLocalReact", builder =>
                 {
-                    builder.WithOrigins("https://localhost:3000")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
+                    builder
+                        .WithOrigins("http://localhost", "http://localhost/", "http://localhost:80")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                 });
             });
         }
@@ -119,19 +120,14 @@ namespace MicroManagement.Service
                 app.UseSwagger();
                 app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
-                app.UseCors("AllowLocalReact");
-            }
-            else
-            {
-                app.UseCors();
             }
 
             app.UseRouting();
 
+            app.UseCors("AllowLocalReact");
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseHttpsRedirection();
 
             app.UseEndpoints(endpoints =>
             {
@@ -139,6 +135,5 @@ namespace MicroManagement.Service
                 endpoints.MapHub<TimeSessionsHub>("/hub/timesessionshub");
             });
         }
-
     }
 }

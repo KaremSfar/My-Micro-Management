@@ -37,7 +37,7 @@ public class Startup
         {
             // TODO-KAREM: update here if deployed a real db
             var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
-            var dbPath = Path.Combine(projectRoot, "..", "..", "..", "..", "..", "SQLite", "auth.db");
+            var dbPath = Path.Combine(projectRoot, "auth.db");
 
             options.UseSqlite($"DataSource={dbPath}");
         });
@@ -98,10 +98,11 @@ public class Startup
         {
             options.AddPolicy("AllowLocalReact", builder =>
             {
-                builder.WithOrigins("https://localhost:3000")
-                    .AllowCredentials()
+                builder
+                    .WithOrigins("http://localhost", "http://localhost/", "http://localhost:80")
+                    .AllowAnyHeader()
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowCredentials();
             });
         });
     }
@@ -119,19 +120,14 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseDeveloperExceptionPage();
-            app.UseCors("AllowLocalReact");
-        }
-        else
-        {
-            app.UseCors();
         }
 
         app.UseRouting();
 
+        app.UseCors("AllowLocalReact");
+
         app.UseAuthentication();
         app.UseAuthorization();
-
-        app.UseHttpsRedirection();
 
         app.UseEndpoints(endpoints =>
         {
