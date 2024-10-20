@@ -16,7 +16,7 @@ RUN npm install
 COPY . ./
 
 # Building the React app for production deployment
-RUN npm run build 
+RUN npm run build:dev 
 
 # Consider adding ARG for build time variables if needed
 
