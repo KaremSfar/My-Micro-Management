@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const logout = async () => {
-        await fetch('https://localhost:44325/auth/logout', {
+        await fetch(`${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/auth/logout`, {
             method: 'POST',
             credentials: 'include',
         });
