@@ -3,8 +3,9 @@ version: '3.8'
 services:
   app:
     build:
-      context: ./Application.React/my-micro-management
+      context: ./Application.React/
       dockerfile: app.Dockerfile
+    image: karemsfar/mmgmt-dev-app:latest
     ports:
       - "80:80"  # Bind port 3000 on the host to port 80 in the app container
     depends_on:
@@ -16,6 +17,7 @@ services:
     build:
       context: .
       dockerfile: auth.Dockerfile
+    image: karemsfar/mmgmt-dev-auth:latest
     ports:
       - "82:82"  # Bind port 82 on the host to port 82 in the auth container
     depends_on:
@@ -27,6 +29,7 @@ services:
     build:
       context: .
       dockerfile: service.Dockerfile
+    image: karemsfar/mmgmt-dev-service:latest
     ports:
       - "81:81"  # Bind port 81 on the host to port 81 in the service container
     environment:
