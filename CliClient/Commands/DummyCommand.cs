@@ -1,17 +1,11 @@
 ﻿using CliClient.States;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CliClient.Commands
+namespace CliClient.Commands;
+
+public class DummyCommand : ICommandHandler
 {
-    internal class DummyCommand : ICommand
+    public Task<IState> Execute()
     {
-        public IState Execute()
-        {
-            return new LoginState();
-        }
+        return Task.FromResult<IState>(null);
     }
 }

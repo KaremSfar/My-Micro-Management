@@ -2,13 +2,16 @@
 
 public class App
 {
-    public App()
+    private readonly StateProvider _stateProvider;
+
+    public App(StateProvider stateProvider)
     {
+        _stateProvider = stateProvider;
     }
 
     public async Task RunAsync()
     {
-        var state = new LoginState();
+        var state = _stateProvider.GetState("login");
 
         await state.Render();
 

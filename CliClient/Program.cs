@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CliClient.States;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace CliClient
@@ -10,8 +11,14 @@ namespace CliClient
             var host = Host.CreateDefaultBuilder(args)
                         .ConfigureServices((hostContext, services) =>
                         {
-                            // Register your services here
                             services.AddSingleton<App>();
+                            services.AddSingleton<IAuthService>(c =>
+                            {
+                                return new AuthService("https://localhost:44325", c.GetService<TokenStorage>()!);
+                            });
+                            services.AddSingleton<TokenStorage>();
+                            services.AddTransient<LoginState>();
+                            services.AddTransient<StateProvider>();
                         })
                         .Build();
 

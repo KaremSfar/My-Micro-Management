@@ -1,18 +1,24 @@
 ﻿using CliClient.Commands;
-using CliClient.States;
 using Spectre.Console;
-using System;
+
+namespace CliClient.States;
 
 public class LoginState : IState
 {
+    private readonly IAuthService _authService;
+
     private string _email = "";
     private string _password = "";
     private int _selectedIndex = 0;
     private readonly string[] _options = { "Email", "Password", "Go to Signup", "Login" };
     private Table _table;
-    private LiveDisplayContext _context;
 
-    public async Task<ICommand> Render()
+    public LoginState(IAuthService authService)
+    {
+        _authService = authService;
+    }
+
+    public async Task<IState> Render()
     {
         _table = new Table().BorderColor(Color.Grey).Border(TableBorder.Square);
         _table.AddColumn("Label");
@@ -20,14 +26,14 @@ public class LoginState : IState
 
         RefreshTable();
 
-        ICommand command;
+        ICommandHandler command;
         do
         {
             command = await HandleInputAsync();
         }
         while (command == null);
 
-        return command;
+        return await command.Execute();
     }
 
     private void RefreshTable()
@@ -55,42 +61,43 @@ public class LoginState : IState
         AnsiConsole.Write(_table);
     }
 
-    public Task<ICommand> HandleInputAsync()
+    private Task<ICommandHandler> HandleInputAsync()
     {
         var key = Console.ReadKey(true);
+
         return key switch
         {
-            { Key: ConsoleKey.UpArrow } or { Key: ConsoleKey.Tab, Modifiers: ConsoleModifiers.None } => HandlePrevious(),
-            { Key: ConsoleKey.DownArrow } or { Key: ConsoleKey.Tab, Modifiers: ConsoleModifiers.Shift } => HandleNext(),
+            { Key: ConsoleKey.UpArrow } or { Key: ConsoleKey.Tab, Modifiers: ConsoleModifiers.Shift } => HandlePrevious(),
+            { Key: ConsoleKey.DownArrow } or { Key: ConsoleKey.Tab, Modifiers: ConsoleModifiers.None } => HandleNext(),
             { Key: ConsoleKey.Enter } => HandleAction(),
             _ => HandleTextPress()
         };
 
-        Task<ICommand> HandlePrevious()
+        Task<ICommandHandler> HandlePrevious()
         {
             _selectedIndex = (_selectedIndex - 1 + _options.Length) % _options.Length;
             RefreshTable();
-            return Task.FromResult<ICommand>(null);
+            return Task.FromResult<ICommandHandler>(null);
         }
 
-        Task<ICommand> HandleNext()
+        Task<ICommandHandler> HandleNext()
         {
             _selectedIndex = (_selectedIndex + 1) % _options.Length;
             RefreshTable();
-            return Task.FromResult<ICommand>(null);
+            return Task.FromResult<ICommandHandler>(null);
         }
 
-        Task<ICommand> HandleAction()
+        Task<ICommandHandler> HandleAction()
         {
             if (_selectedIndex == 2) // Go to Signup
-                return Task.FromResult<ICommand>(new DummyCommand());
+                return Task.FromResult<ICommandHandler>(new DummyCommand());
             if (_selectedIndex == 3) // Login
-                return Task.FromResult<ICommand>(new DummyCommand());
+                return Task.FromResult<ICommandHandler>(new LoginCommandHandler(_authService, _email, _password));
 
-            return Task.FromResult<ICommand>(null);
+            return Task.FromResult<ICommandHandler>(null);
         }
 
-        Task<ICommand> HandleTextPress()
+        Task<ICommandHandler> HandleTextPress()
         {
             if (_selectedIndex < 2) // Email or Password field
             {
@@ -111,7 +118,7 @@ public class LoginState : IState
                 RefreshTable();
             }
 
-            return Task.FromResult<ICommand>(null);
+            return Task.FromResult<ICommandHandler>(null);
         }
     }
 }

@@ -15,6 +15,6 @@ namespace CliClient.States
         /// <summary>
         /// Renders the current state's UI
         /// </summary>
-        Task<ICommand> Render();
+        Task<IState> Render();
     }
 }

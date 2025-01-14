@@ -2,8 +2,8 @@
 
 namespace CliClient.Commands
 {
-    public interface ICommand
+    public interface ICommandHandler
     {
-        IState Execute();
+        Task<IState> Execute();
     }
 }
