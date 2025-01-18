@@ -7,6 +7,7 @@ public interface IAuthService
     bool IsAuthenticated { get; }
     Task<string> GetTokenAsync();
     Task LoginAsync(string email, string password);
+    Task SignupAsync(string email, string password, string firstName, string lastName);
     Task LogoutAsync();
 }
 
@@ -94,6 +95,23 @@ public class AuthService : IAuthService
     {
         _jwtToken = null;
         await _tokenStorage.ClearToken();
+    }
+
+    public async Task SignupAsync(string email, string password, string firstName, string lastName)
+    {
+        var request = new RestRequest("Auth/Register", Method.Post);
+        request.AddJsonBody(new { email, password, firstName, lastName });
+
+        var response = await _restClient.ExecuteAsync<TokenResponse>(request);
+
+        if (response.IsSuccessful)
+        {
+            var tokens = response.Data;
+            _jwtToken = tokens!.AccessToken;
+            var refresh = response.Cookies["refreshToken"]!.Value;
+
+            await _tokenStorage.SaveToken(refresh);
+        }
     }
 }
 

@@ -13,7 +13,10 @@ public class App
     {
         var state = _stateProvider.GetState("login");
 
-        await state.Render();
+        do
+        {
+            state = await state.Render();
+        } while (state != null);
 
         await Task.CompletedTask;
     }

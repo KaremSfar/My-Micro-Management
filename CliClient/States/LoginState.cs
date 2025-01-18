@@ -20,7 +20,7 @@ public class LoginState : IState
 
     public async Task<IState> Render()
     {
-        _table = new Table().BorderColor(Color.Grey).Border(TableBorder.Square);
+        _table = new Table().BorderColor(Color.Grey).Border(TableBorder.Ascii2).SafeBorder().Centered();
         _table.AddColumn("Label");
         _table.AddColumn("Input");
 
@@ -58,7 +58,7 @@ public class LoginState : IState
             new Text(_options[2], _selectedIndex == 2 ? new Style(foreground: Color.Yellow) : null),
             new Text(_options[3], _selectedIndex == 3 ? new Style(foreground: Color.Yellow) : null));
 
-        AnsiConsole.Write(_table);
+        AnsiConsole.Write(new Align(_table, HorizontalAlignment.Center, VerticalAlignment.Middle));
     }
 
     private Task<ICommandHandler> HandleInputAsync()
@@ -90,7 +90,7 @@ public class LoginState : IState
         Task<ICommandHandler> HandleAction()
         {
             if (_selectedIndex == 2) // Go to Signup
-                return Task.FromResult<ICommandHandler>(new DummyCommand());
+                return Task.FromResult<ICommandHandler>(new GoToSignupCommand(_authService));
             if (_selectedIndex == 3) // Login
                 return Task.FromResult<ICommandHandler>(new LoginCommandHandler(_authService, _email, _password));
 
