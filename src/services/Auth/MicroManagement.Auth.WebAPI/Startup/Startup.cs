@@ -96,14 +96,7 @@ public class Startup
 
         services.AddCors(options =>
         {
-            options.AddPolicy("AllowLocalReact", builder =>
-            {
-                builder
-                    .WithOrigins("http://localhost", "http://localhost/", "http://localhost:80")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
-            });
+            options.AddPolicy("AllowLocalReact", p => p.SetIsOriginAllowed(p => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
         });
     }
 
@@ -114,6 +107,8 @@ public class Startup
     /// <param name="env"></param>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        app.UseCors("AllowLocalReact");
+
         // Configure the HTTP request pipeline.
         if (env.IsDevelopment())
         {
@@ -123,8 +118,6 @@ public class Startup
         }
 
         app.UseRouting();
-
-        app.UseCors("AllowLocalReact");
 
         app.UseAuthentication();
         app.UseAuthorization();

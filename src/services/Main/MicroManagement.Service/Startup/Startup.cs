@@ -101,19 +101,14 @@ namespace MicroManagement.Service
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowLocalReact", builder =>
-                {
-                    builder
-                        .WithOrigins("http://localhost", "http://localhost/", "http://localhost:80")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials();
-                });
+                options.AddPolicy("AllowLocalReact", p => p.SetIsOriginAllowed(p => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("AllowLocalReact");
+
             // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
             {
@@ -123,8 +118,6 @@ namespace MicroManagement.Service
             }
 
             app.UseRouting();
-
-            app.UseCors("AllowLocalReact");
 
             app.UseAuthentication();
             app.UseAuthorization();
