@@ -1,2 +1,8 @@
-- [] Reorganize files and folders like a common project with correct name conventions
-- []  
+- [] Reorganize files and folders like a common project with correct naming conventions
+- [] Create docker files for easy deployment
+- [] Adapt docker files for easy development
+- [] Integrate with Postgres SQL
+- [] Add Signup view in React 
+- [] Make Single sign on Work
+- [] Add Open Telemetry and bundle Graphana / or stuff like that with it
+- [] Add Aspire for fun / easy of usage maybe ?
