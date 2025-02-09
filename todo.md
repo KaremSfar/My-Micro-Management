@@ -1,4 +1,4 @@
-- [] Reorganize files and folders like a common project with correct naming conventions
+- [x] Reorganize files and folders like a common project with correct naming conventions
 - [] Create docker files for easy deployment
 - [] Adapt docker files for easy development
 - [] Integrate with Postgres SQL
