@@ -5,24 +5,27 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
 # Copy csproj files and restore as distinct layers
-COPY MicroManagement.DataContracts/MicroManagement.DataContracts.csproj ./MicroManagement.DataContracts/
-COPY MicroManagement.Service/MicroManagement.Service.WebAPI.csproj ./MicroManagement.Service/
-COPY MicroManagement.Service.Abstractions/MicroManagement.Service.Abstractions.csproj ./MicroManagement.Service.Abstractions/
-COPY Persistence/MicroManagement.Persistence.Abstraction/MicroManagement.Persistence.Abstraction.csproj ./Persistence/MicroManagement.Persistence.Abstraction/
-COPY Persistence/MicroManagement.Persistence.EF/MicroManagement.Persistence.EF.csproj ./Persistence/MicroManagement.Persistence.EF/
-COPY Persistence/MicroManagement.Persistence.Migrations.AzureSQL/MicroManagement.Persistence.Migrations.AzureSQL.csproj ./Persistence/MicroManagement.Persistence.Migrations.AzureSQL/
-COPY Persistence/MicroManagement.Persistence.SQLite.MigrationsApplier/MicroManagement.Persistence.Migrations.SQLite.csproj ./Persistence/MicroManagement.Persistence.SQLite.MigrationsApplier/
+COPY Main/MicroManagement.DataContracts/MicroManagement.DataContracts.csproj ./Main/MicroManagement.DataContracts/
+COPY Main/MicroManagement.Service/MicroManagement.Service.WebAPI.csproj ./Main/MicroManagement.Service/
+COPY Main/MicroManagement.Service.Abstractions/MicroManagement.Service.Abstractions.csproj ./Main/MicroManagement.Service.Abstractions/
+COPY Main/Persistence/MicroManagement.Persistence.Abstraction/MicroManagement.Persistence.Abstraction.csproj ./Main/Persistence/MicroManagement.Persistence.Abstraction/
+COPY Main/Persistence/MicroManagement.Persistence.EF/MicroManagement.Persistence.EF.csproj ./Main/Persistence/MicroManagement.Persistence.EF/
+COPY Main/Persistence/MicroManagement.Persistence.Migrations.AzureSQL/MicroManagement.Persistence.Migrations.AzureSQL.csproj ./Main/Persistence/MicroManagement.Persistence.Migrations.AzureSQL/
+COPY Main/Persistence/MicroManagement.Persistence.SQLite.MigrationsApplier/MicroManagement.Persistence.Migrations.SQLite.csproj ./Main/Persistence/MicroManagement.Persistence.SQLite.MigrationsApplier/
+COPY Core/MicroManagement.Core/MicroManagement.Core.csproj ./Core/MicroManagement.Core/
 
-RUN dotnet restore ./MicroManagement.Service.sln
+COPY Main/MicroManagement.Service.sln ./Main/
+
+RUN dotnet restore ./Main/MicroManagement.Service.sln
 
 # Copy the entire solution and restore dependencies
 COPY . ./
 
 # Publish the specific Web API project
-RUN dotnet publish ./Service/MicroManagement.Service/MicroManagement.Service.WebAPI.csproj -c Release -o /out
+RUN dotnet publish ./Main/MicroManagement.Service/MicroManagement.Service.WebAPI.csproj -c Release -o /out
 
 # Use the runtime image for a smaller final image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 
 # Set the working directory inside the container
 WORKDIR /app
