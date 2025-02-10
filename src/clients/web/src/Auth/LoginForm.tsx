@@ -1,5 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { useAuth } from './AuthContext';
+import { Link } from 'react-router-dom';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -43,6 +44,10 @@ const LoginForm: React.FC = () => {
             <div>
               <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
             </div>
+
+            <Link to="/signup" className="block mt-6 text-sm text-center text-gray-500 underline">
+              Don't have an account yet? Create one!
+            </Link>
           </form>
         </div>
       </div>

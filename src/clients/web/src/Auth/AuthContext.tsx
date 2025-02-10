@@ -6,6 +6,7 @@ interface IAuthContext {
     isLoading: boolean;
     setAccessToken: (token: string | null) => void;
     login: (email: string, password: string) => Promise<void>;
+    singup: (firstName: string, lastName: string, email: string, password: string) => Promise<void>;
     refreshAuthToken: () => Promise<void>;
     logout: () => Promise<void>;
 }
@@ -26,6 +27,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const data = await response.json();
         setAccessToken(data.accessToken);
     };
+
+    const singup = async (firstName: string, lastName: string, email: string, password: string) => {
+        const response = await fetch(`${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ firstName, lastName, email, password }),
+            credentials: 'include'
+        });
+        const data = await response.json();
+        setAccessToken(data.accessToken);
+    }
 
     const refreshAuthToken = async () => {
         setIsLoading(true);
@@ -67,7 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ accessToken, setAccessToken, login, refreshAuthToken, isLoading, logout }}>
+        <AuthContext.Provider value={{ accessToken, setAccessToken, login, singup, refreshAuthToken, isLoading, logout }}>
             {children}
         </AuthContext.Provider>
     );
