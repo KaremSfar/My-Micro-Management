@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Persistence
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Persistence.Migrations.SQLite", "Main\Persistence\MicroManagement.Persistence.SQLite.MigrationsApplier\MicroManagement.Persistence.Migrations.SQLite.csproj", "{98354440-C672-4200-813C-883331C6AFF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Auth.Migrations.Postgres", "Auth\MicroManagement.Auth.Migrations.Postgres\MicroManagement.Auth.Migrations.Postgres.csproj", "{116AD57A-7F4F-47E6-BA89-CC4ADAE9A7B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,10 @@ Global
 		{98354440-C672-4200-813C-883331C6AFF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98354440-C672-4200-813C-883331C6AFF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98354440-C672-4200-813C-883331C6AFF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{116AD57A-7F4F-47E6-BA89-CC4ADAE9A7B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{116AD57A-7F4F-47E6-BA89-CC4ADAE9A7B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{116AD57A-7F4F-47E6-BA89-CC4ADAE9A7B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{116AD57A-7F4F-47E6-BA89-CC4ADAE9A7B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,6 +113,7 @@ Global
 		{0B6C8E8C-88FF-48FB-B204-29C41BF4EF3E} = {72199D51-D0F2-4208-ABEE-B70858F0D0E1}
 		{BB0DF696-B0E7-4852-BD43-FEDB4A643461} = {72199D51-D0F2-4208-ABEE-B70858F0D0E1}
 		{98354440-C672-4200-813C-883331C6AFF9} = {72199D51-D0F2-4208-ABEE-B70858F0D0E1}
+		{116AD57A-7F4F-47E6-BA89-CC4ADAE9A7B9} = {0C3B0218-BFE7-4BEC-B414-808D0B9CD034}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}

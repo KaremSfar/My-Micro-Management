@@ -31,16 +31,7 @@ public class Startup
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddHostedService<SqliteInitializationService>();
-
-        services.AddDbContextFactory<AuthenticationServiceDbContext>(options =>
-        {
-            // TODO-KAREM: update here if deployed a real db
-            var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
-            var dbPath = Path.Combine(projectRoot, "auth.db");
-
-            options.UseSqlite($"DataSource={dbPath}");
-        });
+        services.AddAuthDbContext(Configuration);
 
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AuthenticationServiceDbContext>();

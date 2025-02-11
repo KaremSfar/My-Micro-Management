@@ -4,9 +4,13 @@
 - [] Push images to repository
 - [] Create a docker compose file for local devving (services to run in one command)
 - [] Create a docker compose file for publishing
+
 - [] Adapt docker files for easy development
+
 - [] Integrate with Postgres SQL
+
 - [x] Add Signup view in React 
 - [] Make Single sign on Work
+
 - [] Add Open Telemetry and bundle Graphana / or stuff like that with it
 - [] Add Aspire for fun / easy of usage maybe ?

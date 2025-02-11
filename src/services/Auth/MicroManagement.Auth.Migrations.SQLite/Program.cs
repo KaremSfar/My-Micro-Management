@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 Console.WriteLine("Hello, World!");
 
 // This host is used to trick EF Migration Tool to use this project as migration applier
+// TODO-KAREM: most likely to remove
 using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
