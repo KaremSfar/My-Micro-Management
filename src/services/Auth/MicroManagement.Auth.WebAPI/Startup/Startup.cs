@@ -12,7 +12,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Security.Claims;
+using MicroManagement.Shared;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace MicroManagement.Auth.WebAPI;
 
@@ -31,10 +33,15 @@ public class Startup
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddAuthDbContext(Configuration);
+        services.AddAuthDbContext<AuthenticationServiceDbContext>(Configuration);
 
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AuthenticationServiceDbContext>();
+
+        services.AddOptions<DatabaseSettings>()
+            .Bind(Configuration.GetSection(DatabaseSettings.SectionName));
+
+        var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>();
 
         services.AddControllers();
 

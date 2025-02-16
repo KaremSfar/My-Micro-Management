@@ -1,14 +1,15 @@
 ﻿
-using MicroManagement.Auth.WebAPI.Persistence;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
-namespace MicroManagement.Auth.WebAPI
+namespace MicroManagement.Shared
 {
     /// <summary>
     /// Initializes the SQLite DB in case it's not
     /// </summary>
-    public class SqliteInitializationService(IDbContextFactory<AuthenticationServiceDbContext> _dbContextFactory) : IHostedService
+    public class SqliteInitializationService<T>(IDbContextFactory<T> _dbContextFactory) : IHostedService
+        where T : DbContext
     {
         /// <inheritdoc/>
         public async Task StartAsync(CancellationToken cancellationToken)
