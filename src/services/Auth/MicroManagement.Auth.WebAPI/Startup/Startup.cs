@@ -33,7 +33,7 @@ public class Startup
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddAuthDbContext<AuthenticationServiceDbContext>(Configuration);
+        services.AddDbContext<AuthenticationServiceDbContext, Migrations.Postgres.Migrations.InitialCreate>(Configuration);
 
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AuthenticationServiceDbContext>();

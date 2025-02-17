@@ -1,5 +1,4 @@
-﻿using MicroManagement.Auth.WebAPI;
-using MicroManagement.Persistence.Abstraction.Repositories;
+﻿using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Persistence.EF.Configuration;
 using MicroManagement.Persistence.EF.Repositories;
 using MicroManagement.Service.WebAPI.Hubs;
@@ -10,10 +9,12 @@ using MicroManagement.Services.Abstraction.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.WebSockets;
-using Microsoft.EntityFrameworkCore;
+using MicroManagement.Shared;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
+using MicroManagement.Persistence.Migrations.Postgres;
+using MicroManagement.Persistence.Migrations.Postgres.Migrations;
 
 namespace MicroManagement.Service
 {
@@ -85,19 +86,10 @@ namespace MicroManagement.Service
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
             services.AddSingleton<IUserConnectionsProvider, UserConnectionsProvider>();
 
-            services.AddHostedService<SqliteInitializationService>();
+            services.AddDbContext<MyMicroManagementDbContext, InitialCreate>(Configuration);
 
-            services.AddDbContextFactory<MyMicroManagementDbContext>(options =>
-            {
-                // TODO-KAREM: update here if deployed a real db
-                var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
-                var dbPath = Path.Combine(projectRoot, "service.db");
-
-                options.UseSqlite($"DataSource={dbPath}", options =>
-                {
-                    options.MigrationsAssembly("MicroManagement.Persistence.Migrations.SQLite");
-                });
-            });
+            services.AddOptions<DatabaseSettings>()
+                .Bind(Configuration.GetSection(DatabaseSettings.SectionName));
 
             services.AddCors(options =>
             {

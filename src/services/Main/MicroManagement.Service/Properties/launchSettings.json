@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "localDev": {
+    "LocalDev": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

@@ -33,10 +33,6 @@
     <ProjectReference Include="..\MicroManagement.Auth.Migrations.Postgres\MicroManagement.Auth.Migrations.Postgres.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Persistence\" />
-  </ItemGroup>
-
   <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
