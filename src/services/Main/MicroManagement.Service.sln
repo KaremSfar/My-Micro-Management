@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Persistence
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Persistence.EF", "Persistence\MicroManagement.Persistence.EF\MicroManagement.Persistence.EF.csproj", "{67E1CAAD-5978-4DDA-919C-CB62566D6114}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Shared.Startup", "..\Core\MicroManagement.Shared.Startup\MicroManagement.Shared.Startup.csproj", "{492C9527-F863-45BB-929F-BDE8958602E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Persistence.Migrations.Postgres", "Persistence\MicroManagement.Persistence.Migrations.Postgres\MicroManagement.Persistence.Migrations.Postgres.csproj", "{E389091A-7D79-4319-A6F3-84DD15F33160}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,14 @@ Global
 		{67E1CAAD-5978-4DDA-919C-CB62566D6114}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67E1CAAD-5978-4DDA-919C-CB62566D6114}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67E1CAAD-5978-4DDA-919C-CB62566D6114}.Release|Any CPU.Build.0 = Release|Any CPU
+		{492C9527-F863-45BB-929F-BDE8958602E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{492C9527-F863-45BB-929F-BDE8958602E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{492C9527-F863-45BB-929F-BDE8958602E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{492C9527-F863-45BB-929F-BDE8958602E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E389091A-7D79-4319-A6F3-84DD15F33160}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E389091A-7D79-4319-A6F3-84DD15F33160}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E389091A-7D79-4319-A6F3-84DD15F33160}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E389091A-7D79-4319-A6F3-84DD15F33160}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +80,7 @@ Global
 		{54B50B22-9AF4-4E0C-9CBF-26B389BEF6FE} = {0EC314AF-5CC3-461D-AE7C-33D0626042FD}
 		{3C4C5628-7302-4F09-B388-4B9B20DC3DB3} = {0EC314AF-5CC3-461D-AE7C-33D0626042FD}
 		{67E1CAAD-5978-4DDA-919C-CB62566D6114} = {0EC314AF-5CC3-461D-AE7C-33D0626042FD}
+		{E389091A-7D79-4319-A6F3-84DD15F33160} = {0EC314AF-5CC3-461D-AE7C-33D0626042FD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {86B0B8CF-B681-41DB-BBEA-0525CE754C98}
