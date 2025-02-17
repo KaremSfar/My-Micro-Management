@@ -13,8 +13,7 @@ using MicroManagement.Shared;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
-using MicroManagement.Persistence.Migrations.Postgres;
-using MicroManagement.Persistence.Migrations.Postgres.Migrations;
+using Microsoft.Extensions.Configuration;
 
 namespace MicroManagement.Service
 {
@@ -86,15 +85,30 @@ namespace MicroManagement.Service
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
             services.AddSingleton<IUserConnectionsProvider, UserConnectionsProvider>();
 
-            services.AddDbContext<MyMicroManagementDbContext, InitialCreate>(Configuration);
-
             services.AddOptions<DatabaseSettings>()
                 .Bind(Configuration.GetSection(DatabaseSettings.SectionName));
+
+            var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>()!;
+
+            services.AddDatabaseContext<MyMicroManagementDbContext>(dbSettings, SetupMigrationAssembly);
 
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowLocalReact", p => p.SetIsOriginAllowed(p => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             });
+
+            void SetupMigrationAssembly(DbSetupOptions options)
+            {
+
+                var assembly = dbSettings.DatabaseType switch
+                {
+                    "postgres" => typeof(Persistence.Migrations.Postgres.Migrations.InitialCreate).Assembly.GetName().Name!,
+                    "sqlite" => typeof(Persistence.SQLite.MigrationsApplier.Migrations.InitialCreate).Assembly.GetName().Name!,
+                    _ => throw new ArgumentException("Choose Database type in configuration")
+                };
+
+                options.MigrationsAssembly(assembly);
+            }
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -3,48 +3,59 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MicroManagement.Shared
+namespace MicroManagement.Shared;
+
+public static class DbInitializationExtensions
 {
-    public static class DbInitializationExtensions
+    public static IServiceCollection AddDatabaseContext<T>(this IServiceCollection services, DatabaseSettings dbConfigurationSettings, Action<DbSetupOptions> optionsAction = null)
+        where T : DbContext
     {
-        public static IServiceCollection AddDbContext<T, S>(this IServiceCollection services, IConfiguration configuration)
-            where T : DbContext
+        DbSetupOptions dbOptions = new();
+
+        optionsAction?.Invoke(dbOptions);
+
+        return dbConfigurationSettings.DatabaseType switch
         {
-            var dbSettings = configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>()!;
+            "postgres" => AddPostgresSqlDbContext<T>(services, dbConfigurationSettings, dbOptions),
+            "sqlite" => AddSqliteDbContext<T>(services, dbConfigurationSettings, dbOptions),
+            _ => throw new ArgumentException("Choose Database type in configuration")
+        };
+    }
 
-            return dbSettings.DatabaseType switch
-            {
-                "postgres" => AddPostgresSqlDbContext<T, S>(services, dbSettings),
-                "sqlite" => AddSqliteDbContext<T>(services),
-                _ => throw new ArgumentException("Choose Database type in configuration")
-            };
-        }
+    private static IServiceCollection AddSqliteDbContext<T>(IServiceCollection services, DatabaseSettings settings, DbSetupOptions dbOptions)
+        where T : DbContext
+    {
+        services.AddHostedService<MigrationsService<T>>();
 
-        private static IServiceCollection AddSqliteDbContext<T>(IServiceCollection services)
-            where T : DbContext
+        services.AddDbContextFactory<T>(options =>
         {
-            services.AddHostedService<SqliteInitializationService<T>>();
+            var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
+            var dbPath = Path.Combine(projectRoot, settings.ConnectionString);
 
-            services.AddDbContextFactory<T>(options =>
-            {
-                var projectRoot = AppDomain.CurrentDomain.BaseDirectory;
-                var dbPath = Path.Combine(projectRoot, "auth.db");
+            options.UseSqlite($"DataSource={dbPath}", o => o.MigrationsAssembly(dbOptions?.MigrationAssembly));
+        });
+        return services;
+    }
 
-                options.UseSqlite($"DataSource={dbPath}", o => o.MigrationsAssembly("MicroManagement.Auth.Migrations.SQLite"));
-            });
-            return services;
-        }
+    private static IServiceCollection AddPostgresSqlDbContext<T>(IServiceCollection services, DatabaseSettings settings, DbSetupOptions dbOptions)
+        where T : DbContext
+    {
+        services.AddHostedService<MigrationsService<T>>();
 
-        private static IServiceCollection AddPostgresSqlDbContext<T, S>(IServiceCollection services, DatabaseSettings settings)
-            where T : DbContext
+        return services.AddDbContextFactory<T>(options =>
         {
-            services.AddHostedService<MigrationsService<T>>();
+            options.UseNpgsql(settings.ConnectionString,
+                pgOptions => pgOptions.MigrationsAssembly(dbOptions?.MigrationAssembly));
+        });
+    }
+}
 
-            return services.AddDbContextFactory<T>(options =>
-            {
-                options.UseNpgsql(settings.ConnectionString,
-                    pgOptions => pgOptions.MigrationsAssembly(typeof(S).Assembly.GetName().Name));
-            });
-        }
+public class DbSetupOptions
+{
+    public string MigrationAssembly { get; set; }
+
+    public void MigrationsAssembly(string assembly)
+    {
+        this.MigrationAssembly = assembly;
     }
 }

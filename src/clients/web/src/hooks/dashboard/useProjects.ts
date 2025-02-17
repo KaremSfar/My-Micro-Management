@@ -34,7 +34,7 @@ export const useProjects = () => {
         };
 
         fetchProjects();
-    }, [accessToken, projects]);
+    }, [accessToken]);
 
     return { projects, setProjects, runningProjectId, setRunningProjectId };
 };

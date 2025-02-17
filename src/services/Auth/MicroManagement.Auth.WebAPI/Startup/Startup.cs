@@ -33,15 +33,16 @@ public class Startup
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddDbContext<AuthenticationServiceDbContext, Migrations.Postgres.Migrations.InitialCreate>(Configuration);
+        var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>()!;
+
+        services.AddDatabaseContext<AuthenticationServiceDbContext>(dbSettings,
+                SetupMigrationAssembly);
 
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AuthenticationServiceDbContext>();
 
         services.AddOptions<DatabaseSettings>()
             .Bind(Configuration.GetSection(DatabaseSettings.SectionName));
-
-        var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>();
 
         services.AddControllers();
 
@@ -96,6 +97,20 @@ public class Startup
         {
             options.AddPolicy("AllowLocalReact", p => p.SetIsOriginAllowed(p => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
         });
+
+        void SetupMigrationAssembly(DbSetupOptions options)
+        {
+            var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>()!;
+
+            var assembly = dbSettings.DatabaseType switch
+            {
+                "postgres" => typeof(Migrations.Postgres.Migrations.InitialCreate).Assembly.GetName().Name!,
+                "sqlite" => typeof(Migrations.SQLite.Migrations.InitialCreate).Assembly.GetName().Name!,
+                _ => throw new ArgumentException("Choose Database type in configuration")
+            };
+
+            options.MigrationsAssembly(assembly);
+        }
     }
 
     /// <summary>
