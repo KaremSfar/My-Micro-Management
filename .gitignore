@@ -377,3 +377,6 @@ local.properties
 
 # Directory Build overrides for local setups
 Directory.Build.Override.props
+
+# env variables
+.env
