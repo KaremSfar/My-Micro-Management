@@ -2,7 +2,7 @@
 - [x] Create docker files for easy deployment
 - [x] Set up needed environment variables for images/containers for local docker and dev
 - [] Push images to repository
-- [] Create a docker compose file for publishing
+- [x] Create a docker compose file for publishing
 - [] Create a docker compose file for local devving (services to run in one command)
 
 - [] Adapt docker files for easy development
