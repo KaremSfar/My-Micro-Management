@@ -4,22 +4,27 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 # Set the working directory inside the container
 WORKDIR /app
 
-COPY MicroManagement.Auth.DataContracts/MicroManagement.Auth.DataContracts.csproj ./MicroManagement.Auth.DataContracts/
-COPY MicroManagement.Auth.Migrations.AzureSQL/MicroManagement.Auth.Migrations.AzureSQL.csproj ./MicroManagement.Auth.Migrations.AzureSQL/
-COPY MicroManagement.Auth.Migrations.SQLite/MicroManagement.Auth.Migrations.SQLite.csproj ./MicroManagement.Auth.Migrations.SQLite/
-COPY MicroManagement.Auth.WebAPI/MicroManagement.Auth.WebAPI.csproj ./MicroManagement.Auth.WebAPI/
+COPY Auth/MicroManagement.Auth.DataContracts/MicroManagement.Auth.DataContracts.csproj ./Auth/MicroManagement.Auth.DataContracts/
+COPY Auth/MicroManagement.Auth.Migrations.AzureSQL/MicroManagement.Auth.Migrations.AzureSQL.csproj ./Auth/MicroManagement.Auth.Migrations.AzureSQL/
+COPY Auth/MicroManagement.Auth.Migrations.SQLite/MicroManagement.Auth.Migrations.SQLite.csproj ./Auth/MicroManagement.Auth.Migrations.SQLite/
+COPY Auth/MicroManagement.Auth.Migrations.SQLite/MicroManagement.Auth.Migrations.SQLite.csproj ./Auth/MicroManagement.Auth.Migrations.SQLite/
+COPY Auth/MicroManagement.Auth.Migrations.Postgres/MicroManagement.Auth.Migrations.Postgres.csproj ./Auth/MicroManagement.Auth.Migrations.Postgres/
+COPY Auth/MicroManagement.Auth.EFDbContext/MicroManagement.Auth.EFDbContext.csproj ./Auth/MicroManagement.Auth.EFDbContext/
+
+COPY Core/MicroManagement.Shared.Startup/MicroManagement.Shared.Startup.csproj ./Core/MicroManagement.Shared.Startup/
+COPY Auth/MicroManagement.Auth.WebAPI/MicroManagement.Auth.WebAPI.csproj ./Auth/MicroManagement.Auth.WebAPI/
 
 # Copy the solution file and project files first to restore dependencies
-COPY ./MicroManagement.Authentication.Service.sln ./
+COPY ./Auth/MicroManagement.Authentication.Service.sln ./Auth/
 
 # Restore dependencies only
-RUN dotnet restore ./MicroManagement.Authentication.Service.sln
+RUN dotnet restore ./Auth/MicroManagement.Authentication.Service.sln
 
 # Copy the remaining source files
 COPY . ./
 
 # Publish the specific Web API project
-RUN dotnet publish ./MicroManagement.Auth.WebAPI/MicroManagement.Auth.WebAPI.csproj -c Release -o /out
+RUN dotnet publish ./Auth/MicroManagement.Auth.WebAPI/MicroManagement.Auth.WebAPI.csproj -c Release -o /out
 
 # Use the runtime image for a smaller final image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime

@@ -1,36 +1,38 @@
-version: '3.8'
-
 services:
-  app:
-    build:
-      context: ./Application.React/
-      dockerfile: app.Dockerfile
-    image: karemsfar/mmgmt-dev-app:latest
-    ports:
-      - "80:80"  # Bind port 3000 on the host to port 80 in the app container
-    depends_on:
-      - auth
-      - service
-    
-
   auth:
     build:
-      context: .
-      dockerfile: auth.Dockerfile
-    image: karemsfar/mmgmt-dev-auth:latest
+      context: ./src/services
+      dockerfile: ./Auth/Dockerfile
+    image: mmgmt-auth
     ports:
-      - "82:82"  # Bind port 82 on the host to port 82 in the auth container
-    depends_on:
-      - service
+      - 81:81
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - Database__DatabaseType=${Auth_Database__DatabaseType}
+      - Database__ConnectionString=${Auth_Database__ConnectionString}
+      - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
+      - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
 
   service:
     build:
-      context: .
-      dockerfile: service.Dockerfile
-    image: karemsfar/mmgmt-dev-service:latest
+      context: ./src/services
+      dockerfile: ./Main/Dockerfile
+    image: mmgmt-service
     ports:
-      - "81:81"  # Bind port 81 on the host to port 81 in the service container
+      - 82:81
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - Database__DatabaseType=${Main_Database__DatabaseType}
+      - Database__ConnectionString=${Main_Database__ConnectionString}
+      - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
+      - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
+
+  web:
+    build:
+      context: ./src/clients/web
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_AUTH_SERVICE_BASE_URL=${REACT_APP_AUTH_SERVICE_BASE_URL}
+        - REACT_APP_MAIN_SERVICE_BASE_URL=${REACT_APP_MAIN_SERVICE_BASE_URL}
+    image: mmgmt-web
+    ports:
+      - 80:80
+   

@@ -12,7 +12,9 @@ COPY Main/Persistence/MicroManagement.Persistence.Abstraction/MicroManagement.Pe
 COPY Main/Persistence/MicroManagement.Persistence.EF/MicroManagement.Persistence.EF.csproj ./Main/Persistence/MicroManagement.Persistence.EF/
 COPY Main/Persistence/MicroManagement.Persistence.Migrations.AzureSQL/MicroManagement.Persistence.Migrations.AzureSQL.csproj ./Main/Persistence/MicroManagement.Persistence.Migrations.AzureSQL/
 COPY Main/Persistence/MicroManagement.Persistence.SQLite.MigrationsApplier/MicroManagement.Persistence.Migrations.SQLite.csproj ./Main/Persistence/MicroManagement.Persistence.SQLite.MigrationsApplier/
+COPY Main/Persistence/MicroManagement.Persistence.Migrations.Postgres/MicroManagement.Persistence.Migrations.Postgres.csproj ./Main/Persistence/MicroManagement.Persistence.Migrations.Postgres/
 COPY Core/MicroManagement.Core/MicroManagement.Core.csproj ./Core/MicroManagement.Core/
+COPY Core/MicroManagement.Shared.Startup/MicroManagement.Shared.Startup.csproj ./Core/MicroManagement.Shared.Startup/
 
 COPY Main/MicroManagement.Service.sln ./Main/
 

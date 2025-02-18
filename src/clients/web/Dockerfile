@@ -14,6 +14,14 @@ RUN npm ci
 # Copy the rest of the application code
 COPY . .
 
+# Set build-time environment variables
+ARG REACT_APP_AUTH_SERVICE_BASE_URL
+ARG REACT_APP_MAIN_SERVICE_BASE_URL
+
+# Pass them to the build process
+ENV REACT_APP_AUTH_SERVICE_BASE_URL=$REACT_APP_AUTH_SERVICE_BASE_URL
+ENV REACT_APP_MAIN_SERVICE_BASE_URL=$REACT_APP_MAIN_SERVICE_BASE_URL
+
 # Build the React app for production
 RUN npm run build
 
