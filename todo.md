@@ -14,3 +14,5 @@
 
 - [] Add Open Telemetry and bundle Graphana / or stuff like that with it
 - [] Add Aspire for fun / easy of usage maybe ?
+
+test
