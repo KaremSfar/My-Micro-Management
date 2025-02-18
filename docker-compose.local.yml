@@ -7,7 +7,7 @@ services:
         - REACT_APP_AUTH_SERVICE_BASE_URL=${REACT_APP_AUTH_SERVICE_BASE_URL}
         - REACT_APP_MAIN_SERVICE_BASE_URL=${REACT_APP_MAIN_SERVICE_BASE_URL}
     volumes:
-      - .:/app
+      -  ./src/clients/web:/app
       - /app/node_modules
     ports:
       - "3000:3000"  # map the React development server
