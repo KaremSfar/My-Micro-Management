@@ -1,5 +1,8 @@
 services:
   auth:
+    build:
+      context: ./src/services
+      dockerfile: ./Auth/Dockerfile
     image: karemsfar/mmgmt-auth:latest
     ports:
       - 81:81
@@ -10,6 +13,9 @@ services:
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
 
   service:
+    build:
+      context: ./src/services
+      dockerfile: ./Main/Dockerfile
     image: karemsfar/mmgmt-service:latest
     ports:
       - 82:81
@@ -20,6 +26,12 @@ services:
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
 
   web:
+    build:
+      context: ./src/clients/web
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_AUTH_SERVICE_BASE_URL=${REACT_APP_AUTH_SERVICE_BASE_URL}
+        - REACT_APP_MAIN_SERVICE_BASE_URL=${REACT_APP_MAIN_SERVICE_BASE_URL}
     image: karemsfar/mmgmt-web:latest
     ports:
       - 80:80

@@ -1,9 +1,9 @@
 - [x] Reorganize files and folders like a common project with correct naming conventions
 - [x] Create docker files for easy deployment
 - [x] Set up needed environment variables for images/containers for local docker and dev
-- [] Push images to repository
+- [x] Push images to repository
 - [x] Create a docker compose file for publishing
-- [] Create a docker compose file for local devving (services to run in one command)
+- [x] Create a docker compose file for local devving (services to run + build in one command)
 
 - [] Adapt docker files for easy development
 
