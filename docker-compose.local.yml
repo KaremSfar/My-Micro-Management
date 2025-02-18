@@ -1,0 +1,18 @@
+services:
+  web:
+    build:
+      context: ./src/clients/web
+      dockerfile: Dockerfile.local
+      args:
+        - REACT_APP_AUTH_SERVICE_BASE_URL=${REACT_APP_AUTH_SERVICE_BASE_URL}
+        - REACT_APP_MAIN_SERVICE_BASE_URL=${REACT_APP_MAIN_SERVICE_BASE_URL}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"  # map the React development server
+      - "9229:9229"  # optional: map Node.js debugger port
+    stdin_open: true
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
