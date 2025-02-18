@@ -5,7 +5,7 @@
 - [x] Create a docker compose file for publishing
 - [x] Create a docker compose file for local devving (services to run + build in one command)
 
-- [] Adapt docker files for easy development
+- [x] Adapt docker files for easy development
 
 - [x] Integrate with Postgres SQL
 
@@ -14,5 +14,3 @@
 
 - [] Add Open Telemetry and bundle Graphana / or stuff like that with it
 - [] Add Aspire for fun / easy of usage maybe ?
-
-test
