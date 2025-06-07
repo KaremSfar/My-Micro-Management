@@ -64,7 +64,7 @@ namespace MicroManagement.Persistence.EF.Repositories
         public async Task UpdateAsync(TimeSession timeSession)
         {
             var timeSessionEntity = await _dbSet
-                .Where(t => t.UserId.ToString() == timeSession.UserId.ToString().ToUpperInvariant())
+                .Where(t => t.UserId.ToString() == timeSession.UserId.ToString())
                 .Where(t => t.StartTime == timeSession.StartTime)
                 .Include(t => t.Projects)
                 .FirstOrDefaultAsync();
