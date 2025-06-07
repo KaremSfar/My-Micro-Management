@@ -46,21 +46,7 @@ public class Startup
 
         services.AddControllers();
 
-        var authenticationBuilder = services.AddAuthentication(options =>
-        {
-            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-        })
-        .AddCookie(o =>
-        {
-            o.Cookie.SameSite = SameSiteMode.None;
-            o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        });
-
-        services.Configure<CookiePolicyOptions>(o =>
-        {
-            o.MinimumSameSitePolicy = SameSiteMode.None;
-        });
+        var authenticationBuilder = services.AddAuthentication();
 
         if (!string.IsNullOrWhiteSpace(Configuration["googleclient_id"]))
             authenticationBuilder.AddGoogle(ConfigureGoogleSSO);
@@ -132,19 +118,5 @@ public class Startup
     {
         options.ClientId = Configuration["googleclient_id"]!;
         options.ClientSecret = Configuration["googleclient_secret"]!;
-
-        // Explicitly set correlation cookie options
-        options.CorrelationCookie.SameSite = SameSiteMode.Lax; // Try Lax first, then None
-        options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-        options.CorrelationCookie.HttpOnly = true;
-
-        // Log events
-        options.Events.OnRemoteFailure = context =>
-        {
-            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
-            logger.LogError($"Google OAuth Remote Failure: {context.Failure}");
-            return Task.CompletedTask;
-        };
-
     }
 }

@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const handleGoogleAuthResponse = async () => {
         try {
-            // Assuming Refresh token is appendeds
+            // Assuming Refresh token is appended
             await refreshAuthToken();
         } catch (error) {
             console.error('Error during Google authentication:', error);
