@@ -9,6 +9,8 @@ interface IAuthContext {
     singup: (firstName: string, lastName: string, email: string, password: string) => Promise<void>;
     refreshAuthToken: () => Promise<void>;
     logout: () => Promise<void>;
+    loginWithGoogle: () => void;
+    handleGoogleAuthResponse: () => Promise<void>;
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
@@ -73,13 +75,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setAccessToken(null);
     }
 
+    const loginWithGoogle = () => {
+        window.location.href = `${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/google-login`;
+    };
+
+    const handleGoogleAuthResponse = async () => {
+        try {
+            // Assuming Refresh token is appendeds
+            await refreshAuthToken();
+        } catch (error) {
+            console.error('Error during Google authentication:', error);
+            // Handle error (e.g., show error message to user)
+        }
+    };
+
     // Attempt to refresh the token on app startup
     useEffect(() => {
         refreshAuthToken();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ accessToken, setAccessToken, login, singup, refreshAuthToken, isLoading, logout }}>
+        <AuthContext.Provider value={{ accessToken, setAccessToken, login, singup, refreshAuthToken, isLoading, logout, loginWithGoogle, handleGoogleAuthResponse }}>
             {children}
         </AuthContext.Provider>
     );

@@ -135,6 +135,7 @@ namespace MicroManagement.Auth.WebAPI.Services
             var tokenClaims = handler.ValidateToken(refreshTokenInput, validationParam, out _);
             return tokenClaims;
         }
+
         private string GenerateAccessToken(ApplicationUser user)
         {
             var claims = new List<Claim>()

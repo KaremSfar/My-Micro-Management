@@ -48,37 +48,22 @@ public class Startup
 
         var authenticationBuilder = services.AddAuthentication(options =>
         {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
         })
-        .AddJwtBearer(options =>
+        .AddCookie(o =>
         {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = Configuration["Jwt:Issuer"],
-                ValidAudience = Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JwtAccessKey"]!))
-            };
-        })
-        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+            o.Cookie.SameSite = SameSiteMode.None;
+            o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        });
+
+        services.Configure<CookiePolicyOptions>(o =>
+        {
+            o.MinimumSameSitePolicy = SameSiteMode.None;
+        });
 
         if (!string.IsNullOrWhiteSpace(Configuration["googleclient_id"]))
             authenticationBuilder.AddGoogle(ConfigureGoogleSSO);
-
-        services.AddAuthorization(b =>
-        {
-            // Create a new policy (along side default JWT bearer one) to exchange google cookie with JWT Token
-            b.AddPolicy("google-token-exchange", pb =>
-            {
-                pb.AuthenticationSchemes.Clear();
-                pb.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .RequireAuthenticatedUser();
-            });
-        });
 
         services.AddScoped<IAuthService, AuthService>();
 
@@ -95,7 +80,8 @@ public class Startup
 
         services.AddCors(options =>
         {
-            options.AddPolicy("AllowLocalReact", p => p.SetIsOriginAllowed(p => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+            options.AddPolicy("AllowLocalReact",
+                p => p.SetIsOriginAllowed(p => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
         });
 
         void SetupMigrationAssembly(DbSetupOptions options)
@@ -132,6 +118,7 @@ public class Startup
 
         app.UseRouting();
 
+        app.UseCookiePolicy();
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -143,37 +130,21 @@ public class Startup
 
     private void ConfigureGoogleSSO(GoogleOptions options)
     {
-        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.ClientId = Configuration["googleclient_id"]!;
         options.ClientSecret = Configuration["googleclient_secret"]!;
-        options.SaveTokens = false;
 
-        options.Events.OnTicketReceived = async ctx =>
+        // Explicitly set correlation cookie options
+        options.CorrelationCookie.SameSite = SameSiteMode.Lax; // Try Lax first, then None
+        options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+        options.CorrelationCookie.HttpOnly = true;
+
+        // Log events
+        options.Events.OnRemoteFailure = context =>
         {
-            var userManager = ctx.HttpContext.RequestServices.GetService(typeof(UserManager<ApplicationUser>)) as UserManager<ApplicationUser>;
-
-            var userMail = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var firstName = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
-            var lastName = ctx.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
-
-            var user = await userManager!.FindByEmailAsync(userMail);
-
-            if (user == null)
-            {
-                // Create the user if user is not created yet
-                var result = await userManager.CreateAsync(new ApplicationUser()
-                {
-                    UserName = userMail,
-                    Email = userMail,
-                    FirstName = firstName,
-                    LastName = lastName,
-                });
-
-                if (result.Succeeded)
-                {
-                    ctx.Fail("Could not create user");
-                }
-            }
+            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Startup>>();
+            logger.LogError($"Google OAuth Remote Failure: {context.Failure}");
+            return Task.CompletedTask;
         };
+
     }
 }

@@ -12,7 +12,6 @@ using MicroManagement.Auth.WebAPI.Services;
 namespace MicroManagement.Auth.WebAPI.Controllers
 {
     [ApiController]
-    [Route("/")]
     public class GoogleSignInController : ControllerBase
     {
         private readonly IAuthService _authenticationService;
@@ -22,35 +21,63 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             _authenticationService = authenticationService;
         }
 
-        /// <summary>
-        /// Challenges the current user, if not authenticated redirect to Google's authentication page
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("google/google-link")]
-        public IResult GoogleLink()
+        [HttpGet("google-login")]
+        public IActionResult GoogleLogin()
         {
-            return Results.Challenge(
-                properties: new AuthenticationProperties
-                {
-                    RedirectUri = Url.Action(nameof(GetToken))
-                },
-                authenticationSchemes: new List<string> { GoogleDefaults.AuthenticationScheme }
-                );
+            var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleCallback") };
+            return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
-        /// <summary>
-        /// Endpoint used to exchange the google generated cookie for a pair of JWT Access and refresh token
-        /// This endpoint is used to restrict accepted authentication schemas to only jwt bearer
-        /// [NOTE] Try not to get too coupled to this, as it should be removed at a given time
-        /// </summary>
-        /// <returns></returns>
-        [Authorize(Policy = "google-token-exchange")]
-        [HttpGet("google/exchange")]
-        public async Task<IActionResult> GetToken()
+        [HttpGet("google-callback")]
+        public async Task<IActionResult> GoogleCallback()
         {
-            var user = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
 
-            return Ok(await _authenticationService.AuthenticateAsync(user.Value));
+            if (!result.Succeeded)
+                return BadRequest();
+
+            var userManager = HttpContext.RequestServices.GetService(typeof(UserManager<ApplicationUser>)) as UserManager<ApplicationUser>;
+
+            var userMail = result.Principal.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var firstName = result.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+            var lastName = result.Principal?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+
+            var user = await userManager!.FindByEmailAsync(userMail);
+
+            if (user == null)
+            {
+                // Create the user if user is not created yet
+                var creationResult = await userManager.CreateAsync(new ApplicationUser()
+                {
+                    UserName = userMail,
+                    Email = userMail,
+                    FirstName = firstName,
+                    LastName = lastName,
+                });
+
+                if (!creationResult.Succeeded)
+                    return BadRequest("Could not create user");
+
+                user = await userManager!.FindByEmailAsync(userMail);
+            }
+
+            var connection = await _authenticationService.AuthenticateAsync(user.Email);
+
+            AppendRefreshToken(connection.RefreshToken);
+
+            return Redirect($"http://localhost:3000/auth/google-callback?token={connection.AccessToken}");
+        }
+
+        private void AppendRefreshToken(string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                Secure = true, // Ensure the cookie is sent over HTTPS
+                SameSite = SameSiteMode.None, // Prevents the cookie from being sent in cross-site requests
+                Expires = DateTimeOffset.UtcNow.AddDays(7)
+            };
+
+            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         }
     }
 }
