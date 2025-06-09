@@ -28,6 +28,9 @@ RUN npm run build
 # Use nginx to serve static files
 FROM nginx:alpine AS production
 
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy build files from the previous stage
 COPY --from=build /app/build /usr/share/nginx/html
 

@@ -71,7 +71,7 @@ namespace MicroManagement.Auth.WebAPI.Controllers
 
             var returnUrl = result.Properties.Items["returnUrl"];
 
-            return Redirect($"{returnUrl}/auth/google-callback?token={connection.AccessToken}");
+            return Redirect($"{returnUrl}/auth/google-callback");
         }
 
         private void AppendRefreshToken(string refreshToken)
