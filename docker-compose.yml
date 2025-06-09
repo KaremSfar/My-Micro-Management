@@ -8,6 +8,8 @@ services:
       - Database__ConnectionString=${Auth_Database__ConnectionString}
       - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
+      - googleclient_id=${googleclient_id}
+      - googleclient_secret=${googleclient_secret}
 
   service:
     image: karemsfar/mmgmt-service:latest
