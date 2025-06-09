@@ -28,7 +28,7 @@ function App() {
               <Route path="/analytics" element={accessToken ? <Layout><Analytics /></Layout> : <Navigate to="/login" replace />} />
               <Route path="/login" element={accessToken ? <Navigate to="/" replace /> : <LoginForm />} />
               <Route path="/signup" element={accessToken ? <Navigate to="/" replace /> : <SignupForm />} />
-              <Route path="/auth/google-callback" element={<GoogleAuthCallback />} />
+              <Route path="/google-callback" element={<GoogleAuthCallback />} />
               <Route path="*" element={accessToken ? <Layout><Dashboard /></Layout> : <Navigate to="/login" replace />} /> {/* Reroute all to / if not found */}
             </Routes>
           </BrowserRouter>}

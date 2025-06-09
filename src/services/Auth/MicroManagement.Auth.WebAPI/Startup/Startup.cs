@@ -15,6 +15,7 @@ using System.Security.Claims;
 using MicroManagement.Shared;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace MicroManagement.Auth.WebAPI;
 
@@ -45,6 +46,15 @@ public class Startup
             .Bind(Configuration.GetSection(DatabaseSettings.SectionName));
 
         services.AddControllers();
+
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                                      ForwardedHeaders.XForwardedProto |
+                                      ForwardedHeaders.XForwardedHost;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
 
         var authenticationBuilder = services.AddAuthentication();
 
@@ -92,6 +102,8 @@ public class Startup
     /// <param name="env"></param>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        app.UseForwardedHeaders();
+
         app.UseCors("AllowLocalReact");
 
         // Configure the HTTP request pipeline.
