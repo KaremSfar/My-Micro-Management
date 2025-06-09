@@ -12,13 +12,19 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Make script executable
         run: chmod +x ./devops/update-files.sh
+
+      - name: Debug script content
+      run: |
+        echo "Script content:"
+        cat -A ./devops/update-files.sh
+        echo "File encoding:"
+        file ./devops/update-files.sh
 
       - name: Run update-files.sh
         env:
