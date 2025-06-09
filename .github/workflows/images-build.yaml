@@ -1,7 +1,7 @@
 name: Build and Push Docker images
 
 on:
-  workflow_dispatch:
+  push:
 
 env:
   REGISTRY: docker.io
