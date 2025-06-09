@@ -20,13 +20,6 @@ jobs:
       - name: Make script executable
         run: chmod +x ./devops/update-files.sh
 
-      - name: Debug script content
-        run: |
-          echo "Script content:"
-          cat -A ./devops/update-files.sh
-          echo "File encoding:"
-          file ./devops/update-files.sh
-
       - name: Run update-files.sh
         env:
           AUTH_DB_TYPE: "sqlite"
@@ -49,7 +42,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker compose build
+        run: docker compose -f docker-compose.dev build
 
       - name: Push Docker image
         run: docker compose push
