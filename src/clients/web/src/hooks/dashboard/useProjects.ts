@@ -14,7 +14,7 @@ export const useProjects = () => {
                 return;
 
             try {
-                const response = await fetch(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/api/projects`, {
+                const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

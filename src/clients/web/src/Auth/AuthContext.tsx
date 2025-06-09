@@ -1,5 +1,5 @@
 // src/contexts/AuthContext.tsx
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface IAuthContext {
     accessToken: string | null;
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
     const login = async (email: string, password: string) => {
-        const response = await fetch(`${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/auth/login`, {
+        const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const singup = async (firstName: string, lastName: string, email: string, password: string) => {
-        const response = await fetch(`${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/auth/register`, {
+        const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ firstName, lastName, email, password }),
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const refreshAuthToken = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/auth/refresh-token`, {
+            const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/refresh-token`, {
                 method: 'POST',
                 credentials: 'include', // Necessary to send the HttpOnly cookie
             });
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const logout = async () => {
-        await fetch(`${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/auth/logout`, {
+        await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/logout`, {
             method: 'POST',
             credentials: 'include',
         });
@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const loginWithGoogle = () => {
-        window.location.href = `${process.env.REACT_APP_AUTH_SERVICE_BASE_URL}/google-login`;
+        window.location.href = `${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/google-login?returnUrl=${window.location.origin}`;
     };
 
     const handleGoogleAuthResponse = async () => {

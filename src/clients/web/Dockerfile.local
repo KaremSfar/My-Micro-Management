@@ -15,8 +15,8 @@ RUN npm i
 COPY . .
 
 # Pass them to the build process
-ENV REACT_APP_AUTH_SERVICE_BASE_URL=http://localhost:81
-ENV REACT_APP_MAIN_SERVICE_BASE_URL=http://localhost:82
+ENV VITE_AUTH_SERVICE_BASE_URL=http://localhost:81
+ENV VITE_MAIN_SERVICE_BASE_URL=http://localhost:82
 
 EXPOSE 3000
 

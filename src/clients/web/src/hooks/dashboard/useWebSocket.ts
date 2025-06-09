@@ -10,7 +10,7 @@ export const useWebSocket = (startProject: (projectId: string) => void, stopProj
         if (!accessToken) return;
 
         webSocketConnectionRef.current = new HubConnectionBuilder()
-            .withUrl(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/hub/timesessionshub`, {
+            .withUrl(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/hub/timesessionshub`, {
                 accessTokenFactory: () => accessToken!,
             })
             .withAutomaticReconnect()

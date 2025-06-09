@@ -22,9 +22,13 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         }
 
         [HttpGet("google-login")]
-        public IActionResult GoogleLogin()
+        public IActionResult GoogleLogin([FromQuery] string returnUrl)
         {
-            var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleCallback") };
+            var properties = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleCallback"),
+                Items = { { "returnUrl", returnUrl } }
+            };
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
@@ -65,7 +69,9 @@ namespace MicroManagement.Auth.WebAPI.Controllers
 
             AppendRefreshToken(connection.RefreshToken);
 
-            return Redirect($"http://localhost:3000/auth/google-callback?token={connection.AccessToken}");
+            var returnUrl = result.Properties.Items["returnUrl"];
+
+            return Redirect($"{returnUrl}/auth/google-callback?token={connection.AccessToken}");
         }
 
         private void AppendRefreshToken(string refreshToken)

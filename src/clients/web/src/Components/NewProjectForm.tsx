@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../Auth/AuthContext';
-import { CreateProjectDTO, GetProjectDto } from '../DTOs/ProjectDto';
+import type { CreateProjectDTO, GetProjectDto } from '../DTOs/ProjectDto';
 
 interface NewProjectFormProps {
     onClose: () => void;
@@ -15,7 +15,7 @@ function NewProjectForm({ onClose, onProjectCreated }: NewProjectFormProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${process.env.REACT_APP_MAIN_SERVICE_BASE_URL}/api/projects`, {
+            const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

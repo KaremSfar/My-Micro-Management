@@ -18,7 +18,7 @@ export const useProjectCardColors = (projectColor: string) => {
 
 const hexToRgb = (hex: string): number[] => {
     const hexRgb: string = hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i,
-        (m, r, g, b) => '#' + r + r + g + g + b + b);
+        (_, r, g, b) => '#' + r + r + g + g + b + b);
 
     return hexRgb
         .substring(1).match(/.{2}/g)!

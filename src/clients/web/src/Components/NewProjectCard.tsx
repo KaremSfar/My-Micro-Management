@@ -2,7 +2,7 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import { Dialog } from '@headlessui/react'; // Add this import
 import { useState } from 'react';
 import NewProjectForm from './NewProjectForm';
-import { GetProjectDto } from '../DTOs/ProjectDto';
+import type { GetProjectDto } from '../DTOs/ProjectDto';
 
 interface NewProjectCardProps {
     onProjectCreated: (project: GetProjectDto) => void;
