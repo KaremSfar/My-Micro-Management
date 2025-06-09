@@ -130,5 +130,7 @@ public class Startup
     {
         options.ClientId = Configuration["googleclient_id"]!;
         options.ClientSecret = Configuration["googleclient_secret"]!;
+
+        options.CallbackPath = "/auth-api/signin-google"; // Custom path
     }
 }
