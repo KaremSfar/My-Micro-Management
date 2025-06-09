@@ -53,6 +53,6 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push $IMAGE_NAME_WEB:latest
-          docker push $IMAGE_NAME_AUTH:latest
-          docker push $IMAGE_NAME_SERVICE:latest
+          docker push ${{ env.IMAGE_NAME_WEB }}:latest
+          docker push ${{ env.IMAGE_NAME_AUTH }}:latest
+          docker push ${{ env.IMAGE_NAME_SERVICE }}:latest
