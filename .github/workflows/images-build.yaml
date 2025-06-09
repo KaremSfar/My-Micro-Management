@@ -45,4 +45,7 @@ jobs:
         run: docker compose -f docker-compose.dev.yml build
 
       - name: Push Docker image
-        run: docker compose push
+        run: |
+          docker push ${{ env.IMAGE_NAME_WEB }}:latest
+          docker push ${{ env.IMAGE_NAME_AUTH }}:latest
+          docker push ${{ env.IMAGE_NAME_SERVICE }}:latest
