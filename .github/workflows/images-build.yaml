@@ -35,8 +35,8 @@ jobs:
           JWT_REFRESH_KEY: ${{ secrets.JWT_REFRESH_KEY }}
           MAIN_DB_TYPE: "sqlite"
           MAIN_DB_CONNECTION: "main"
-          AUTH_SERVICE_URL: ${{ secrets.AUTH_SERVICE_URL }}
-          MAIN_SERVICE_URL: ${{ secrets.MAIN_SERVICE_URL }}
+          AUTH_SERVICE_URL: ${{ vars.AUTH_SERVICE_URL }}
+          MAIN_SERVICE_URL: ${{ vars.MAIN_SERVICE_URL }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: source ./devops/update-files.sh
