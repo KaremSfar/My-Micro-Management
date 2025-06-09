@@ -21,11 +21,11 @@ jobs:
         run: chmod +x ./devops/update-files.sh
 
       - name: Debug script content
-      run: |
-        echo "Script content:"
-        cat -A ./devops/update-files.sh
-        echo "File encoding:"
-        file ./devops/update-files.sh
+        run: |
+          echo "Script content:"
+          cat -A ./devops/update-files.sh
+          echo "File encoding:"
+          file ./devops/update-files.sh
 
       - name: Run update-files.sh
         env:
