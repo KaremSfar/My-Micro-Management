@@ -24,11 +24,9 @@ namespace MicroManagement.Auth.WebAPI.Controllers
         [HttpGet("google-login")]
         public IActionResult GoogleLogin([FromQuery] string returnUrl)
         {
-            var callbackUrl = Url.Action("GoogleCallback", null, null, Request.Scheme, Request.Host.Value);
-
             var properties = new AuthenticationProperties
             {
-                RedirectUri = callbackUrl,
+                RedirectUri = Url.Action(nameof(GoogleCallback)),
                 Items = { { "returnUrl", returnUrl } }
             };
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
