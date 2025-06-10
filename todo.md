@@ -10,7 +10,6 @@
 - [x] Integrate with Postgres SQL
 
 - [x] Add Signup view in React 
-- [] Make Single sign on Work
+- [x] Make Single sign on Work
 
 - [] Add Open Telemetry and bundle Graphana / or stuff like that with it
-- [] Add Aspire for fun / easy of usage maybe ?
