@@ -27,8 +27,11 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             var properties = new AuthenticationProperties
             {
                 RedirectUri = Url.Action(nameof(GoogleCallback)),
-                Items = { { "returnUrl", returnUrl } }
+                Items = { { "returnUrl", returnUrl } },
             };
+
+            properties.Parameters.Add("prompt", "select_account");
+
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
