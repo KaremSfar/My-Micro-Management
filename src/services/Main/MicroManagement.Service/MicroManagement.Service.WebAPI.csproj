@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>4f3e9743-d330-45b2-be9b-d5a50a78440c</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LanguageExt.Core" Version="4.4.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\MicroManagement.Core\MicroManagement.Core.csproj" />
+    <ProjectReference Include="..\..\Core\MicroManagement.Shared.Startup\MicroManagement.Shared.Startup.csproj" />
+    <ProjectReference Include="..\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj" />
+    <ProjectReference Include="..\MicroManagement.Service.Abstractions\MicroManagement.Service.Abstractions.csproj" />
+    <ProjectReference Include="..\Persistence\MicroManagement.Persistence.Abstraction\MicroManagement.Persistence.Abstraction.csproj" />
+    <ProjectReference Include="..\Persistence\MicroManagement.Persistence.EF\MicroManagement.Persistence.EF.csproj" />
+    <ProjectReference Include="..\Persistence\MicroManagement.Persistence.Migrations.AzureSQL\MicroManagement.Persistence.Migrations.AzureSQL.csproj" />
+    <ProjectReference Include="..\Persistence\MicroManagement.Persistence.Migrations.Postgres\MicroManagement.Persistence.Migrations.Postgres.csproj" />
+    <ProjectReference Include="..\Persistence\MicroManagement.Persistence.SQLite.MigrationsApplier\MicroManagement.Persistence.Migrations.SQLite.csproj" />
+  </ItemGroup>
+
+</Project>

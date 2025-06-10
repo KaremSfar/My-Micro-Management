@@ -1,5 +1,8 @@
 services:
   auth:
+    build:
+      context: ./src/services
+      dockerfile: ./Auth/Dockerfile
     image: karemsfar/mmgmt-auth:latest
     ports:
       - 81:81
@@ -8,10 +11,11 @@ services:
       - Database__ConnectionString=${Auth_Database__ConnectionString}
       - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
-      - googleclient_id=${googleclient_id}
-      - googleclient_secret=${googleclient_secret}
 
   service:
+    build:
+      context: ./src/services
+      dockerfile: ./Main/Dockerfile
     image: karemsfar/mmgmt-service:latest
     ports:
       - 82:81
@@ -22,7 +26,19 @@ services:
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
 
   web:
-    image: karemsfar/mmgmt-web:latest
+    build:
+      context: ./src/clients/web
+      dockerfile: Dockerfile.local
+      args:
+        - VITE_AUTH_SERVICE_BASE_URL=${VITE_AUTH_SERVICE_BASE_URL}
+        - VITE_MAIN_SERVICE_BASE_URL=${VITE_MAIN_SERVICE_BASE_URL}
+    volumes:
+      -  ./src/clients/web:/app
+      - /app/node_modules
     ports:
-      - 80:80
-   
+      - "3000:3000"  # map the React development server
+      - "9229:9229"  # optional: map Node.js debugger port
+    stdin_open: true
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true

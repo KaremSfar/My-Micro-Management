@@ -1,0 +1,24 @@
+# Use the official Node.js 20 image as the build environment
+FROM node:20 
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json into the working directory
+COPY package.json ./
+COPY package-lock.json ./
+
+# Install dependencies
+RUN npm i
+
+# Copy the rest of the application code
+COPY . .
+
+# Pass them to the build process
+ENV VITE_AUTH_SERVICE_BASE_URL=http://localhost:81
+ENV VITE_MAIN_SERVICE_BASE_URL=http://localhost:82
+
+EXPOSE 3000
+
+# Build the React app for production
+CMD ["npm", "start"]

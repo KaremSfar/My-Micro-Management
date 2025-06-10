@@ -1,0 +1,54 @@
+name: Build and Push Docker images
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME_WEB: karemsfar/mmgmt-web
+  IMAGE_NAME_AUTH: karemsfar/mmgmt-auth
+  IMAGE_NAME_SERVICE: karemsfar/mmgmt-service
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make script executable
+        run: chmod +x ./devops/update-files.sh
+
+      - name: Run update-files.sh
+        env:
+          AUTH_DB_TYPE: "sqlite"
+          AUTH_DB_CONNECTION: "auth"
+          JWT_ACCESS_KEY: ${{ secrets.JWT_ACCESS_KEY }}
+          JWT_REFRESH_KEY: ${{ secrets.JWT_REFRESH_KEY }}
+          MAIN_DB_TYPE: "sqlite"
+          MAIN_DB_CONNECTION: "main"
+          AUTH_SERVICE_URL: ${{ vars.AUTH_SERVICE_URL }}
+          MAIN_SERVICE_URL: ${{ vars.MAIN_SERVICE_URL }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+        run: source ./devops/update-files.sh
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: docker compose -f docker-compose.dev.yml build
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.IMAGE_NAME_WEB }}:latest
+          docker push ${{ env.IMAGE_NAME_AUTH }}:latest
+          docker push ${{ env.IMAGE_NAME_SERVICE }}:latest
