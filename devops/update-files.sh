@@ -14,7 +14,6 @@ sed -i "s#VITE_AUTH_SERVICE_BASE_URL=.*#VITE_AUTH_SERVICE_BASE_URL=$AUTH_SERVICE
 sed -i "s#VITE_MAIN_SERVICE_BASE_URL=.*#VITE_MAIN_SERVICE_BASE_URL=$MAIN_SERVICE_URL#g" .env
 sed -i "s#googleclient_id=.*#googleclient_id=$GOOGLE_CLIENT_ID#g" .env
 sed -i "s#googleclient_secret=.*#googleclient_secret=$GOOGLE_CLIENT_SECRET#g" .env
-
 sed -i "s#POSTGRES_USER=.*#POSTGRES_USER=$POSTGRES_USER#g" .env
 sed -i "s#POSTGRES_PASSWORD=.*#POSTGRES_PASSWORD=$POSTGRES_PASSWORD#g" .env
 sed -i "s#OTEL__JAEGER_URL=.*#OTEL__JAEGER_URL=$OTEL_JAEGER_URL#g" .env
