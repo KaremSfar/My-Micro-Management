@@ -150,7 +150,7 @@ namespace MicroManagement.Service
                 {
                     tracerProviderBuilder
                         .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                            .AddService(serviceName: "mmgmt-auth"))
+                            .AddService(serviceName: "mmgmt-service"))
                         .AddAspNetCoreInstrumentation(options =>
                         {
                             options.RecordException = true;
