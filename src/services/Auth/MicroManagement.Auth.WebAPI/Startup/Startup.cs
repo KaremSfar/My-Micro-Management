@@ -16,6 +16,9 @@ using MicroManagement.Shared;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.HttpOverrides;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Logs;
 
 namespace MicroManagement.Auth.WebAPI;
 
@@ -34,6 +37,33 @@ public class Startup
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddOpenTelemetry()
+            .WithTracing(tracerProviderBuilder =>
+            {
+                tracerProviderBuilder
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService(serviceName: "mmgmt-auth"))
+                    .AddAspNetCoreInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                    })
+                    .AddHttpClientInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                    })
+                    .AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = new Uri("http://jaeger:4317");
+                    })
+                    .AddConsoleExporter();
+            }).WithLogging(loggerOptions =>
+            {
+                loggerOptions.AddOtlpExporter(options =>
+                {
+                    options.Endpoint = new Uri("http://jaeger:4317");
+                });
+            });
+
         var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>()!;
 
         services.AddDatabaseContext<AuthenticationServiceDbContext>(dbSettings,

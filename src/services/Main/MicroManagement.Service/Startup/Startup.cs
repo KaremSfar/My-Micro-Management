@@ -14,6 +14,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace MicroManagement.Service
 {
@@ -28,6 +31,33 @@ namespace MicroManagement.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOpenTelemetry()
+           .WithTracing(tracerProviderBuilder =>
+           {
+               tracerProviderBuilder
+                   .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                       .AddService(serviceName: "mmgmt-auth"))
+                   .AddAspNetCoreInstrumentation(options =>
+                   {
+                       options.RecordException = true;
+                   })
+                   .AddHttpClientInstrumentation(options =>
+                   {
+                       options.RecordException = true;
+                   })
+                   .AddOtlpExporter(options =>
+                   {
+                       options.Endpoint = new Uri("http://jaeger:4317");
+                   })
+                   .AddConsoleExporter();
+           }).WithLogging(loggerOptions =>
+           {
+               loggerOptions.AddOtlpExporter(options =>
+               {
+                   options.Endpoint = new Uri("http://jaeger:4317");
+               });
+           });
+
             // Add services to the container.
             services.AddControllers();
 
