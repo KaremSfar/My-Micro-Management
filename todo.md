@@ -4,7 +4,7 @@
 - [x] Deploy and Run Bolt Diy 
 
 - [] Add Context Concept
-- [] Make sure timers and connections are not lost when switching pages
+- [x] Make sure timers and connections are not lost when switching pages
 
 - [] Introduce the Event Bus stuff
 - [] User connections state service
