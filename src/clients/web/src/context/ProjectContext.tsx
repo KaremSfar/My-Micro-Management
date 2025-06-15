@@ -1,0 +1,113 @@
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { GetProjectDto, ProjectSessionDTO } from '../DTOs/ProjectDto';
+import { useAuth } from '../Auth/AuthContext';
+import { useTimer } from '../hooks/dashboard/useTimer';
+import { useWebSocket } from '../hooks/dashboard/useWebSocket';
+
+interface IProjectContext {
+    projects: ProjectSessionDTO[];
+    runningProjectId: string | null;
+    handleProjectClick: (projectId: string) => void;
+    addNewProject: (newProject: GetProjectDto) => void;
+}
+
+const ProjectContext = createContext<IProjectContext | undefined>(undefined);
+
+export const ProjectProvider = ({ children }: { children: ReactNode }) => {
+    const { accessToken } = useAuth();
+    const [projects, setProjects] = useState<ProjectSessionDTO[]>([]);
+    const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
+
+    // Fetch initial projects
+    useEffect(() => {
+        const fetchProjects = async () => {
+            if (!accessToken) return;
+
+            try {
+                const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                });
+                const data: ProjectSessionDTO[] = await response.json();
+                setProjects(data);
+
+                // Check if any project is running from the backend data and set it
+                const runningProject = data.find(p => p.isRunning);
+                if (runningProject) {
+                    setRunningProjectId(runningProject.id);
+                }
+            } catch (error) {
+                console.error('Error fetching projects:', error);
+            }
+        };
+
+        if (accessToken) {
+            fetchProjects();
+        }
+    }, [accessToken]);
+
+    // Timer logic is now managed within the provider
+    useTimer(runningProjectId, setProjects);
+
+    // WebSocket logic and handlers are also managed here
+    const startProject = useCallback((projectId: string) => {
+        setProjects(prevProjects => prevProjects.map(project => ({
+            ...project,
+            timeSpentCurrentSession: 0,
+        })));
+        setRunningProjectId(projectId);
+    }, []);
+
+    const stopProjects = useCallback(() => {
+        setProjects(prevProjects => prevProjects.map(project => ({
+            ...project,
+            timeSpentCurrentSession: 0,
+        })));
+        setRunningProjectId(null);
+    }, []);
+
+    const webSocketConnectionRef = useWebSocket(startProject, stopProjects);
+
+    const handleProjectClick = useCallback((projectId: string) => {
+        if (projectId === runningProjectId) {
+            webSocketConnectionRef.current?.send("StopTimeSessions");
+            stopProjects();
+        } else {
+            webSocketConnectionRef.current?.send("StartTimeSession", projectId);
+            startProject(projectId);
+        }
+    }, [runningProjectId, startProject, stopProjects, webSocketConnectionRef]);
+
+    const addNewProject = useCallback((newProject: GetProjectDto) => {
+        const addedProject: ProjectSessionDTO = {
+            ...newProject,
+            isRunning: false,
+            timeSpentCurrentSession: 0,
+            timeSpentTotal: 0,
+        };
+        setProjects(prevProjects => [...prevProjects, addedProject]);
+    }, []);
+
+    const value = {
+        projects,
+        runningProjectId,
+        handleProjectClick,
+        addNewProject,
+    };
+
+    return (
+        <ProjectContext.Provider value={value}>
+            {children}
+        </ProjectContext.Provider>
+    );
+};
+
+export const useProjectContext = () => {
+    const context = useContext(ProjectContext);
+    if (context === undefined) {
+        throw new Error('useProjectContext must be used within a ProjectProvider');
+    }
+    return context;
+};
