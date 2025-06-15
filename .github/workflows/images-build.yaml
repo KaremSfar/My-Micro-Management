@@ -48,7 +48,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker compose -f docker-compose.dev.yml build
+        run: docker compose -f docker-compose.yml -f docker-compose.dev.yml build
 
       - name: Push Docker image
         run: |
