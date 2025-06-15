@@ -1,15 +1,16 @@
-- [x] Reorganize files and folders like a common project with correct naming conventions
-- [x] Create docker files for easy deployment
-- [x] Set up needed environment variables for images/containers for local docker and dev
-- [x] Push images to repository
-- [x] Create a docker compose file for publishing
-- [x] Create a docker compose file for local devving (services to run + build in one command)
-
-- [x] Adapt docker files for easy development
-
-- [x] Integrate with Postgres SQL
-
-- [x] Add Signup view in React 
-- [x] Make Single sign on Work
-
 - [] Add Open Telemetry and bundle Graphana / or stuff like that with it
+- [] Add Nginx routing config to docker and source control
+
+- [x] Deploy and Run Bolt Diy 
+
+- [] Add Context Concept
+- [] Make sure timers and connections are not lost when switching pages
+
+- [] Introduce the Event Bus stuff
+- [] User connections state service
+    => Active connections ?
+    => Time since last connections => Closes current TimeSessions
+
+- [] Add Pomodoro to the App 
+    - [] Sticky Pomodoro Widget (maybe in the navbar)
+    - []  On Pomodoro Pause, pauses the timers and restarts on itself
