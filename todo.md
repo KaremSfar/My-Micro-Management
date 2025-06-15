@@ -1,5 +1,5 @@
-- [] Add Open Telemetry and bundle Graphana / or stuff like that with it
-- [] Add Nginx routing config to docker and source control
+- [x] Add Open Telemetry and bundle Graphana / or stuff like that with it
+- [x] Add Nginx routing config to docker and source control
 
 - [x] Deploy and Run Bolt Diy 
 
