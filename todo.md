@@ -12,5 +12,8 @@
     => Time since last connections => Closes current TimeSessions
 
 - [] Add Pomodoro to the App 
-    - [] Sticky Pomodoro Widget (maybe in the navbar)
-    - []  On Pomodoro Pause, pauses the timers and restarts on itself
+    - [x] Sticky Pomodoro Widget (maybe in the navbar)
+    - [x] On Pomodoro Pause, pauses the timers and restarts on itself
+    - [ ] On Pomodoro Next Clicks - Auto Start Pomodoro and Projects
+    - [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
+        - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
