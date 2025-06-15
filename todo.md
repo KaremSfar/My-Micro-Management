@@ -1,5 +1,6 @@
 - [x] Add Open Telemetry and bundle Graphana / or stuff like that with it
 - [x] Add Nginx routing config to docker and source control
+- [ ] Next? Use Remote Caches to avoid building everything everytime
 
 - [x] Deploy and Run Bolt Diy 
 

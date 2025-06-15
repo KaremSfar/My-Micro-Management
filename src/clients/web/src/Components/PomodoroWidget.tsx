@@ -22,7 +22,19 @@ const PomodoroWidget: React.FC = () => {
     const [isActive, setIsActive] = useState<boolean>(false);
     const [pomodoroCount, setPomodoroCount] = useState<number>(0);
 
-    // Timer effect
+
+    useEffect(() => {
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+    }, []);
+
+    const showNotification = (message: string) => {
+        if (Notification.permission === 'granted') {
+            new Notification(message);
+        }
+    };
+
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
 
@@ -43,14 +55,14 @@ const PomodoroWidget: React.FC = () => {
 
     const handleStartPauseReset = () => {
         if (isActive && currentMode === 'focus') {
-            // If active and in focus mode, reset the timer
+
             setIsActive(false);
             setTimeLeft(FOCUS_DURATION);
-            // IMPORTANT: Do NOT stop the running project here.
-            // The project should continue running in the background.
-            // setPausedProjectId(null); // No need to clear pausedProjectId if not stopping project
+
+
+
         } else {
-            // If not active, or in break mode, behave as a start/pause button
+
             if (isActive && runningProjectId) {
                 setPausedProjectId(runningProjectId);
                 handleProjectClick(runningProjectId);
@@ -60,17 +72,18 @@ const PomodoroWidget: React.FC = () => {
     };
 
     const handleNextPhase = () => {
-        // Stop current running project if exists
+
         if (runningProjectId) {
             setPausedProjectId(runningProjectId);
             handleProjectClick(runningProjectId);
         }
 
-        // Reset active state
+
         setIsActive(false);
 
-        // Determine next phase logic
+
         if (currentMode === 'focus') {
+            showNotification('Focus session complete! Time for a break.');
             const newPomodoroCount = pomodoroCount + 1;
             setPomodoroCount(newPomodoroCount);
             
@@ -82,21 +95,23 @@ const PomodoroWidget: React.FC = () => {
                 setTimeLeft(SHORT_BREAK_DURATION);
             }
 
-            // Automatically start project if manually skipping from focus phase
+
             if (pausedProjectId) {
                 handleProjectClick(pausedProjectId);
                 setPausedProjectId(null);
                 setIsActive(true);
             }
-        } else { // currentMode was 'shortBreak' or 'longBreak'
+
+        } else {
+            showNotification('Break time over! Time to focus.');
             setCurrentMode('focus');
             setTimeLeft(FOCUS_DURATION);
         }
     };
 
-    // Start timer and project together
+
     const startTimerAndProject = () => {
-        // Only start project if in focus mode and timer is about to start
+
         if (currentMode === 'focus' && pausedProjectId && !isActive) {
             handleProjectClick(pausedProjectId);
             setPausedProjectId(null);
@@ -112,9 +127,11 @@ const PomodoroWidget: React.FC = () => {
 
     const getBackgroundColor = () => {
         if (currentMode === 'focus') {
-            return 'bg-rose-500'; // Reddish
+
+            return 'bg-rose-500';
         }
-        return 'bg-sky-500'; // Bluish
+
+        return 'bg-sky-500';
     };
 
     const isBreakMode = currentMode === 'shortBreak' || currentMode === 'longBreak';
@@ -124,12 +141,14 @@ const PomodoroWidget: React.FC = () => {
             <span className="text-xl font-bold tabular-nums">
                 {formatTime(timeLeft)}
             </span>
-            {!(isActive && isBreakMode) && ( // Hide play button when active and in break mode
+
+            {!(isActive && isBreakMode) && (
                 <button
                     onClick={() => {
                         handleStartPauseReset();
-                        // Only start project if we are actually starting the timer, not resetting
-                        if (!isActive && currentMode === 'focus') { // Check if it's about to become active and in focus
+
+
+                        if (!isActive && currentMode === 'focus') {
                             startTimerAndProject();
                         }
                     }}
