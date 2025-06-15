@@ -7,8 +7,10 @@ import { useWebSocket } from '../hooks/dashboard/useWebSocket';
 interface IProjectContext {
     projects: ProjectSessionDTO[];
     runningProjectId: string | null;
+    pausedProjectId: string | null; // New field to track paused project
     handleProjectClick: (projectId: string) => void;
     addNewProject: (newProject: GetProjectDto) => void;
+    setPausedProjectId: (projectId: string | null) => void; // New method to set paused project
 }
 
 const ProjectContext = createContext<IProjectContext | undefined>(undefined);
@@ -17,6 +19,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
     const { accessToken } = useAuth();
     const [projects, setProjects] = useState<ProjectSessionDTO[]>([]);
     const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
+    const [pausedProjectId, setPausedProjectId] = useState<string | null>(null); // New state for paused project
 
     // Fetch initial projects
     useEffect(() => {
@@ -58,6 +61,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
             timeSpentCurrentSession: 0,
         })));
         setRunningProjectId(projectId);
+        setPausedProjectId(null); // Clear paused project when starting a new one
     }, []);
 
     const stopProjects = useCallback(() => {
@@ -93,8 +97,10 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
     const value = {
         projects,
         runningProjectId,
+        pausedProjectId,
         handleProjectClick,
         addNewProject,
+        setPausedProjectId, // Expose the method to set paused project
     };
 
     return (
