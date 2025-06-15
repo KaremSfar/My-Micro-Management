@@ -37,32 +37,7 @@ public class Startup
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddOpenTelemetry()
-            .WithTracing(tracerProviderBuilder =>
-            {
-                tracerProviderBuilder
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                        .AddService(serviceName: "mmgmt-auth"))
-                    .AddAspNetCoreInstrumentation(options =>
-                    {
-                        options.RecordException = true;
-                    })
-                    .AddHttpClientInstrumentation(options =>
-                    {
-                        options.RecordException = true;
-                    })
-                    .AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri("http://jaeger:4317");
-                    })
-                    .AddConsoleExporter();
-            }).WithLogging(loggerOptions =>
-            {
-                loggerOptions.AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri("http://jaeger:4317");
-                });
-            });
+        AddOpenTelemetry(services);
 
         var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>()!;
 
@@ -160,5 +135,38 @@ public class Startup
     {
         options.ClientId = Configuration["googleclient_id"]!;
         options.ClientSecret = Configuration["googleclient_secret"]!;
+    }
+
+    private void AddOpenTelemetry(IServiceCollection services)
+    {
+        if (Configuration["OTEL:JAEGER_URL"] == null)
+            return;
+
+        services.AddOpenTelemetry()
+            .WithTracing(tracerProviderBuilder =>
+            {
+                tracerProviderBuilder
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService(serviceName: "mmgmt-auth"))
+                    .AddAspNetCoreInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                    })
+                    .AddHttpClientInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                    })
+                    .AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
+                    })
+                    .AddConsoleExporter();
+            }).WithLogging(loggerOptions =>
+            {
+                loggerOptions.AddOtlpExporter(options =>
+                {
+                    options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
+                });
+            });
     }
 }
