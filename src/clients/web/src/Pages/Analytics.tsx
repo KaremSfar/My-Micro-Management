@@ -45,9 +45,17 @@ function Analytics() {
 
     return (
         <div className="w-full h-full flex items-center justify-center my-16">
-            <div className="w-4/5 h-4/5">
-                <table className="w-full h-full border-collapse">
-                    <tbody>
+            <div className="w-full h-full bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                {/* Header */}
+                <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                    <h2 className="text-xl font-semibold text-gray-800">Weekly Schedule</h2>
+                    <p className="text-sm text-gray-600 mt-1">View your events across the week</p>
+                </div>
+
+                {/* Table Container */}
+                <div className="p-6">
+                    <table className="w-full h-full border-collapse">
+                        <tbody>
                         {days.map((day, dayIndex) => (
                             <tr key={day} className="h-full relative">
                                 <td className="w-12 text-gray-600 pr-2 font-medium">
@@ -84,6 +92,7 @@ function Analytics() {
                     </tbody>
                 </table>
             </div>
+        </div>
         </div>
     );
 }
