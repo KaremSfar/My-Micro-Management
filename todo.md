@@ -20,7 +20,7 @@
         - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
 
 - [ ] Add Initial Crude Analytics page
-    - [ ] Empty TimeTable
+    - [x] Empty TimeTable
     - [ ] Time Table with time sessions
     - [ ] Colored, can be focused TimeSessions
 
