@@ -3,6 +3,8 @@
 
 - [x] Deploy and Run Bolt Diy 
 
+- [] Redo Readme
+
 - [] Add Context Concept
 - [x] Make sure timers and connections are not lost when switching pages
 

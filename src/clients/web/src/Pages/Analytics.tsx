@@ -1,21 +1,16 @@
-import WeeklyScheduleTable from "../Components/WeeklyScheduleTable";
+import WeeklyScheduleTable, { TimeTableEvent } from "../Components/WeeklyScheduleTable";
+import { useTimeSessions } from "../hooks/useTimeSessions";
 
 function Analytics() {
-    // Example events - replace with your actual events
-    const events = [
-        {
-            id: 1,
-            title: "Meeting",
-            start: new Date('2024-01-01T12:33:00'),
-            end: new Date('2024-01-01T14:15:00'),
-        },
-        {
-            id: 2,
-            title: "Call",
-            start: new Date('2024-01-02T09:45:00'),
-            end: new Date('2024-01-02T10:30:00'),
+    const timeSessions = useTimeSessions();
+    const events: TimeTableEvent[] = timeSessions.timeSessions.map(ts => {
+        return {
+            start: ts.startTime,
+            end: ts.endDate ?? new Date(),
+            title: ts.project.name,
+            color: ts.project.color
         }
-    ];
+    }).filter(ts => (ts.end.getTime() - ts.start.getTime()) > 600000);
 
     return (
         <div className="w-full h-full flex items-center justify-center my-16">
