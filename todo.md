@@ -26,6 +26,8 @@
     - [ ] Time Table with time sessions
     - [ ] Colored, can be focused TimeSessions
 
+- [ ] FIX TIME SESSION MODEL (one project  only)
+
 
 ## NEXT
 - [ ] Update Time Sessions feature 

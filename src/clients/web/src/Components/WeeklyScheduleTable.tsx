@@ -10,7 +10,7 @@ interface WeeklyScheduleTableProps {
 }
 
 function WeeklyScheduleTable({ events }: WeeklyScheduleTableProps) {
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const hours = Array.from({ length: 24 }, (_, i) => i);
 
     const getEventStyle = (event: TimeTableEvent) => {
@@ -45,6 +45,23 @@ function WeeklyScheduleTable({ events }: WeeklyScheduleTableProps) {
             .map(x => parseInt(x, 16));
     }
 
+    function getLastSunday(): Date {
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
+
+        // Calculate the difference in days to the last Sunday
+        const diff = today.getDate() - dayOfWeek;
+
+        const lastSunday = new Date(today.setDate(diff));
+
+        // Reset time to midnight
+        lastSunday.setHours(0, 0, 0, 0);
+
+        return lastSunday;
+    }
+
+    events = events.filter(e => e.start > getLastSunday());
+
     return (
         <table className="w-full h-full border-collapse">
             <tbody>
@@ -66,15 +83,17 @@ function WeeklyScheduleTable({ events }: WeeklyScheduleTableProps) {
 
                             {/* Events overlay */}
                             {events
-                                .filter(event => event.start.getDay() === dayIndex)
+                                .filter(showThisDaysEvents(dayIndex))
                                 .map((event, i) => (
                                     <div
                                         key={i}
-                                        className="absolute bg-blue-500 text-white text-xs px-1 rounded opacity-80 hover:opacity-100 z-10 flex items-center"
+                                        className="group absolute bg-blue-500 text-white text-xs px-1 rounded opacity-80 hover:opacity-100 z-10 flex items-center"
                                         style={getEventStyle(event)}
-                                        title={`${event.title} (${event.start.toLocaleTimeString()} - ${event.end.toLocaleTimeString()})`}
-                                    >
-                                        {event.title}
+                                        title={`${event.title} (${event.start.toLocaleTimeString()} - ${event.end.toLocaleTimeString()})`}>
+                                            <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max bg-gray-700 text-white px-2 py-1 rounded-md text-sm">
+                                                {event.title}
+                                            <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-gray-700"></div>
+                                        </div>
                                     </div>
                                 ))
                             }
@@ -84,6 +103,10 @@ function WeeklyScheduleTable({ events }: WeeklyScheduleTableProps) {
             </tbody>
         </table>
     );
+
+    function showThisDaysEvents(dayIndexOnTable: number): (value: TimeTableEvent, index: number, array: TimeTableEvent[]) => unknown {
+        return event => event.start.getDay() === dayIndexOnTable;
+    }
 }
 
 export default WeeklyScheduleTable;

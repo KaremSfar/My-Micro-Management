@@ -10,7 +10,7 @@ function Analytics() {
             title: ts.project.name,
             color: ts.project.color
         }
-    }).filter(ts => (ts.end.getTime() - ts.start.getTime()) > 600000);
+    }).filter(ts => (ts.end.getTime() - ts.start.getTime()) > 60 * 1000);
 
     return (
         <div className="w-full h-full flex items-center justify-center my-16">
