@@ -21,6 +21,8 @@
     - [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
         - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
 
+- [x] Fix Timers Ticks (Main + Pomodoro)
+
 - [ ] Add Initial Crude Analytics page
     - [x] Empty TimeTable
     - [ ] Time Table with time sessions
