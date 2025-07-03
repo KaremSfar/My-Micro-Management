@@ -27,7 +27,7 @@ namespace MicroManagement.Services
             {
                 UserId = userId,
                 StartTime = DateTime.UtcNow,
-                EndDate = null,
+                EndTime = null,
                 ProjectId = projectId,
             };
 
@@ -42,13 +42,13 @@ namespace MicroManagement.Services
         public async Task<IEnumerable<TimeSessionDTO>> GetAll(Guid userId)
         {
             return (await _timeSessionsRepo.GetAllAsync(userId))
-                .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndTime = ts.EndDate, ProjectId = ts.ProjectId });
+                .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndTime = ts.EndTime, ProjectId = ts.ProjectId });
         }
 
         public async Task StopTimeSession(Guid userId)
         {
             var timeSessions = (await _timeSessionsRepo.GetAllAsync(userId))
-                .Where(ts => ts.EndDate is null)
+                .Where(ts => ts.EndTime is null)
                 .ToList();
 
             if (timeSessions.Count > 1)
@@ -56,7 +56,7 @@ namespace MicroManagement.Services
 
             var timeSessionsToStop = timeSessions.Select(ts => ts with
             {
-                EndDate = DateTime.UtcNow
+                EndTime = DateTime.UtcNow
             }).ToList();
 
             foreach (var timeSessionToStop in timeSessionsToStop)

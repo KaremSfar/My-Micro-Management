@@ -41,9 +41,9 @@ namespace MicroManagement.Services
 
             var projectsDtos = projects.Select(p =>
             {
-                var isRunning = timeSessionsPerProject[p.Id].Any(ts => ts.EndDate is null);
+                var isRunning = timeSessionsPerProject[p.Id].Any(ts => ts.EndTime is null);
                 var timeSpentTotal = timeSessionsPerProject[p.Id]
-                    .Sum(ts => ((ts.EndDate ?? DateTime.UtcNow) - ts.StartTime).TotalSeconds);
+                    .Sum(ts => ((ts.EndTime ?? DateTime.UtcNow) - ts.StartTime).TotalSeconds);
 
                 return new ProjectSessionDTO()
                 {
@@ -52,7 +52,7 @@ namespace MicroManagement.Services
                     Color = p.Color,
                     IsRunning = isRunning,
                     TimeSpentTotal = Math.Round(timeSpentTotal),
-                    TimeSpentCurrentSession = isRunning ? Math.Round((DateTime.UtcNow - timeSessionsPerProject[p.Id].First(ts => ts.EndDate is null).StartTime).TotalSeconds) : 0,
+                    TimeSpentCurrentSession = isRunning ? Math.Round((DateTime.UtcNow - timeSessionsPerProject[p.Id].First(ts => ts.EndTime is null).StartTime).TotalSeconds) : 0,
                 };
             });
 
