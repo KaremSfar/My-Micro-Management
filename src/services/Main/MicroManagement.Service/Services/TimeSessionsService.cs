@@ -28,7 +28,7 @@ namespace MicroManagement.Services
                 UserId = userId,
                 StartTime = DateTime.UtcNow,
                 EndDate = null,
-                ProjectIds = new List<Guid> { projectId },
+                ProjectId = projectId,
             };
 
             await _timeSessionsRepo.AddAsync(timeSession);
@@ -42,7 +42,7 @@ namespace MicroManagement.Services
         public async Task<IEnumerable<TimeSessionDTO>> GetAll(Guid userId)
         {
             return (await _timeSessionsRepo.GetAllAsync(userId))
-                .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndDate = ts.EndDate, ProjectIds = ts.ProjectIds });
+                .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndTime = ts.EndDate, ProjectId = ts.ProjectId });
         }
 
         public async Task StopTimeSession(Guid userId)

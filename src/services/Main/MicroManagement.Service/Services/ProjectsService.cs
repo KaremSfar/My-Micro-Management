@@ -37,7 +37,7 @@ namespace MicroManagement.Services
             var projects = await _projectsRepo.GetAllAsync(userId);
             var timeSessions = await _timeSessionsRepository.GetAllAsync(userId);
 
-            var timeSessionsPerProject = timeSessions.ToLookup(t => t.ProjectIds.FirstOrDefault());
+            var timeSessionsPerProject = timeSessions.ToLookup(t => t.ProjectId);
 
             var projectsDtos = projects.Select(p =>
             {

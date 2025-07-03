@@ -31,12 +31,11 @@ namespace MicroManagement.Persistence.EF.Repositories
                 UserId = timeSession.UserId,
             };
 
-            var projects = await _dbContext
+            var project = await _dbContext
                 .Projects
-                .Where(p => timeSession.ProjectIds.Contains(p.Id))
-                .ToListAsync();
+                .SingleOrDefaultAsync(p => timeSession.ProjectId == p.Id);
 
-            timeSessionEntity.Projects = projects;
+            timeSessionEntity.Project = project;
 
             await _dbSet.AddAsync(timeSessionEntity);
             await _dbContext.SaveChangesAsync();
@@ -45,7 +44,7 @@ namespace MicroManagement.Persistence.EF.Repositories
         public async Task<IEnumerable<TimeSession>> GetAllAsync(Guid userId)
         {
             var timeSessionEntities = (await _dbSet
-                .Include(t => t.Projects)
+                .Include(t => t.Project)
                 .ToListAsync())
                 .Where(t => t.UserId.ToString() == userId.ToString());
 
@@ -54,7 +53,7 @@ namespace MicroManagement.Persistence.EF.Repositories
             foreach (var timeSessionEntity in timeSessionEntities)
             {
                 var timeSession = timeSessionEntity.Adapt<TimeSession>();
-                timeSession.ProjectIds = timeSessionEntity.Projects.Select(p => p.Id).ToList();
+                timeSession.ProjectId = timeSessionEntity.Project.Id;
                 timesSessions.Add(timeSession);
             }
 
@@ -66,7 +65,7 @@ namespace MicroManagement.Persistence.EF.Repositories
             var timeSessionEntity = await _dbSet
                 .Where(t => t.UserId.ToString() == timeSession.UserId.ToString())
                 .Where(t => t.StartTime == timeSession.StartTime)
-                .Include(t => t.Projects)
+                .Include(t => t.Project)
                 .FirstOrDefaultAsync();
 
             if (timeSessionEntity is null)
