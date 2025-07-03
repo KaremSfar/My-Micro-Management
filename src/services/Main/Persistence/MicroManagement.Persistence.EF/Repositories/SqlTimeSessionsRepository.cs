@@ -27,7 +27,7 @@ namespace MicroManagement.Persistence.EF.Repositories
             var timeSessionEntity = new TimeSessionEntity()
             {
                 StartTime = timeSession.StartTime,
-                EndDate = timeSession.EndDate,
+                EndTime = timeSession.EndDate,
                 UserId = timeSession.UserId,
             };
 
@@ -71,7 +71,7 @@ namespace MicroManagement.Persistence.EF.Repositories
             if (timeSessionEntity is null)
                 return;
 
-            timeSessionEntity.EndDate = timeSession.EndDate;
+            timeSessionEntity.EndTime = timeSession.EndDate;
 
             _dbSet.Update(timeSessionEntity);
 

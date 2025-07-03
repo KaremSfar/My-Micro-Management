@@ -45,7 +45,7 @@ namespace MicroManagement.Persistence.SQLite.MigrationsApplier.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("EndDate")
+                    b.Property<DateTime?>("EndTime")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ProjectId")

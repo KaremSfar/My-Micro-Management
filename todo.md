@@ -40,3 +40,4 @@
 - [ ] Use Remote Caches to avoid building everything everytime
 - [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
     - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
+- [ ] Add Migration creator automation
