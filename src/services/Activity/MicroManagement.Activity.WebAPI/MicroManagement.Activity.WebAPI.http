@@ -1,0 +1,6 @@
+@MicroManagement.Activity.WebAPI_HostAddress = http://localhost:5052
+
+GET {{MicroManagement.Activity.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
