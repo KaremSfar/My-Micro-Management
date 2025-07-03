@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Clients", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Activity.Migrations.Redis", "Activity\Persistence\MicroManagement.Activity.Migrations.Redis\MicroManagement.Activity.Migrations.Redis.csproj", "{C8638019-13D8-43A8-BDE2-1D7FC2E88B9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroManagement.Shared.Events", "Core\MicroManagement.Shared.Events\MicroManagement.Shared.Events.csproj", "{A0E98932-5AD5-4B13-9720-C913A42C6956}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,10 @@ Global
 		{C8638019-13D8-43A8-BDE2-1D7FC2E88B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8638019-13D8-43A8-BDE2-1D7FC2E88B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8638019-13D8-43A8-BDE2-1D7FC2E88B9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0E98932-5AD5-4B13-9720-C913A42C6956}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0E98932-5AD5-4B13-9720-C913A42C6956}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0E98932-5AD5-4B13-9720-C913A42C6956}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0E98932-5AD5-4B13-9720-C913A42C6956}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,6 +174,7 @@ Global
 		{70FDB147-3C8B-4099-B309-EA95E31B7D26} = {38A5F9F7-EADD-4998-9960-98614905814E}
 		{925DE7D5-C6C6-49CF-A5D1-2FC7F15D2045} = {90FDF657-AFED-4D8D-9CE0-4EBEB09BC19D}
 		{C8638019-13D8-43A8-BDE2-1D7FC2E88B9B} = {70FDB147-3C8B-4099-B309-EA95E31B7D26}
+		{A0E98932-5AD5-4B13-9720-C913A42C6956} = {90FDF657-AFED-4D8D-9CE0-4EBEB09BC19D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}

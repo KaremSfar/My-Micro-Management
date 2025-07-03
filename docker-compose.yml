@@ -12,7 +12,7 @@ services:
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
-      - "16686:16686"  # Jaeger UI
+      - "16686:16686" # Jaeger UI
     environment:
       - COLLECTOR_OTLP_ENABLED=true
 
@@ -41,6 +41,7 @@ services:
     depends_on:
       - db
       - jaeger
+      - rabbitmq
 
   web:
     image: karemsfar/mmgmt-web:latest
@@ -56,5 +57,15 @@ services:
       - service
       - web
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # AMQP
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+    restart: always
 volumes:
   postgres_data:
