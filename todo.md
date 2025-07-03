@@ -32,7 +32,7 @@
     - [ ] Fix 401 session issue
 
 - [ ] Update Auth Service - use ready methods 
-- [ ] FIX TIME SESSION MODEL (one project  only)
+- [x] FIX TIME SESSION MODEL (one project  only)
 
 
 ## NEXT

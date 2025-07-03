@@ -55,8 +55,8 @@ export const useTimeSessions = () => {
                 const timeSessions: TimeSessionModel[] = timeSessionsDtos.map(ts => {
                     return {
                         startTime: ts.startTime,
-                        endDate: ts.endDate,
-                        project: projectsData.find(p => p.id === ts.projectIds[0])!
+                        endDate: ts.endTime,
+                        project: projectsData.find(p => p.id === ts.projectId)!
                     }
                 });
 

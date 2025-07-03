@@ -6,7 +6,7 @@ function Analytics() {
     const events: TimeTableEvent[] = timeSessions.timeSessions.map(ts => {
         return {
             start: ts.startTime,
-            end: ts.endDate ?? new Date(),
+            end: ts.endTime ?? new Date(),
             title: ts.project.name,
             color: ts.project.color
         }
