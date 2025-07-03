@@ -111,6 +111,7 @@ namespace MicroManagement.Service
                     "sqlite" => typeof(Persistence.SQLite.MigrationsApplier.Migrations.InitialCreate).Assembly.GetName().Name!,
                     _ => throw new ArgumentException("Choose Database type in configuration")
                 };
+                Console.WriteLine($"Using migrations assembly: {assembly}");
 
                 options.MigrationsAssembly(assembly);
             }
