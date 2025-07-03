@@ -3,6 +3,8 @@
 
 - [x] Deploy and Run Bolt Diy 
 
+- [] Redo Readme
+
 - [] Add Context Concept
 - [x] Make sure timers and connections are not lost when switching pages
 
@@ -21,6 +23,8 @@
     - [ ] On Pomodoro Next Clicks - Auto Start Pomodoro and Projects
 
 
+- [x] Fix Timers Ticks (Main + Pomodoro)
+
 - [ ] Add Initial Crude Analytics page
     - [x] Empty TimeTable
     - [x] Time Table with time sessions
@@ -28,6 +32,8 @@
     - [ ] Fix 401 session issue
 
 - [ ] Update Auth Service - use ready methods 
+- [ ] FIX TIME SESSION MODEL (one project  only)
+
 
 ## NEXT
 - [ ] Update Time Sessions feature 

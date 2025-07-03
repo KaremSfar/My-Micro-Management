@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PlayIcon, StopIcon, ForwardIcon } from '@heroicons/react/24/outline';
 import { useProjectContext } from '../context/ProjectContext';
 
@@ -10,11 +10,11 @@ const SESSIONS_FOR_LONG_BREAK = 4;
 type Mode = 'focus' | 'shortBreak' | 'longBreak';
 
 const PomodoroWidget: React.FC = () => {
-    const { 
-        runningProjectId, 
-        pausedProjectId, 
-        handleProjectClick, 
-        setPausedProjectId 
+    const {
+        runningProjectId,
+        pausedProjectId,
+        handleProjectClick,
+        setPausedProjectId
     } = useProjectContext();
 
     const [currentMode, setCurrentMode] = useState<Mode>('focus');
@@ -34,14 +34,26 @@ const PomodoroWidget: React.FC = () => {
             new Notification(message);
         }
     };
-
+    
+    const lastTickTime = useRef<number>(Date.now());
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
 
         if (isActive && timeLeft > 0) {
             interval = setInterval(() => {
-                setTimeLeft((prevTime) => prevTime - 1);
+                const now = Date.now();
+                const elapsed = now - lastTickTime.current;
+                const secondsToSubtract = Math.round(elapsed / 1000);
+
+                // Only update if at least 1 second has passed
+                if (secondsToSubtract >= 1) {
+                    setTimeLeft((prevTime) => Math.max(0, prevTime - secondsToSubtract));
+                    lastTickTime.current = now;
+                }
             }, 1000);
+
+            // Reset the timer when starting
+            lastTickTime.current = Date.now();
         } else if (timeLeft === 0 && isActive) {
             handleNextPhase();
         }
@@ -86,7 +98,7 @@ const PomodoroWidget: React.FC = () => {
             showNotification('Focus session complete! Time for a break.');
             const newPomodoroCount = pomodoroCount + 1;
             setPomodoroCount(newPomodoroCount);
-            
+
             if (newPomodoroCount % SESSIONS_FOR_LONG_BREAK === 0) {
                 setCurrentMode('longBreak');
                 setTimeLeft(LONG_BREAK_DURATION);
