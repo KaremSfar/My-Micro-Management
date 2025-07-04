@@ -8,6 +8,7 @@ namespace MicroManagement.Service.WebAPI.Events
     public class UserInactivityConsumer : IConsumer<UserInactiveEvent>
     {
         private readonly ITimeSessionsService _timeSessionsService;
+        private static readonly HttpClient _httpClient = new HttpClient();
 
         public UserInactivityConsumer(ITimeSessionsService timeSessionsService)
         {
@@ -23,6 +24,9 @@ namespace MicroManagement.Service.WebAPI.Events
             }
 
             await _timeSessionsService.StopTimeSession(message.UserId);
+
+            // Notify phone of inactivity
+            await _httpClient.GetAsync("https://ksgn8nvps.duckdns.org/webhook/72f643ab-7c58-4ff3-8c3e-9a6855fa9a38");
         }
     }
 }
