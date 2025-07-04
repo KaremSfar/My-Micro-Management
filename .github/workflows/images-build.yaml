@@ -34,6 +34,7 @@ jobs:
           MAIN_DB_CONNECTION: "main"
           AUTH_SERVICE_URL: ${{ vars.AUTH_SERVICE_URL }}
           MAIN_SERVICE_URL: ${{ vars.MAIN_SERVICE_URL }}
+          ACTIVITY_SERVICE_URL: ${{ vars.ACTIVITY_SERVICE_URL }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}

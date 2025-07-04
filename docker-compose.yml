@@ -62,8 +62,8 @@ services:
       - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}    
       - RabbitMq__Host=rabbitmq
-      - RabbitMq__UserName=${RABBITMQ_DEFAULT_USER:-guest}
-      - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS:-guest}
+      - RabbitMq__UserName=${RABBITMQ_USER:-guest}
+      - RabbitMq__Password=${RABBITMQ_PASS:-guest}
       - Redis__Configuration=redis:6379
     depends_on:
       - redis
@@ -90,8 +90,8 @@ services:
       - "5672:5672" # AMQP
       - "15672:15672" # Management UI
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
     restart: always
 volumes:
   postgres_data:

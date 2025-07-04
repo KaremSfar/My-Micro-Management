@@ -12,6 +12,7 @@ sed -i "s#Main_Database__DatabaseType=.*#Main_Database__DatabaseType=$MAIN_DB_TY
 sed -i "s#Main_Database__ConnectionString=.*#Main_Database__ConnectionString=$MAIN_DB_CONNECTION#g" .env
 sed -i "s#VITE_AUTH_SERVICE_BASE_URL=.*#VITE_AUTH_SERVICE_BASE_URL=$AUTH_SERVICE_URL#g" .env
 sed -i "s#VITE_MAIN_SERVICE_BASE_URL=.*#VITE_MAIN_SERVICE_BASE_URL=$MAIN_SERVICE_URL#g" .env
+sed -i "s#VITE_ACTIVITY_SERVICE_BASE_URL=.*#VITE_ACTIVITY_SERVICE_BASE_URL=$ACTIVITY_SERVICE_URL#g" .env
 sed -i "s#googleclient_id=.*#googleclient_id=$GOOGLE_CLIENT_ID#g" .env
 sed -i "s#googleclient_secret=.*#googleclient_secret=$GOOGLE_CLIENT_SECRET#g" .env
 sed -i "s#POSTGRES_USER=.*#POSTGRES_USER=$POSTGRES_USER#g" .env
