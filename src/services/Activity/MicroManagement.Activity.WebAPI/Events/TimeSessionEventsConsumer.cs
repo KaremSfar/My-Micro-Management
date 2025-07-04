@@ -8,11 +8,11 @@ namespace MicroManagement.Activity.WebAPI.Events;
 public class TimeSessionEventsConsumer : IConsumer<TimeSessionStartedEvent>, IConsumer<TimeSessionStoppedEvent>
 {
     private readonly ILogger<TimeSessionEventsConsumer> _logger;
-    private readonly UserActivityManager _userActivityManager;
+    private readonly IUserActivityManager _userActivityManager;
 
     public TimeSessionEventsConsumer(
         ILogger<TimeSessionEventsConsumer> logger,
-        UserActivityManager userActivityManager)
+        IUserActivityManager userActivityManager)
     {
         _logger = logger;
         _userActivityManager = userActivityManager;

@@ -12,17 +12,17 @@ namespace MicroManagement.Activity.WebAPI.Controllers
     [Authorize]
     public class UserActivityController : ControllerBase
     {
-        private readonly UserActivityManager _userActivityManager;
+        private readonly IUserActivityManager _userActivityManager;
 
-        public UserActivityController(UserActivityManager userActivityManager)
+        public UserActivityController(IUserActivityManager userActivityManager)
         {
             _userActivityManager = userActivityManager;
         }
 
         [HttpGet]
-        public IResult RegisterForEvents(CancellationToken cancellationToken)
+        public async Task<IResult> RegisterForEvents(CancellationToken cancellationToken)
         {
-            return TypedResults.ServerSentEvents(_userActivityManager.GetEvents(GetUserId(), cancellationToken));
+            return TypedResults.ServerSentEvents(await _userActivityManager.GetEvents(GetUserId(), cancellationToken));
         }
 
         private Guid GetUserId()

@@ -1,21 +1,30 @@
 ﻿using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
+using System.Threading.Tasks;
 using MicroManagement.Activity.WebAPI.Events;
 using MicroManagement.Shared.Events;
 
 namespace MicroManagement.Activity.WebAPI.Services
 {
-    public class UserActivityManager
+    public class UserActivityManager : IUserActivityManager
     {
+        private readonly IUserConnectionRepository _userConnectionRepository;
         // Each user gets their own channel
         private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<Channel<UserActivityEvent>, int>> _usersChannels = new();
 
-        public IAsyncEnumerable<UserActivityEvent> GetEvents(Guid userId, CancellationToken cancellationToken = default)
+        public UserActivityManager(IUserConnectionRepository userConnectionRepository)
+        {
+            _userConnectionRepository = userConnectionRepository;
+        }
+
+        public async Task<IAsyncEnumerable<UserActivityEvent>> GetEvents(Guid userId, CancellationToken cancellationToken = default)
         {
             var userChannels = _usersChannels.GetOrAdd(userId, _ => new());
             var newChannel = Channel.CreateUnbounded<UserActivityEvent>();
             userChannels.TryAdd(newChannel, 0);
+
+            await _userConnectionRepository.IncrementActiveConnectionsAsync(userId);
 
             return ReadAllAsync(userId, newChannel, cancellationToken);
         }
@@ -42,6 +51,8 @@ namespace MicroManagement.Activity.WebAPI.Services
                 if (_usersChannels.TryGetValue(userId, out var userChannels))
                 {
                     userChannels.TryRemove(channel, out _);
+
+                    await _userConnectionRepository.DecrementActiveConnectionsAsync(userId);
 
                     if (!userChannels.Any())
                     {

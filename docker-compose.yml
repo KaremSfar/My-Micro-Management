@@ -9,6 +9,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    command: redis-server --appendonly yes
+
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
@@ -69,3 +79,4 @@ services:
     restart: always
 volumes:
   postgres_data:
+  redis_data:

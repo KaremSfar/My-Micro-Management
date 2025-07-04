@@ -4,6 +4,7 @@ using MicroManagement.Activity.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 using System.Text;
 
 namespace MicroManagement.Activity.WebAPI;
@@ -23,7 +24,12 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        services.AddSingleton<UserActivityManager>();
+        services.AddSingleton<IConnectionMultiplexer>(sp =>
+            ConnectionMultiplexer.Connect(
+                Configuration.GetSection("Redis")["Configuration"]));
+
+        services.AddSingleton<IUserActivityManager, UserActivityManager>();
+        services.AddSingleton<IUserConnectionRepository, UserConnectionRepository>();
 
         services.AddAuthentication()
             .AddJwtBearer(options =>
