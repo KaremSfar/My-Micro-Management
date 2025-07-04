@@ -57,6 +57,9 @@ namespace MicroManagement.Services
                 .Where(ts => ts.EndTime is null)
                 .ToList();
 
+            if (!timeSessions.Any())
+                return;
+
             if (timeSessions.Count > 1)
                 Console.WriteLine("HAAAAA some time sessions were started while others not stopped");
 
