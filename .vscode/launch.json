@@ -5,7 +5,7 @@
             "name": "Docker: Web Client Debug",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:3000",
+            "url": "http://localhost:5173",
             "webRoot": "${workspaceFolder}/src/clients/web",
             "sourceMapPathOverrides": {
                 "/app/*": "${workspaceFolder}/src/clients/web/*"

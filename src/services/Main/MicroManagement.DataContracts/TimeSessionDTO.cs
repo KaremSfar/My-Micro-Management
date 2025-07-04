@@ -17,12 +17,12 @@ namespace MicroManagement.Services.Abstraction.DTOs
         /// <summary>
         /// End Time of the session 
         /// </summary>
-        public DateTime? EndDate { get; set; } // TODO-KAREM: rename this into EndTime :(
+        public DateTime? EndTime { get; set; } // TODO-KAREM: rename this into EndTime :(
 
         /// <summary>
-        /// The projects that were in action during the time session
+        /// The project that were in action during the time session
         /// </summary>
-        [Required, MinLength(1)]
-        public IList<Guid> ProjectIds { get; set; } // TODO: Turn into a single Project for each session
+        [Required]
+        public Guid ProjectId { get; set; } // TODO: Turn into a single Project for each session
     }
 }

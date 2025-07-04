@@ -1,58 +1,11 @@
 import ProjectCard from "../Components/ProjectCard";
-import { GetProjectDto, ProjectSessionDTO } from "../DTOs/ProjectDto";
-import NewProjectCard from "../Components/NewProjectCard"; // Assuming this is the correct import path
-import { useProjects } from "../hooks/dashboard/useProjects";
-import { useWebSocket } from "../hooks/dashboard/useWebSocket";
-import { useTimer } from "../hooks/dashboard/useTimer";
+import NewProjectCard from "../Components/NewProjectCard";
+import { useProjectContext } from "../context/ProjectContext";
 
 function Dashboard() {
-    const { projects, setProjects, runningProjectId, setRunningProjectId } = useProjects();
-
-    useTimer(runningProjectId, setProjects);
-
-    const startProject: (projectId: string) => void = (projectId: string) => {
-        setProjects(prevProjects => prevProjects.map(project => ({
-            ...project,
-            timeSpentCurrentSession: 0,
-        })));
-
-        setRunningProjectId(projectId);
-    };
-
-    const stopProjects: () => void = () => {
-        setProjects(prevProjects => prevProjects.map(project => ({
-            ...project,
-            timeSpentCurrentSession: 0,
-        })));
-
-        setRunningProjectId(null);
-    };
-
-    const webSocketConnectionRef = useWebSocket(startProject, stopProjects);
-
-    const handleProjectClick = (projectId: string) => {
-        // When clicking on a same project - we stop the session
-        if (projectId === runningProjectId) {
-            webSocketConnectionRef.current?.send("StopTimeSessions");
-            stopProjects();
-        }
-        else { // Other wise we start a new one
-            webSocketConnectionRef.current?.send("StartTimeSession", projectId);
-
-            startProject(projectId);
-        }
-    };
-
-    const addNewProject = (newProject: GetProjectDto) => {
-        const addedProject = {
-            ...newProject,
-            isRunning: false,
-            timeSpentCurrentSession: 0,
-            timeSpentTotal: 0
-        } as ProjectSessionDTO;
-
-        setProjects((prevProjects) => [...prevProjects, addedProject]);
-    };
+    // All state and logic is now consumed from the central context.
+    // This component is now much simpler and only handles rendering.
+    const { projects, runningProjectId, handleProjectClick, addNewProject } = useProjectContext();
 
     return (
         <div className="grid lg:grid-cols-4 grid-cols-1 justify-start lg my-8 gap-4 overflow-auto">

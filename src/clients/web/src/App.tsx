@@ -7,10 +7,10 @@ import Layout from './Components/Layout';
 import Analytics from './Pages/Analytics';
 import SignupForm from './Auth/SignupForm';
 import GoogleAuthCallback from './Auth/GoogleAuthCallback';
+import { ProjectProvider } from './context/ProjectContext';
 
-// LEARN: React components are usually functions that return tsx code
 function App() {
-  const { accessToken, isLoading } = useAuth(); // Use the useAuth hook to access the accessToken
+  const { accessToken, isLoading } = useAuth();
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 to-orange-400">
@@ -23,16 +23,26 @@ function App() {
           </div>
           :
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={accessToken ? <Layout><Dashboard /></Layout> : <Navigate to="/login" replace />} />
-              <Route path="/analytics" element={accessToken ? <Layout><Analytics /></Layout> : <Navigate to="/login" replace />} />
-              <Route path="/login" element={accessToken ? <Navigate to="/" replace /> : <LoginForm />} />
-              <Route path="/signup" element={accessToken ? <Navigate to="/" replace /> : <SignupForm />} />
-              <Route path="/google-login-success" element={<GoogleAuthCallback />} />
-              <Route path="*" element={accessToken ? <Layout><Dashboard /></Layout> : <Navigate to="/login" replace />} /> {/* Reroute all to / if not found */}
-            </Routes>
+            {accessToken ? (
+              <ProjectProvider> {/* Wrap authenticated routes with the provider */}
+                <Routes>
+                  <Route path="/" element={<Layout><Dashboard /></Layout>} />
+                  <Route path="/analytics" element={<Layout><Analytics /></Layout>} />
+                  <Route path="/login" element={<Navigate to="/" replace />} />
+                  <Route path="/signup" element={<Navigate to="/" replace />} />
+                  <Route path="/google-login-success" element={<GoogleAuthCallback />} />
+                  <Route path="*" element={<Layout><Dashboard /></Layout>} />
+                </Routes>
+              </ProjectProvider>
+            ) : (
+              <Routes>
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/signup" element={<SignupForm />} />
+                <Route path="/google-login-success" element={<GoogleAuthCallback />} />
+                <Route path="*" element={<Navigate to="/login" replace />} />
+              </Routes>
+            )}
           </BrowserRouter>}
-
       </div>
     </div>
   );
