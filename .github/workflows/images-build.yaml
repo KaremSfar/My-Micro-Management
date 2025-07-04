@@ -11,6 +11,7 @@ env:
   IMAGE_NAME_WEB: karemsfar/mmgmt-web
   IMAGE_NAME_AUTH: karemsfar/mmgmt-auth
   IMAGE_NAME_SERVICE: karemsfar/mmgmt-service
+  IMAGE_NAME_ACTIVITY: karemsfar/mmgmt-activity
 
 jobs:
   build-and-push:
@@ -55,3 +56,4 @@ jobs:
           docker push ${{ env.IMAGE_NAME_WEB }}:latest
           docker push ${{ env.IMAGE_NAME_AUTH }}:latest
           docker push ${{ env.IMAGE_NAME_SERVICE }}:latest
+          docker push ${{ env.IMAGE_NAME_ACTIVITY}}:latest

@@ -8,14 +8,15 @@
 - [] Add Context Concept
 - [x] Make sure timers and connections are not lost when switching pages
 
-- [] Introduce the Event Bus stuff to stop time sessions
-- [] User connections state service
-    - [ ] Add new Web API Authenticated
-    - [ ] Link With Events Smth (Redis Stream; RabbitMQ etc)
-    - [ ] Add UserActions Controller (Start TimeSession, Stop TimeSession, Create TimeSession)
-    => Active connections ?
-    => Time since last connections => Closes current TimeSessions
+- [x] Introduce the Event Bus stuff to stop time sessions
+- [x] User connections state service
+    - [x] Add new Web API Authenticated
+    - [x] Link With Events Smth (Redis Stream; RabbitMQ etc)
+    - [x] Add UserActions Controller
+        => Active connections ?
+    - [ ] Time since last connections => Closes current TimeSessions
 
+- [ ] Dockerize - NGINX - Deploy - test - changes after activity service
 
 - [] Add Pomodoro to the App 
     - [x] Sticky Pomodoro Widget (maybe in the navbar)

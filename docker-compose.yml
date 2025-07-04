@@ -48,9 +48,25 @@ services:
       - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
       - OTEL__JAEGER_URL=${OTEL__JAEGER_URL}
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__UserName=${RABBITMQ_DEFAULT_USER:-guest}
+      - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS:-guest}
     depends_on:
       - db
       - jaeger
+      - rabbitmq
+
+  activity:
+    image: karemsfar/mmgmt-activity:latest
+    environment:
+      - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
+      - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}    
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__UserName=${RABBITMQ_DEFAULT_USER:-guest}
+      - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS:-guest}
+      - Redis__Configuration=redis:6379
+    depends_on:
+      - redis
       - rabbitmq
 
   web:

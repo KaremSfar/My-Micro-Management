@@ -9,6 +9,11 @@ services:
       context: ./src/services
       dockerfile: ./Main/Dockerfile
 
+  activity:
+    build:
+      context: ./src/services
+      dockerfile: ./Activity/Dockerfile
+
   web:
     build:
       context: ./src/clients/web
@@ -16,4 +21,5 @@ services:
       args:
         - VITE_AUTH_SERVICE_BASE_URL=${VITE_AUTH_SERVICE_BASE_URL}
         - VITE_MAIN_SERVICE_BASE_URL=${VITE_MAIN_SERVICE_BASE_URL}
+        - VITE_ACTIVITY_SERVICE_BASE_URL=${VITE_ACTIVITY_SERVICE_BASE_URL}
     image: karemsfar/mmgmt-web:latest
