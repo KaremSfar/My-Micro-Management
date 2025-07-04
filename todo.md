@@ -16,7 +16,7 @@
         => Active connections ?
     - [ ] Time since last connections => Closes current TimeSessions
 
-- [ ] Dockerize - NGINX - Deploy - test - changes after activity service
+- [x] Dockerize - NGINX - Deploy - test - changes after activity service
 
 - [] Add Pomodoro to the App 
     - [x] Sticky Pomodoro Widget (maybe in the navbar)
@@ -37,8 +37,9 @@
 
 
 ## NEXT
-- [ ] Update Time Sessions feature 
+- [x] Update Time Sessions feature 
 - [ ] Use Remote Caches to avoid building everything everytime
 - [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
     - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
 - [ ] Add Migration creator automation
+- [ ] Add Unit Tests :)
