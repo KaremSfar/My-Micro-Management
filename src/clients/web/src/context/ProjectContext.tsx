@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode, useCallback 
 import { GetProjectDto, ProjectSessionDTO } from '../DTOs/ProjectDto';
 import { useAuth } from '../Auth/AuthContext';
 import { useTimer } from '../hooks/dashboard/useTimer';
-import { useWebSocket } from '../hooks/dashboard/useWebSocket';
+import { useServerSideEvents } from '../hooks/dashboard/useServerSideEvents';
 
 interface IProjectContext {
     projects: ProjectSessionDTO[];
@@ -72,17 +72,32 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
         setRunningProjectId(null);
     }, []);
 
-    const webSocketConnectionRef = useWebSocket(startProject, stopProjects);
+    const sseConnectionRef = useServerSideEvents(startProject, stopProjects);
 
-    const handleProjectClick = useCallback((projectId: string) => {
+    const handleProjectClick = useCallback(async (projectId: string) => {
         if (projectId === runningProjectId) {
-            webSocketConnectionRef.current?.send("StopTimeSessions");
             stopProjects();
+            await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/timesessions/stop`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+            });
+
         } else {
-            webSocketConnectionRef.current?.send("StartTimeSession", projectId);
             startProject(projectId);
+            await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/timesessions/start`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(projectId),
+            });
+
         }
-    }, [runningProjectId, startProject, stopProjects, webSocketConnectionRef]);
+    }, [runningProjectId, startProject, stopProjects, sseConnectionRef]);
 
     const addNewProject = useCallback((newProject: GetProjectDto) => {
         const addedProject: ProjectSessionDTO = {
