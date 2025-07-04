@@ -82,8 +82,6 @@ public class Startup
 
         app.UseRouting();
 
-        app.UseHttpsRedirection();
-
         app.UseAuthentication();
         app.UseAuthorization();
 
