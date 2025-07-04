@@ -1,5 +1,6 @@
 ﻿using MicroManagement.Core;
 using MicroManagement.Persistence.Abstraction.Repositories;
+using MicroManagement.Service.WebAPI.Events;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
 using System;
@@ -13,10 +14,18 @@ namespace MicroManagement.Services
     public class TimeSessionsService : ITimeSessionsService
     {
         private ITimeSessionsRepository _timeSessionsRepo;
+        private ITimeSessionEventsPublisher _timeSessionEventsPublisher;
 
-        public TimeSessionsService(ITimeSessionsRepository timeSessionsRepo)
+        public TimeSessionsService(ITimeSessionsRepository timeSessionsRepo, ITimeSessionEventsPublisher timeSessionEventsPublisher)
         {
             _timeSessionsRepo = timeSessionsRepo;
+            _timeSessionEventsPublisher = timeSessionEventsPublisher;
+        }
+
+        public async Task<IEnumerable<TimeSessionDTO>> GetAll(Guid userId)
+        {
+            return (await _timeSessionsRepo.GetAllAsync(userId))
+                .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndTime = ts.EndTime, ProjectId = ts.ProjectId });
         }
 
         public async Task<TimeSessionDTO> StartTimeSession(Guid userId, Guid projectId)
@@ -33,16 +42,13 @@ namespace MicroManagement.Services
 
             await _timeSessionsRepo.AddAsync(timeSession);
 
+            await _timeSessionEventsPublisher.PublishTimeSessionStartedEventAsync(userId, projectId);
+
             return new TimeSessionDTO
             {
-                StartTime = timeSession.StartTime
+                StartTime = timeSession.StartTime,
+                ProjectId = projectId,
             };
-        }
-
-        public async Task<IEnumerable<TimeSessionDTO>> GetAll(Guid userId)
-        {
-            return (await _timeSessionsRepo.GetAllAsync(userId))
-                .Select(ts => new TimeSessionDTO() { StartTime = ts.StartTime, EndTime = ts.EndTime, ProjectId = ts.ProjectId });
         }
 
         public async Task StopTimeSession(Guid userId)
@@ -63,6 +69,8 @@ namespace MicroManagement.Services
             {
                 await _timeSessionsRepo.UpdateAsync(timeSessionToStop);
             }
+
+            await _timeSessionEventsPublisher.PublishTimeSessionStoppedEventAsync(userId);
         }
     }
 }

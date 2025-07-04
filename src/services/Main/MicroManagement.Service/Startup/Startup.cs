@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using MassTransit;
+using MicroManagement.Service.WebAPI.Events;
 
 namespace MicroManagement.Service
 {
@@ -71,6 +73,7 @@ namespace MicroManagement.Service
 
             services.AddTransient<ITimeSessionsRepository, SqlTimeSessionsRepository>();
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
+            services.AddTransient<ITimeSessionEventsPublisher, TimeSessionEventsPublisher>();
 
             services.AddOptions<DatabaseSettings>()
                 .Bind(Configuration.GetSection(DatabaseSettings.SectionName));
@@ -82,6 +85,19 @@ namespace MicroManagement.Service
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowLocalReact", p => p.SetIsOriginAllowed(p => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+            });
+
+            // MassTransit + RabbitMQ configuration
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(Configuration["RabbitMq:Host"], "/", h =>
+                    {
+                        h.Username(Configuration["RabbitMq:Username"]);
+                        h.Password(Configuration["RabbitMq:Password"]);
+                    });
+                });
             });
 
             void SetupMigrationAssembly(DbSetupOptions options)

@@ -1,4 +1,6 @@
 ﻿using MassTransit;
+using MicroManagement.Activity.WebAPI.Events;
+using MicroManagement.Activity.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
@@ -20,6 +22,8 @@ public class Startup
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+
+        services.AddSingleton<UserActivityManager>();
 
         services.AddAuthentication()
             .AddJwtBearer(options =>
@@ -46,7 +50,11 @@ public class Startup
                     h.Username(Configuration["RabbitMq:Username"]);
                     h.Password(Configuration["RabbitMq:Password"]);
                 });
+
+                cfg.ConfigureEndpoints(context);
             });
+
+            x.AddConsumer<TimeSessionEventsConsumer>();
         });
 
         services.AddCors(options =>

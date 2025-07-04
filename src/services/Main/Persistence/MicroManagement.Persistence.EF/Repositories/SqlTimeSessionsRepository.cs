@@ -45,8 +45,8 @@ namespace MicroManagement.Persistence.EF.Repositories
         {
             var timeSessionEntities = (await _dbSet
                 .Include(t => t.Project)
-                .ToListAsync())
-                .Where(t => t.UserId.ToString() == userId.ToString());
+                .Where(t => t.UserId == userId)
+                .ToListAsync());
 
             var timesSessions = new List<TimeSession>();
 
@@ -63,7 +63,7 @@ namespace MicroManagement.Persistence.EF.Repositories
         public async Task UpdateAsync(TimeSession timeSession)
         {
             var timeSessionEntity = await _dbSet
-                .Where(t => t.UserId.ToString() == timeSession.UserId.ToString())
+                .Where(t => t.UserId == timeSession.UserId)
                 .Where(t => t.StartTime == timeSession.StartTime)
                 .Include(t => t.Project)
                 .FirstOrDefaultAsync();

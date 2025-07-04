@@ -1,29 +1,31 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MicroManagement.Activity.WebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 
 namespace MicroManagement.Activity.WebAPI.Controllers
 {
-    [Route("[controller]")]
+    [Route("/events")]
     [ApiController]
     [Authorize]
     public class UserActivityController : ControllerBase
     {
-        [HttpGet]
-        public async Task<IResult> GetThings(CancellationToken cancellationToken)
-        {
-            async IAsyncEnumerable<string> GetHeartRate(CancellationToken cancellationToken)
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    var heartRate = Random.Shared.Next(60, 100);
-                    yield return heartRate.ToString();
-                    await Task.Delay(2000, cancellationToken);
-                }
-            }
+        private readonly UserActivityManager _userActivityManager;
 
-            return TypedResults.ServerSentEvents(GetHeartRate(cancellationToken));
+        public UserActivityController(UserActivityManager userActivityManager)
+        {
+            _userActivityManager = userActivityManager;
         }
+
+        [HttpGet]
+        public IResult RegisterForEvents(CancellationToken cancellationToken)
+        {
+            return TypedResults.ServerSentEvents(_userActivityManager.GetEvents(GetUserId(), cancellationToken));
+        }
+
+        private Guid GetUserId()
+            => Guid.Parse(User.Identities.First().Claims.Single(c => c.Type == ClaimTypes.NameIdentifier).Value);
     }
 }
