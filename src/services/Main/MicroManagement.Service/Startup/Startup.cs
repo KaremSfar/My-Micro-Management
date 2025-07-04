@@ -97,7 +97,10 @@ namespace MicroManagement.Service
                         h.Username(Configuration["RabbitMq:Username"]);
                         h.Password(Configuration["RabbitMq:Password"]);
                     });
+                    cfg.ConfigureEndpoints(context);
                 });
+
+                x.AddConsumer<UserInactivityConsumer>();
             });
 
             void SetupMigrationAssembly(DbSetupOptions options)

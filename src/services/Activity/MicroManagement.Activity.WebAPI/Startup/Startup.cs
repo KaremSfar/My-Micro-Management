@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Coravel;
+using MassTransit;
 using MicroManagement.Activity.WebAPI.Events;
 using MicroManagement.Activity.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,6 +31,7 @@ public class Startup
 
         services.AddSingleton<IUserActivityManager, UserActivityManager>();
         services.AddSingleton<IUserConnectionRepository, UserConnectionRepository>();
+        services.AddTransient<UserInactivityMonitor>();
 
         services.AddAuthentication()
             .AddJwtBearer(options =>
@@ -63,13 +65,15 @@ public class Startup
             x.AddConsumer<TimeSessionEventsConsumer>();
         });
 
+        services.AddScheduler();
+
         services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalReact", p => p.SetIsOriginAllowed(p => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
         });
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
     {
         app.UseCors("AllowLocalReact");
 
@@ -88,6 +92,12 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+        });
+
+        serviceProvider.UseScheduler(sc =>
+        {
+            sc.Schedule<UserInactivityMonitor>()
+                .EveryFiveMinutes();
         });
     }
 }
