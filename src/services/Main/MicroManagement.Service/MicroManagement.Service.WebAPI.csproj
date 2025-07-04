@@ -12,6 +12,9 @@
 
   <ItemGroup>
     <PackageReference Include="LanguageExt.Core" Version="4.4.3" />
+    <PackageReference Include="MassTransit" Version="8.5.0" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.8" />
@@ -31,11 +34,12 @@
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\MicroManagement.Core\MicroManagement.Core.csproj" />
+    <ProjectReference Include="..\..\Core\MicroManagement.Shared.Events\MicroManagement.Shared.Events.csproj" />
     <ProjectReference Include="..\..\Core\MicroManagement.Shared.Startup\MicroManagement.Shared.Startup.csproj" />
     <ProjectReference Include="..\MicroManagement.DataContracts\MicroManagement.DataContracts.csproj" />
     <ProjectReference Include="..\MicroManagement.Service.Abstractions\MicroManagement.Service.Abstractions.csproj" />

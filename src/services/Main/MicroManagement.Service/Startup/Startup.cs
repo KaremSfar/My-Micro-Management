@@ -1,8 +1,6 @@
 ﻿using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Persistence.EF.Configuration;
 using MicroManagement.Persistence.EF.Repositories;
-using MicroManagement.Service.WebAPI.Hubs;
-using MicroManagement.Service.WebAPI.Services;
 using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
@@ -55,21 +53,6 @@ namespace MicroManagement.Service
                     ValidAudience = Configuration["Jwt:Audience"]!,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JwtAccessKey"]!))
                 };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"];
-                        var path = context.HttpContext.Request.Path;
-
-                        // Set Access token for SignalR hubs
-                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hub/timesessionshub"))
-                            context.Token = accessToken;
-
-                        return Task.CompletedTask;
-                    }
-                };
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -88,7 +71,6 @@ namespace MicroManagement.Service
 
             services.AddTransient<ITimeSessionsRepository, SqlTimeSessionsRepository>();
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
-            services.AddSingleton<IUserConnectionsProvider, UserConnectionsProvider>();
 
             services.AddOptions<DatabaseSettings>()
                 .Bind(Configuration.GetSection(DatabaseSettings.SectionName));
@@ -137,7 +119,6 @@ namespace MicroManagement.Service
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<TimeSessionsHub>("/hub/timesessionshub");
             });
         }
 
