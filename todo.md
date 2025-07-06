@@ -34,6 +34,7 @@
 
 - [ ] Update Auth Service - use ready methods 
 - [x] FIX TIME SESSION MODEL (one project  only)
+- [ ] Turn into Progressive web app to install
 
 
 ## NEXT
