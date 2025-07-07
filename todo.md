@@ -32,13 +32,13 @@
     - [ ] Colored, can be focused TimeSessions
     - [ ] Fix 401 session issue
 
-- [ ] Update Auth Service - use ready methods 
 - [x] FIX TIME SESSION MODEL (one project  only)
 - [ ] Turn into Progressive web app to install
-- [ ] Fix the event not reconnecting and the access token not refreshing 
+- [x] Fix the event not reconnecting and the access token not refreshing 
 
 
 ## NEXT
+- [ ] Update Auth Service - use ready methods 
 - [x] Update Time Sessions feature 
 - [ ] Use Remote Caches to avoid building everything everytime
 - [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
