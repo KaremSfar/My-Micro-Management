@@ -1,5 +1,5 @@
 // src/contexts/AuthContext.tsx
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 
 interface IAuthContext {
     accessToken: string | null;
@@ -11,13 +11,22 @@ interface IAuthContext {
     logout: () => Promise<void>;
     loginWithGoogle: () => void;
     handleGoogleAuthResponse: () => Promise<void>;
+    isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [accessToken, setAccessTokenInternal] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true); // Add a loading state
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    const setAccessToken = (token: string | null) => {
+        setAccessTokenInternal(token);
+
+        if (!!token !== isAuthenticated)
+            setIsAuthenticated(!!token);
+    };
 
     const login = async (email: string, password: string) => {
         const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/login`, {
@@ -89,13 +98,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Auto-refresh token every 10 minutes (before 15min expiry)
+    useEffect(() => {
+        if (accessToken && !refreshIntervalRef.current) {
+            refreshIntervalRef.current = setInterval(() => {
+                refreshAuthToken();
+            }, 5 * 60 * 1000);
+        } else if (!accessToken && refreshIntervalRef.current) {
+            clearInterval(refreshIntervalRef.current);
+            refreshIntervalRef.current = null;
+        }
+
+        return () => {
+            if (refreshIntervalRef.current) {
+                clearInterval(refreshIntervalRef.current);
+                refreshIntervalRef.current = null;
+            }
+        };
+    }, [!!accessToken]); // Only depend on whether token exists, not its value
+
+
     // Attempt to refresh the token on app startup
     useEffect(() => {
         refreshAuthToken();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ accessToken, setAccessToken, login, singup, refreshAuthToken, isLoading, logout, loginWithGoogle, handleGoogleAuthResponse }}>
+        <AuthContext.Provider value={{ accessToken, setAccessToken, login, singup, refreshAuthToken, isLoading, logout, loginWithGoogle, handleGoogleAuthResponse, isAuthenticated }}>
             {children}
         </AuthContext.Provider>
     );

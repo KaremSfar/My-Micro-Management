@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import Avatar from './Avatar';
+import PomodoroWidget from './PomodoroWidget'; // Import the new widget
 
 const Navbar = () => {
 
@@ -18,7 +19,10 @@ const Navbar = () => {
                     </svg>
                 </NavLink>
             </div>
-            <div className="flex-grow"></div> {/* This div can act as spacer if needed */}
+            {/* Pomodoro Widget moved here, outside the "islands" */}
+            <div className="flex-grow flex justify-center"> {/* Added flex-grow and justify-center */}
+                <PomodoroWidget />
+            </div>
             <div className="flex justify-between items-center shadow-md border border-black rounded-xl h-14 p-2 gap-1">
                 <NavLink to="/analytics" className={navLinkStyle}>
                     <svg viewBox="0 0 40 40" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">

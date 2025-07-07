@@ -3,27 +3,16 @@ services:
     build:
       context: ./src/services
       dockerfile: ./Auth/Dockerfile
-    image: karemsfar/mmgmt-auth:latest
-    ports:
-      - 81:81
-    environment:
-      - Database__DatabaseType=${Auth_Database__DatabaseType}
-      - Database__ConnectionString=${Auth_Database__ConnectionString}
-      - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
-      - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
 
   service:
     build:
       context: ./src/services
       dockerfile: ./Main/Dockerfile
-    image: karemsfar/mmgmt-service:latest
-    ports:
-      - 82:81
-    environment:
-      - Database__DatabaseType=${Main_Database__DatabaseType}
-      - Database__ConnectionString=${Main_Database__ConnectionString}
-      - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
-      - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
+
+  activity:
+    build:
+      context: ./src/services
+      dockerfile: ./Activity/Dockerfile
 
   web:
     build:
@@ -32,7 +21,5 @@ services:
       args:
         - VITE_AUTH_SERVICE_BASE_URL=${VITE_AUTH_SERVICE_BASE_URL}
         - VITE_MAIN_SERVICE_BASE_URL=${VITE_MAIN_SERVICE_BASE_URL}
+        - VITE_ACTIVITY_SERVICE_BASE_URL=${VITE_ACTIVITY_SERVICE_BASE_URL}
     image: karemsfar/mmgmt-web:latest
-    ports:
-      - 80:80
-   
