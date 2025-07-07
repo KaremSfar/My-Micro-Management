@@ -45,7 +45,7 @@ export const useServerSideEvents = (startProject: (projectId: string) => void, s
         return () => {
             abortController.abort();
         };
-    }, [accessToken, startProject, stopProjects]);
+    }, [startProject, stopProjects]);
 
     return abortControllerRef;
 };

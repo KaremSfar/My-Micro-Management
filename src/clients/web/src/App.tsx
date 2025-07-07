@@ -10,20 +10,13 @@ import GoogleAuthCallback from './Auth/GoogleAuthCallback';
 import { ProjectProvider } from './context/ProjectContext';
 
 function App() {
-  const { accessToken, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 to-orange-400">
       <div className="border-2 border-black lg:h-[75vh] w-3/4 flex justify-center items-center bg-white rounded-lg shadow-xl p-5 m-4">
-        {isLoading ?
-          <div className="flex justify-center items-center">
-            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
-              <span className="visually-hidden"></span>
-            </div>
-          </div>
-          :
           <BrowserRouter>
-            {accessToken ? (
+            {isAuthenticated ? (
               <ProjectProvider> {/* Wrap authenticated routes with the provider */}
                 <Routes>
                   <Route path="/" element={<Layout><Dashboard /></Layout>} />
@@ -42,7 +35,7 @@ function App() {
                 <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
             )}
-          </BrowserRouter>}
+          </BrowserRouter>
       </div>
     </div>
   );

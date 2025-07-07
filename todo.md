@@ -35,6 +35,7 @@
 - [ ] Update Auth Service - use ready methods 
 - [x] FIX TIME SESSION MODEL (one project  only)
 - [ ] Turn into Progressive web app to install
+- [ ] Fix the event not reconnecting and the access token not refreshing 
 
 
 ## NEXT

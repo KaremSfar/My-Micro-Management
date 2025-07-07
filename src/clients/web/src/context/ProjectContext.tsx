@@ -49,7 +49,8 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
         if (accessToken) {
             fetchProjects();
         }
-    }, [accessToken]);
+
+    }, []);
 
     // Timer logic is now managed within the provider
     useTimer(runningProjectId, setProjects);
