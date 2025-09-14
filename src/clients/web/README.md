@@ -1,69 +1,36 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Web Client
 
-Currently, two official plugins are available:
+This folder contains the source code for the main web client of My-Micro-Management. It provides the user interface for authentication, activity management, dashboards, and more.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Purpose
+Delivers a modern, responsive UI for users to interact with all core features of the platform. Communicates with backend services via REST APIs and is served via Nginx in production.
 
-## Expanding the ESLint configuration
+## Main Features
+- User authentication (login, registration, Google OAuth)
+- Activity and event management
+- Dashboard and analytics views
+- Responsive design with Tailwind CSS
+- Fast development and HMR with Vite
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Folder Structure
+- `src/` - Main source code
+  - `Auth/` - Authentication pages and logic
+  - `Components/` - Reusable UI components
+  - `Pages/` - Application views/pages
+  - `context/` - React context providers
+  - `hooks/` - Custom React hooks
+  - `Models/` - TypeScript models/interfaces
+  - `DTOs/` - Data transfer objects
+- `public/` - Static assets (favicon, manifest, etc.)
+- `Dockerfile` - Container build instructions
+- `nginx.conf` - Nginx configuration for serving the app
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Technologies
+- React
+- Vite
+- TypeScript
+- Tailwind CSS
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Usage
+Install dependencies with `npm install`. Run locally with `npm run dev`. For production, build with `npm run build` and serve via Nginx or Docker. See main project README.md for setup instructions.
