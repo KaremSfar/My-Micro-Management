@@ -46,3 +46,4 @@
 - [ ] Add Migration creator automation
 - [ ] Add Unit Tests :)
 - [ ] Swap datetimes with DateTimeOffsets
+- [ ] Update Open Telemetry Stuff - Use Collector and enrich

@@ -39,6 +39,7 @@ services:
     depends_on:
       - db
       - jaeger
+      - rabbitmq
 
   service:
     image: karemsfar/mmgmt-service:latest
@@ -64,7 +65,7 @@ services:
       - RabbitMq__Host=rabbitmq
       - RabbitMq__UserName=${RABBITMQ_USER:-guest}
       - RabbitMq__Password=${RABBITMQ_PASS:-guest}
-      - Redis__Configuration=redis:6379
+      - Redis__Configuration=${REDIS__CONFIGURATION}
     depends_on:
       - redis
       - rabbitmq
