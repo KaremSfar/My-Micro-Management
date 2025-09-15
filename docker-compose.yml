@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: mmgmt
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
   redis:
     image: redis:7-alpine
@@ -94,6 +96,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
     restart: always
+
 volumes:
   postgres_data:
   redis_data:
