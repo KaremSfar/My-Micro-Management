@@ -1,0 +1,39 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C#: MicroManagement.Activity.WebAPI Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/Activity/MicroManagement.Activity.WebAPI/MicroManagement.Activity.WebAPI.csproj",
+            "launchConfigurationId": "TargetFramework=;LocalDev",
+        },
+        {
+            "name": "C#: MicroManagement.Service.WebAPI Debug",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/Main/MicroManagement.Service/MicroManagement.Service.WebAPI.csproj",
+            "launchConfigurationId": "TargetFramework=;LocalDev"
+        },
+        {
+            "name": "C#: MicroManagement.Auth.WebAPI",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/Auth/MicroManagement.Auth.WebAPI/MicroManagement.Auth.WebAPI.csproj",
+            "launchConfigurationId": "TargetFramework=;LocalDev"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Auth + Service + Activity",
+            "configurations": [
+                "C#: MicroManagement.Activity.WebAPI Debug",
+                "C#: MicroManagement.Service.WebAPI Debug",
+                "C#: MicroManagement.Auth.WebAPI"
+            ]
+        }
+    ]
+}

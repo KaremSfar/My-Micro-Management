@@ -1,3 +1,5 @@
+- [x] GET BACK ON TRACK: local development experience back on track: local services + web + dockers in 2-3 clicks 
+
 - [x] Add Open Telemetry and bundle Graphana / or stuff like that with it
 - [x] Add Nginx routing config to docker and source control
 
