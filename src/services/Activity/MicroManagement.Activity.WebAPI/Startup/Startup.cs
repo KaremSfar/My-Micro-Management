@@ -1,6 +1,7 @@
 ﻿using Coravel;
 using MassTransit;
 using MicroManagement.Activity.WebAPI.Events;
+using MicroManagement.Activity.WebAPI.Hubs;
 using MicroManagement.Activity.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +26,8 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
+        services.AddSignalR();
+
         services.AddSingleton<IConnectionMultiplexer>(sp =>
             ConnectionMultiplexer.Connect(
                 Configuration.GetSection("Redis")["Configuration"]));
@@ -45,6 +48,22 @@ public class Startup
                     ValidIssuer = Configuration["Jwt:Issuer"]!,
                     ValidAudience = Configuration["Jwt:Audience"]!,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JwtAccessKey"]!))
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        var path = context.HttpContext.Request.Path;
+
+                        // Set Access token for SignalR hubs
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hub/timesessionshub"))
+                            context.Token = accessToken;
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
@@ -92,6 +111,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapHub<UserActivityHub>("/hub/timesessionshub");
         });
 
         serviceProvider.UseScheduler(sc =>

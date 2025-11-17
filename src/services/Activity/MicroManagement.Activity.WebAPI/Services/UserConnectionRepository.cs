@@ -76,7 +76,7 @@ public class UserConnectionRepository : IUserConnectionRepository
         for (int i = 0; i < userKeys.Count; i++)
         {
             var value = values[i];
-            if (value.HasValue && int.TryParse(value, out int count) && count == 0)
+            if (value.HasValue && value.TryParse(out int count) && count == 0)
             {
                 var userIdStr = userKeys[i].ToString().Substring(KeyPrefix.Length);
                 if (Guid.TryParse(userIdStr, out Guid userId))

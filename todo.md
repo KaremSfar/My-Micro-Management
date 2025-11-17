@@ -38,6 +38,8 @@
 - [ ] Turn into Progressive web app to install
 - [x] Fix the event not reconnecting and the access token not refreshing 
 
+- [] Go back to using Websockets lol
+
 
 ## NEXT
 - [ ] Update Auth Service - use ready methods 

@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode, useCallback 
 import { GetProjectDto, ProjectSessionDTO } from '../DTOs/ProjectDto';
 import { useAuth } from '../Auth/AuthContext';
 import { useTimer } from '../hooks/dashboard/useTimer';
-import { useServerSideEvents } from '../hooks/dashboard/useServerSideEvents';
+import { useWebSocket } from '../hooks/useWebSockets';
 
 interface IProjectContext {
     projects: ProjectSessionDTO[];
@@ -73,7 +73,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
         setRunningProjectId(null);
     }, []);
 
-    const sseConnectionRef = useServerSideEvents(startProject, stopProjects);
+    const sseConnectionRef = useWebSocket(startProject, stopProjects);
 
     const handleProjectClick = useCallback(async (projectId: string) => {
         if (projectId === runningProjectId) {

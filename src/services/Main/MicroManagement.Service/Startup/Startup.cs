@@ -36,8 +36,6 @@ namespace MicroManagement.Service
             // Add services to the container.
             services.AddControllers();
 
-            services.AddSignalR();
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
