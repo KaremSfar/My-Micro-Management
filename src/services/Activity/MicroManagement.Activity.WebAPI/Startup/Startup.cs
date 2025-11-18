@@ -32,7 +32,7 @@ public class Startup
             ConnectionMultiplexer.Connect(
                 Configuration.GetSection("Redis")["Configuration"]));
 
-        services.AddSingleton<IUserActivityManager, UserActivityManager>();
+        services.AddSingleton<IUserActivityService, UserActivityService>();
         services.AddSingleton<IUserConnectionRepository, UserConnectionRepository>();
         services.AddTransient<UserInactivityMonitor>();
 

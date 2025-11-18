@@ -9,21 +9,20 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/Activity/MicroManagement.Activity.WebAPI/MicroManagement.Activity.WebAPI.csproj",
-            "launchConfigurationId": "TargetFramework=;LocalDev",
+            "launchSettingsProfile": "LocalDev",
         },
         {
             "name": "C#: MicroManagement.Service.WebAPI Debug",
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/Main/MicroManagement.Service/MicroManagement.Service.WebAPI.csproj",
-            "launchConfigurationId": "TargetFramework=;LocalDev"
-        },
+            "launchSettingsProfile": "LocalDev",        },
         {
-            "name": "C#: MicroManagement.Auth.WebAPI",
+            "name": "C#: MicroManagement.Auth.WebAPI Debug",
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/Auth/MicroManagement.Auth.WebAPI/MicroManagement.Auth.WebAPI.csproj",
-            "launchConfigurationId": "TargetFramework=;LocalDev"
+            "launchSettingsProfile": "LocalDev",
         },
     ],
     "compounds": [
@@ -32,7 +31,7 @@
             "configurations": [
                 "C#: MicroManagement.Activity.WebAPI Debug",
                 "C#: MicroManagement.Service.WebAPI Debug",
-                "C#: MicroManagement.Auth.WebAPI"
+                "C#: MicroManagement.Auth.WebAPI Debug"
             ]
         }
     ]

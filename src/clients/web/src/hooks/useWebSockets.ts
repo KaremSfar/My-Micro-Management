@@ -2,6 +2,17 @@ import { useEffect, useRef } from "react";
 import { HubConnection, HubConnectionBuilder, JsonHubProtocol } from "@microsoft/signalr";
 import { useAuth } from "../Auth/AuthContext";
 
+// UserActivityEventType enum equivalent to C# enum
+type UserActivityEventType = "TimeSessionStarted" | "TimeSessionStopped";
+
+// UserActivityEvent type equivalent to C# record
+export type UserActivityEvent = {
+    userActivityEventType: UserActivityEventType;
+    userId: string;
+    eventData: { projectId: string, userId: string };
+};
+
+
 export const useWebSocket = (startProject: (projectId: string) => void, stopProjects: () => void) => {
     const { accessToken } = useAuth();
     const webSocketConnectionRef = useRef<HubConnection | null>(null);
@@ -20,11 +31,16 @@ export const useWebSocket = (startProject: (projectId: string) => void, stopProj
         webSocketConnectionRef.current.start();
 
         webSocketConnectionRef.current.on("ReceiveEvent", (projectId: any) => {
-            startProject(projectId);
-        });
-
-        webSocketConnectionRef.current.on("TimeSessionsStopped", () => {
-            stopProjects();
+            switch (projectId.userActivityEventType) {
+                case "TimeSessionStarted":
+                    startProject(projectId.eventData.projectId);
+                    break;
+                case "TimeSessionStopped":
+                    stopProjects();
+                    break;
+                default:
+                    console.warn("Unknown event type received:", projectId.userActivityEventType);
+            }
         });
 
         webSocketConnectionRef.current.onclose((error) => {

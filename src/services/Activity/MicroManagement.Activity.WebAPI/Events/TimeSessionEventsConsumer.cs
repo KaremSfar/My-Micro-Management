@@ -8,14 +8,13 @@ namespace MicroManagement.Activity.WebAPI.Events;
 public class TimeSessionEventsConsumer : IConsumer<TimeSessionStartedEvent>, IConsumer<TimeSessionStoppedEvent>
 {
     private readonly ILogger<TimeSessionEventsConsumer> _logger;
-    private readonly IUserActivityManager _userActivityManager;
+    private readonly IUserActivityService _userActivityService;
 
     public TimeSessionEventsConsumer(
-        ILogger<TimeSessionEventsConsumer> logger,
-        IUserActivityManager userActivityManager)
+        ILogger<TimeSessionEventsConsumer> logger, IUserActivityService userActivityService)
     {
         _logger = logger;
-        _userActivityManager = userActivityManager;
+        _userActivityService = userActivityService;
     }
 
     public async Task Consume(ConsumeContext<TimeSessionStartedEvent> context)
@@ -25,8 +24,7 @@ public class TimeSessionEventsConsumer : IConsumer<TimeSessionStartedEvent>, ICo
         _logger.LogInformation("Time session started for User: {UserId}, Project: {ProjectId}",
             message.UserId, message.ProjectId);
 
-        // Broadcast the event to all connected clients
-        await _userActivityManager.RegisterEvent(new UserActivityEvent
+        await this._userActivityService.NotifyUserActivityEventAsync(new UserActivityEvent
         {
             UserId = message.UserId,
             UserActivityEventType = UserActivityEventType.TimeSessionStarted,
@@ -34,18 +32,16 @@ public class TimeSessionEventsConsumer : IConsumer<TimeSessionStartedEvent>, ICo
         });
     }
 
-    public Task Consume(ConsumeContext<TimeSessionStoppedEvent> context)
+    public async Task Consume(ConsumeContext<TimeSessionStoppedEvent> context)
     {
         var message = context.Message;
         _logger.LogInformation("Time session stopped for User: {UserId}", message.UserId);
 
-        // Broadcast the event to all connected clients
-        return _userActivityManager.RegisterEvent(
-            new UserActivityEvent
-            {
-                UserId = message.UserId,
-                UserActivityEventType = UserActivityEventType.TimeSessionStopped,
-                EventData = message
-            });
+       await this._userActivityService.NotifyUserActivityEventAsync(new UserActivityEvent
+        {
+            UserId = message.UserId,
+            UserActivityEventType = UserActivityEventType.TimeSessionStopped,
+            EventData = message
+        });
     }
 }
