@@ -19,12 +19,9 @@ namespace MicroManagement.Activity.WebAPI.Services
         {
             var inactiveUsers = await _userConnectionRepository.GetAllInactiveUsersAsync();
 
-            var now = DateTime.UtcNow;
-
-            var inactiveThreshold = now.AddSeconds(-5);
-
             foreach (var user in inactiveUsers)
             {
+                // TODO-KAREM: consider passing down a time abstraction or smth to mock later in tests 
                 if ((DateTime.UtcNow - user.UpdatedAt.Value) > TimeSpan.FromMinutes(5)
                     && (DateTime.UtcNow - user.UpdatedAt.Value) < TimeSpan.FromMinutes(10))
                 {

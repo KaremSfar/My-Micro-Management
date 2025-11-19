@@ -7,7 +7,6 @@
 
 - [] Redo Readme
 
-- [] Add Context Concept
 - [x] Make sure timers and connections are not lost when switching pages
 
 - [x] Introduce the Event Bus stuff to stop time sessions
@@ -16,7 +15,7 @@
     - [x] Link With Events Smth (Redis Stream; RabbitMQ etc)
     - [x] Add UserActions Controller
         => Active connections ?
-    - [ ] Time since last connections => Closes current TimeSessions
+    - [x] Time since last connections => Closes current TimeSessions (buggy)
 
 - [x] Dockerize - NGINX - Deploy - test - changes after activity service
 
@@ -35,13 +34,15 @@
     - [ ] Fix 401 session issue
 
 - [x] FIX TIME SESSION MODEL (one project  only)
-- [ ] Turn into Progressive web app to install
 - [x] Fix the event not reconnecting and the access token not refreshing 
 
-- [] Go back to using Websockets lol
-
+- [x] Go back to using Websockets lol
+- [] Sync Pomodoro Across devices as well
 
 ## NEXT
+- [ ] Turn into Progressive web app to install
+- [ ] Add Context Concept
+- [ ] Make clients super dumb, only listen to ws and call http
 - [ ] Update Auth Service - use ready methods 
 - [x] Update Time Sessions feature 
 - [ ] Use Remote Caches to avoid building everything everytime
