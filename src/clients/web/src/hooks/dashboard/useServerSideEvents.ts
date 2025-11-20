@@ -7,7 +7,14 @@ export const useServerSideEvents = (startProject: (projectId: string) => void, s
     const abortControllerRef = useRef<AbortController | null>(null);
 
     useEffect(() => {
-        if (!accessToken) return;
+        if (!accessToken) {
+            // Clean up any existing connection when token is removed
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+                abortControllerRef.current = null;
+            }
+            return;
+        }
 
         const abortController = new AbortController();
         abortControllerRef.current = abortController;
@@ -36,6 +43,9 @@ export const useServerSideEvents = (startProject: (projectId: string) => void, s
             },
             onerror(error) {
                 console.error("SSE connection error:", error);
+                if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
+                    console.log("SSE token expired - will retry with new token on refresh");
+                }
                 // Returns true to retry, false to stop
                 return 1000; // Retry after 1 second
             },
@@ -45,7 +55,7 @@ export const useServerSideEvents = (startProject: (projectId: string) => void, s
         return () => {
             abortController.abort();
         };
-    }, [startProject, stopProjects]);
+    }, [startProject, stopProjects, accessToken]);
 
     return abortControllerRef;
 };

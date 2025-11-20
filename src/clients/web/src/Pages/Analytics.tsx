@@ -2,8 +2,8 @@ import WeeklyScheduleTable, { TimeTableEvent } from "../Components/WeeklySchedul
 import { useTimeSessions } from "../hooks/useTimeSessions";
 
 function Analytics() {
-    const timeSessions = useTimeSessions();
-    const events: TimeTableEvent[] = timeSessions.timeSessions.map(ts => {
+    const { timeSessions, loading } = useTimeSessions();
+    const events: TimeTableEvent[] = timeSessions.map(ts => {
         return {
             start: ts.startTime,
             end: ts.endTime ?? new Date(),
@@ -12,9 +12,20 @@ function Analytics() {
         }
     }).filter(ts => (ts.end.getTime() - ts.start.getTime()) > 60 * 1000);
 
+    if (loading) {
+        return (
+            <div className="w-full h-full flex items-center justify-center my-16">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                    <p className="text-gray-600 font-medium">Loading your schedule...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="w-full h-full flex items-center justify-center my-16">
-            <div className="w-full h-full bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="w-full max-w-6xl h-[600px] bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden flex flex-col">
                 {/* Header */}
                 <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
                     <h2 className="text-xl font-semibold text-gray-800">Weekly Schedule</h2>
@@ -22,7 +33,7 @@ function Analytics() {
                 </div>
 
                 {/* Table Container */}
-                <div className="p-6">
+                <div className="flex-1 p-6 overflow-auto">
                     <WeeklyScheduleTable events={events} />
                 </div>
             </div>

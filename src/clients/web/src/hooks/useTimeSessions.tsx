@@ -10,7 +10,7 @@ export const useTimeSessions = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Fetch time sessions
+    // Fetch time sessions only once on mount - keep cache, but use latest token for all API calls
     useEffect(() => {
         const fetchTimeSessions = async () => {
             if (!accessToken) return;
@@ -26,16 +26,19 @@ export const useTimeSessions = () => {
                     },
                 });
 
-
                 if (!timeSessionsResponse.ok) {
-                    throw new Error('Failed to fetch time sessions');
+                    if (timeSessionsResponse.status === 401) {
+                        console.error('Unauthorized - token may have expired');
+                        throw new Error('Authentication failed - please refresh the page');
+                    }
+                    throw new Error(`Failed to fetch time sessions: ${timeSessionsResponse.status}`);
                 }
 
                 const timeSessionsDtos: TimeSessionDTO[] = (await timeSessionsResponse.json()).map((ts: any) => {
                     return {
                         ...ts,
                         startTime: new Date(ts.startTime),
-                        endDate: ts.endDate ? new Date(ts.endDate) : undefined,
+                        endTime: ts.endTime ? new Date(ts.endTime) : undefined,
                     }
                 });
 
@@ -47,7 +50,11 @@ export const useTimeSessions = () => {
                 });
 
                 if (!projectsResponse.ok) {
-                    throw new Error('Failed to fetch projects');
+                    if (projectsResponse.status === 401) {
+                        console.error('Unauthorized - token may have expired');
+                        throw new Error('Authentication failed - please refresh the page');
+                    }
+                    throw new Error(`Failed to fetch projects: ${projectsResponse.status}`);
                 }
 
                 const projectsData: ProjectSessionDTO[] = await projectsResponse.json();
@@ -55,7 +62,7 @@ export const useTimeSessions = () => {
                 const timeSessions: TimeSessionModel[] = timeSessionsDtos.map(ts => {
                     return {
                         startTime: ts.startTime,
-                        endDate: ts.endTime,
+                        endTime: ts.endTime,
                         project: projectsData.find(p => p.id === ts.projectId)!
                     }
                 });
@@ -72,7 +79,7 @@ export const useTimeSessions = () => {
         if (accessToken) {
             fetchTimeSessions();
         }
-    }, [accessToken]);
+    }, []);
 
     return { timeSessions, loading, error };
 };

@@ -8,6 +8,7 @@ export const useProjects = () => {
     const [projects, setProjects] = useState<ProjectSessionDTO[]>([]);
     const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
 
+    // Fetch projects only once on mount - keep cache, but use latest token for all API calls
     useEffect(() => {
         const fetchProjects = async () => {
             if (!accessToken || projects?.length)
@@ -22,6 +23,13 @@ export const useProjects = () => {
                     }
                 });
 
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.error('Unauthorized - token may have expired');
+                    }
+                    throw new Error(`Failed to fetch projects: ${response.status}`);
+                }
+
                 const data: ProjectSessionDTO[] = await response.json();
                 setProjects(data);
 
@@ -34,7 +42,7 @@ export const useProjects = () => {
         };
 
         fetchProjects();
-    }, [accessToken]);
+    }, []);
 
     return { projects, setProjects, runningProjectId, setRunningProjectId };
 };
