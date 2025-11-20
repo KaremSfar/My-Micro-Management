@@ -1,5 +1,5 @@
 // src/contexts/AuthContext.tsx
-import { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface IAuthContext {
     accessToken: string | null;
@@ -98,26 +98,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-    // Auto-refresh token every 10 minutes (before 15min expiry)
+    // Auto-refresh token every 5 minutes (before 15min expiry)
     useEffect(() => {
-        if (accessToken && !refreshIntervalRef.current) {
-            refreshIntervalRef.current = setInterval(() => {
-                refreshAuthToken();
-            }, 5 * 60 * 1000);
-        } else if (!accessToken && refreshIntervalRef.current) {
-            clearInterval(refreshIntervalRef.current);
-            refreshIntervalRef.current = null;
-        }
+        if (!accessToken) return;
 
-        return () => {
-            if (refreshIntervalRef.current) {
-                clearInterval(refreshIntervalRef.current);
-                refreshIntervalRef.current = null;
-            }
-        };
-    }, [!!accessToken]); // Only depend on whether token exists, not its value
+        // Refresh immediately on mount/when token changes
+        const timer = setInterval(() => {
+            refreshAuthToken();
+        }, 5 * 60 * 1000); // 5 minutes
+
+        return () => clearInterval(timer);
+    }, [accessToken]); // Depend on the actual token, not just its existence
 
 
     // Attempt to refresh the token on app startup
