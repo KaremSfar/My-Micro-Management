@@ -52,8 +52,8 @@ services:
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
       - OTEL__JAEGER_URL=${OTEL__JAEGER_URL}
       - RabbitMq__Host=rabbitmq
-      - RabbitMq__UserName=${RABBITMQ_DEFAULT_USER:-guest}
-      - RabbitMq__Password=${RABBITMQ_DEFAULT_PASS:-guest}
+      - RabbitMq__UserName=${RABBITMQ_USER}
+      - RabbitMq__Password=${RABBITMQ_PASS}
     depends_on:
       - db
       - jaeger
@@ -65,8 +65,8 @@ services:
       - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}    
       - RabbitMq__Host=rabbitmq
-      - RabbitMq__UserName=${RABBITMQ_USER:-guest}
-      - RabbitMq__Password=${RABBITMQ_PASS:-guest}
+      - RabbitMq__UserName=${RABBITMQ_USER}
+      - RabbitMq__Password=${RABBITMQ_PASS}
       - Redis__Configuration=${REDIS__CONFIGURATION}
     depends_on:
       - redis
@@ -93,8 +93,8 @@ services:
       - "5672:5672" # AMQP
       - "15672:15672" # Management UI
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
     restart: always
 
 volumes:
