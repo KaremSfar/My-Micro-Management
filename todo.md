@@ -31,7 +31,7 @@
     - [x] Empty TimeTable
     - [x] Time Table with time sessions
     - [x] Colored, can be focused TimeSessions
-    - [] Fix 401 session issue => i think fixed with websockets ?
+    - [x] Fix 401 session issue => i think fixed with websockets ?
 
 - [x] FIX TIME SESSION MODEL (one project  only)
 - [x] Fix the event not reconnecting and the access token not refreshing 

@@ -40,6 +40,9 @@ jobs:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           OTEL_JAEGER_URL: ${{ env.OTEL_JAEGER_URL }}
+          REDIS__CONFIGURATION: ${{ secrets.REDIS__CONFIGURATION }}
+          RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
+          RABBITMQ_PASS: ${{ secrets.RABBITMQ_PASS }}
         run: source ./devops/update-files.sh
 
       - name: Log in to DockerHub
