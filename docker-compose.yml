@@ -8,14 +8,14 @@ services:
       POSTGRES_DB: mmgmt
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
 
   redis:
     image: redis:7-alpine
     container_name: redis
-    ports:
-      - "6379:6379"
+    # ports:
+    #   - "6379:6379"
     volumes:
       - redis_data:/data
     restart: always
@@ -89,9 +89,9 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
-    ports:
-      - "5672:5672" # AMQP
-      - "15672:15672" # Management UI
+    # ports:
+    #   - "5672:5672" # AMQP
+    #   - "15672:15672" # Management UI
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
