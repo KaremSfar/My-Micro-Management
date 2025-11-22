@@ -52,3 +52,4 @@
 - [ ] Add Unit Tests :)
 - [ ] Swap datetimes with DateTimeOffsets
 - [ ] Update Open Telemetry Stuff - Use Collector and enrich
+- [ ] Clean up env variables mess and only keep needed ones in github vs needed ones in VPS (find a secrets manager)
