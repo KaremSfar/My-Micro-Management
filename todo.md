@@ -1,3 +1,35 @@
+## NEXT
+- [ ] Sync Pomodoro Across devices as well
+- [ ] Turn into Progressive web app to install
+- [ ] Add Context Concept
+- [ ] Make clients super dumb, only listen to ws and call http
+- [ ] Update Auth Service - use ready methods 
+- [x] Update Time Sessions feature 
+- [ ] Use Remote Caches to avoid building everything everytime
+- [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
+    - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
+- [ ] Add Migration creator automation
+- [ ] Add Unit Tests :)
+- [ ] Swap datetimes with DateTimeOffsets
+- [ ] Update Open Telemetry Stuff - Use Collector and enrich
+- [ ] Clean up env variables mess and only keep needed ones in github vs needed ones in VPS (find a secrets manager)
+- [ ] Redo Readme
+
+## Bugs
+- [ ] Fix 401 token staleness
+- [ ] Console errors Websockets
+
+## Big Features / Epics
+- [x] Basics: Auth, SSO, Deploying 
+- [x] Time sessions and Projects creating etc..
+- [ ] Add mail stuff (for Auth endpoints)
+- [ ] Context Stuff
+- [ ] CLI app
+- [ ] Screenshots cli service, connect with Agent 
+- [ ] Outside: Create an n8n agent for Work (Scrum ceremonies, Planner ...) And integrate with mmgmt
+
+
+## History
 - [x] GET BACK ON TRACK: local development experience back on track: local services + web + dockers in 2-3 clicks 
 
 - [x] Add Open Telemetry and bundle Graphana / or stuff like that with it
@@ -37,19 +69,4 @@
 - [x] Go back to using Websockets lol
 - [x] Switch domain names
 
-## NEXT
-- [ ] Sync Pomodoro Across devices as well
-- [ ] Turn into Progressive web app to install
-- [ ] Add Context Concept
-- [ ] Make clients super dumb, only listen to ws and call http
-- [ ] Update Auth Service - use ready methods 
-- [x] Update Time Sessions feature 
-- [ ] Use Remote Caches to avoid building everything everytime
-- [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
-    - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
-- [ ] Add Migration creator automation
-- [ ] Add Unit Tests :)
-- [ ] Swap datetimes with DateTimeOffsets
-- [ ] Update Open Telemetry Stuff - Use Collector and enrich
-- [ ] Clean up env variables mess and only keep needed ones in github vs needed ones in VPS (find a secrets manager)
-- [ ] Redo Readme
+----
