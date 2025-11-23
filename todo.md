@@ -3,9 +3,7 @@
 - [x] Add Open Telemetry and bundle Graphana / or stuff like that with it
 - [x] Add Nginx routing config to docker and source control
 
-- [x] Deploy and Run Bolt Diy 
-
-- [] Redo Readme
+- [x] Deploy and Run Bolt Diy => mega flop
 
 - [x] Make sure timers and connections are not lost when switching pages
 
@@ -19,10 +17,10 @@
 
 - [x] Dockerize - NGINX - Deploy - test - changes after activity service
 
-- [] Add Pomodoro to the App 
+- [x] Add Pomodoro to the App 
     - [x] Sticky Pomodoro Widget (maybe in the navbar)
     - [x] On Pomodoro Pause, pauses the timers and restarts on itself
-    - [ ] On Pomodoro Next Clicks - Auto Start Pomodoro and Projects
+    - [x] On Pomodoro Next Clicks - Auto Start Pomodoro and Projects
 
 
 - [x] Fix Timers Ticks (Main + Pomodoro)
@@ -37,9 +35,10 @@
 - [x] Fix the event not reconnecting and the access token not refreshing 
 
 - [x] Go back to using Websockets lol
-- [] Sync Pomodoro Across devices as well
+- [x] Switch domain names
 
 ## NEXT
+- [ ] Sync Pomodoro Across devices as well
 - [ ] Turn into Progressive web app to install
 - [ ] Add Context Concept
 - [ ] Make clients super dumb, only listen to ws and call http
@@ -53,3 +52,4 @@
 - [ ] Swap datetimes with DateTimeOffsets
 - [ ] Update Open Telemetry Stuff - Use Collector and enrich
 - [ ] Clean up env variables mess and only keep needed ones in github vs needed ones in VPS (find a secrets manager)
+- [ ] Redo Readme
