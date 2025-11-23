@@ -1,8 +1,35 @@
 services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: mmgmt
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    # ports:
+    #   - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    # ports:
+    #   - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    command: redis-server --appendonly yes
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686" # Jaeger UI
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
   auth:
     image: karemsfar/mmgmt-auth:latest
-    ports:
-      - 81:81
     environment:
       - Database__DatabaseType=${Auth_Database__DatabaseType}
       - Database__ConnectionString=${Auth_Database__ConnectionString}
@@ -10,19 +37,65 @@ services:
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
       - googleclient_id=${googleclient_id}
       - googleclient_secret=${googleclient_secret}
+      - OTEL__JAEGER_URL=${OTEL__JAEGER_URL}
+    depends_on:
+      - db
+      - jaeger
 
   service:
     image: karemsfar/mmgmt-service:latest
-    ports:
-      - 82:81
     environment:
       - Database__DatabaseType=${Main_Database__DatabaseType}
       - Database__ConnectionString=${Main_Database__ConnectionString}
       - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
+      - OTEL__JAEGER_URL=${OTEL__JAEGER_URL}
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__UserName=${RABBITMQ_USER}
+      - RabbitMq__Password=${RABBITMQ_PASS}
+    depends_on:
+      - db
+      - jaeger
+      - rabbitmq
+
+  activity:
+    image: karemsfar/mmgmt-activity:latest
+    environment:
+      - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
+      - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}    
+      - RabbitMq__Host=rabbitmq
+      - RabbitMq__UserName=${RABBITMQ_USER}
+      - RabbitMq__Password=${RABBITMQ_PASS}
+      - Redis__Configuration=${REDIS__CONFIGURATION}
+    depends_on:
+      - redis
+      - rabbitmq
 
   web:
     image: karemsfar/mmgmt-web:latest
+
+  nginx:
+    image: nginx:latest
     ports:
-      - 80:80
-   
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - auth
+      - service
+      - web
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    # ports:
+    #   - "5672:5672" # AMQP
+    #   - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    restart: always
+
+volumes:
+  postgres_data:
+  redis_data:

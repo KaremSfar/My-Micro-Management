@@ -50,8 +50,11 @@ namespace MicroManagement.Persistence.Migrations.Postgres.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("EndDate")
+                    b.Property<DateTime?>("EndTime")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp with time zone");
@@ -61,37 +64,25 @@ namespace MicroManagement.Persistence.Migrations.Postgres.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProjectId");
+
                     b.ToTable("TimeSessionsTable");
                 });
 
-            modelBuilder.Entity("ProjectEntityTimeSessionEntity", b =>
+            modelBuilder.Entity("MicroManagement.Persistence.EF.Entities.TimeSessionEntity", b =>
                 {
-                    b.Property<Guid>("ProjectsId")
-                        .HasColumnType("uuid");
+                    b.HasOne("MicroManagement.Persistence.EF.Entities.ProjectEntity", "Project")
+                        .WithMany("TimeSessions")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<Guid>("TimeSessionsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ProjectsId", "TimeSessionsId");
-
-                    b.HasIndex("TimeSessionsId");
-
-                    b.ToTable("ProjectEntityTimeSessionEntity");
+                    b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("ProjectEntityTimeSessionEntity", b =>
+            modelBuilder.Entity("MicroManagement.Persistence.EF.Entities.ProjectEntity", b =>
                 {
-                    b.HasOne("MicroManagement.Persistence.EF.Entities.ProjectEntity", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MicroManagement.Persistence.EF.Entities.TimeSessionEntity", null)
-                        .WithMany()
-                        .HasForeignKey("TimeSessionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("TimeSessions");
                 });
 #pragma warning restore 612, 618
         }

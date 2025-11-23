@@ -15,7 +15,7 @@ namespace MicroManagement.Persistence.SQLite.MigrationsApplier.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
 
             modelBuilder.Entity("MicroManagement.Persistence.EF.Entities.ProjectEntity", b =>
                 {
@@ -45,7 +45,10 @@ namespace MicroManagement.Persistence.SQLite.MigrationsApplier.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("EndDate")
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartTime")
@@ -56,37 +59,25 @@ namespace MicroManagement.Persistence.SQLite.MigrationsApplier.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProjectId");
+
                     b.ToTable("TimeSessionsTable");
                 });
 
-            modelBuilder.Entity("ProjectEntityTimeSessionEntity", b =>
+            modelBuilder.Entity("MicroManagement.Persistence.EF.Entities.TimeSessionEntity", b =>
                 {
-                    b.Property<Guid>("ProjectsId")
-                        .HasColumnType("TEXT");
+                    b.HasOne("MicroManagement.Persistence.EF.Entities.ProjectEntity", "Project")
+                        .WithMany("TimeSessions")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<Guid>("TimeSessionsId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ProjectsId", "TimeSessionsId");
-
-                    b.HasIndex("TimeSessionsId");
-
-                    b.ToTable("ProjectEntityTimeSessionEntity");
+                    b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("ProjectEntityTimeSessionEntity", b =>
+            modelBuilder.Entity("MicroManagement.Persistence.EF.Entities.ProjectEntity", b =>
                 {
-                    b.HasOne("MicroManagement.Persistence.EF.Entities.ProjectEntity", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MicroManagement.Persistence.EF.Entities.TimeSessionEntity", null)
-                        .WithMany()
-                        .HasForeignKey("TimeSessionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("TimeSessions");
                 });
 #pragma warning restore 612, 618
         }

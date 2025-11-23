@@ -1,6 +1,17 @@
 import { useEffect, useRef } from "react";
 import { HubConnection, HubConnectionBuilder, JsonHubProtocol } from "@microsoft/signalr";
-import { useAuth } from "../../Auth/AuthContext";
+import { useAuth } from "../Auth/AuthContext";
+
+// UserActivityEventType enum equivalent to C# enum
+type UserActivityEventType = "TimeSessionStarted" | "TimeSessionStopped";
+
+// UserActivityEvent type equivalent to C# record
+export type UserActivityEvent = {
+    userActivityEventType: UserActivityEventType;
+    userId: string;
+    eventData: { projectId: string, userId: string };
+};
+
 
 export const useWebSocket = (startProject: (projectId: string) => void, stopProjects: () => void) => {
     const { accessToken } = useAuth();
@@ -10,7 +21,7 @@ export const useWebSocket = (startProject: (projectId: string) => void, stopProj
         if (!accessToken) return;
 
         webSocketConnectionRef.current = new HubConnectionBuilder()
-            .withUrl(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/hub/timesessionshub`, {
+            .withUrl(`${import.meta.env.VITE_ACTIVITY_SERVICE_BASE_URL}/hub/timesessionshub`, {
                 accessTokenFactory: () => accessToken!,
             })
             .withAutomaticReconnect()
@@ -19,12 +30,17 @@ export const useWebSocket = (startProject: (projectId: string) => void, stopProj
 
         webSocketConnectionRef.current.start();
 
-        webSocketConnectionRef.current.on("TimeSessionStarted", (projectId: string) => {
-            startProject(projectId);
-        });
-
-        webSocketConnectionRef.current.on("TimeSessionsStopped", () => {
-            stopProjects();
+        webSocketConnectionRef.current.on("ReceiveEvent", (projectId: any) => {
+            switch (projectId.userActivityEventType) {
+                case "TimeSessionStarted":
+                    startProject(projectId.eventData.projectId);
+                    break;
+                case "TimeSessionStopped":
+                    stopProjects();
+                    break;
+                default:
+                    console.warn("Unknown event type received:", projectId.userActivityEventType);
+            }
         });
 
         webSocketConnectionRef.current.onclose((error) => {

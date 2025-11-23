@@ -16,6 +16,9 @@ using MicroManagement.Shared;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.HttpOverrides;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Logs;
 
 namespace MicroManagement.Auth.WebAPI;
 
@@ -34,6 +37,8 @@ public class Startup
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
+        AddOpenTelemetry(services);
+
         var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>()!;
 
         services.AddDatabaseContext<AuthenticationServiceDbContext>(dbSettings,
@@ -130,5 +135,38 @@ public class Startup
     {
         options.ClientId = Configuration["googleclient_id"]!;
         options.ClientSecret = Configuration["googleclient_secret"]!;
+    }
+
+    private void AddOpenTelemetry(IServiceCollection services)
+    {
+        if (Configuration["OTEL:JAEGER_URL"] == null)
+            return;
+
+        services.AddOpenTelemetry()
+            .WithTracing(tracerProviderBuilder =>
+            {
+                tracerProviderBuilder
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService(serviceName: "mmgmt-auth"))
+                    .AddAspNetCoreInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                    })
+                    .AddHttpClientInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                    })
+                    .AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
+                    })
+                    .AddConsoleExporter();
+            }).WithLogging(loggerOptions =>
+            {
+                loggerOptions.AddOtlpExporter(options =>
+                {
+                    options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
+                });
+            });
     }
 }

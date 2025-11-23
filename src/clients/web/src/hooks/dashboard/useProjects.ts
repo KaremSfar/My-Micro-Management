@@ -1,40 +1,53 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ProjectSessionDTO } from "../../DTOs/ProjectDto";
 import { useAuth } from "../../Auth/AuthContext";
 
 export const useProjects = () => {
     const { accessToken } = useAuth();
 
-    const [projects, setProjects] = useState<ProjectSessionDTO[]>([]);
-    const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
-
-    useEffect(() => {
-        const fetchProjects = async () => {
-            if (!accessToken || projects?.length)
-                return;
-
-            try {
-                const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`, {
-                    method: 'GET',
+    // Fetch projects using React Query
+    const {
+        data: projects = [],
+        isLoading,
+        isError,
+        error,
+        refetch,
+    } = useQuery({
+        queryKey: ["projects", accessToken],
+        queryFn: async () => {
+            const response = await fetch(
+                `${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`,
+                {
+                    method: "GET",
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${accessToken}`,
-                    }
-                });
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${accessToken}`,
+                    },
+                }
+            );
 
-                const data: ProjectSessionDTO[] = await response.json();
-                setProjects(data);
-
-                const runningProject = data.find(p => p.isRunning);
-                if (runningProject)
-                    setRunningProjectId(runningProject.id);
-            } catch (error) {
-                console.error('Error fetching projects:', error);
+            if (!response.ok) {
+                if (response.status === 401) {
+                    console.error("Unauthorized - token may have expired");
+                }
+                throw new Error(`Failed to fetch projects: ${response.status}`);
             }
-        };
 
-        fetchProjects();
-    }, [accessToken]);
+            return response.json() as Promise<ProjectSessionDTO[]>;
+        },
+        enabled: !!accessToken, // Only run query when accessToken is available
+        staleTime: 5 * 60 * 1000, // 5 minutes
+    });
 
-    return { projects, setProjects, runningProjectId, setRunningProjectId };
+    // Derive the running project ID from projects data
+    const runningProjectId = projects.find(p => p.isRunning)?.id ?? null;
+
+    return {
+        projects,
+        isLoading,
+        isError,
+        error,
+        runningProjectId,
+        refetch,
+    };
 };

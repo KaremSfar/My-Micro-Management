@@ -1,74 +1,96 @@
-> this readme is still a work in progress ;)
-# My Micro Management
-A small application for the time-tracking lovers.
+# My-Micro-Management
 
-## Summary
-My Micro management revolves around a simple objective: track events and time throughout the day.
+My-Micro-Management is a microservices-based productivity platform for time tracking, activity management, and analytics. It features a modern React web client and .NET backend services, orchestrated via Docker Compose and Nginx.
 
-Its core model is a *TimeSession*, a unit of work related to a *Project*.
+## Architecture Overview
 
-Projects are user-management entities, representing a 'context' where they might spend time.
+- **Frontend:** React + Vite + TypeScript web client (see `src/clients/web`)
+- **Backend Services:**
+	- **Auth Service:** Authentication, JWT, Google OAuth (`src/services/Auth`)
+		- Endpoints: `/Auth/register`, `/Auth/login`, `/Auth/logout`, `/Auth/refresh-token`, `/google-login`, `/google-callback`
+	- **Main Service:** Core business logic, time sessions, projects (`src/services/Main`)
+		- Endpoints: `/api/TimeSessions`, `/api/Projects`
+	- **Activity Service:** Activity/event management, SSE (`src/services/Activity`)
+		- Endpoint: `/events`
+- **Supporting Components:** Redis, RabbitMQ, PostgreSQL, Jaeger, Nginx
 
-The main use case of the application is the choosing of a *Project*, which triggers a timer for the length of the *TimeSession*
+## Quick Start
 
-![plot](/docs/In%20progress.png)
+1. **Clone the repository:**
+	 ```bash
+	 git clone https://github.com/KaremSfar/My-Micro-Management.git
+	 cd My-Micro-Management
+	 ```
 
-Switching projects restarts the timer and saves the TimeSession.
+2. **Build and start all services (development):**
+	 ```bash
+	 docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+	 ```
 
-![plot](/docs/switched%20to.png)
+3. **Access the web client:**
+	 - Open [http://localhost:8080](http://localhost:8080) in your browser (default Nginx port)
 
-## Getting Started
-### Prerequisites
-To run the project you would need:
+## Web Client (React)
 
+- Source: `src/clients/web`
+- Features: Authentication (email/password, Google OAuth), dashboard, analytics, project/activity management
+- Local development:
+	```bash
+	cd src/clients/web
+	npm install
+	npm run dev
+	```
 
-- **[Visual Studio 2022](https://visualstudio.microsoft.com/vs/community/)**, configured with *ASP.NET* and *Cross-Platform UI Application* Modules
-- **[NET 7](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)** installed
+## Backend Services
 
-> You can verify your .NET version with ```dotnet --version```
+- **Auth Service:** Handles user registration, login, JWT, Google OAuth
+- **Main Service:** Manages time sessions, projects, aggregates data
+- **Activity Service:** Streams user activities/events via SSE
 
-### Installation and Getting started
-The Repository contains three main applications
-- The MAUI Desktop app, the client
-- A Web API project dealing the authentication aspect of the application (users registering / login / roles management policies etc...)
-- Another Web API project for the TimeSessions and Projects management.
+## Technologies
 
-#### Running the MAUI App:
-No additional steps needed here, running it from Visual Studio directly.
+- React, Vite, TypeScript, Tailwind CSS
+- .NET (C#), Entity Framework
+- Redis, RabbitMQ, PostgreSQL
+- Nginx, Docker Compose, Jaeger
 
-#### Running the Authentication project
-To get started with the authentication project you will need to: 
-##### 1. Get the Database started: 
-- Create an empty ```C:\Repos\Temp\MyAuthDB-dev.db``` file, this will be our DB
-> Note this static file path will be removed in a later step and configured accordingly.
-- Open the solution in Visual Studio, and select the ```MicroManagement.Auth.Migrations.SQLite``` project as startup project.
-- Open the Nuget Package Manager console in Visual Studio and Select  ```MicroManagement.Auth.Migrations.SQLite``` as Default Project.
-- Run ```Update-Database```.
-The migrations should get applied and your database will get created successfully.
+## API Endpoints
 
-##### 2. Set the application's JWT secrets
-- Right click the ```MicroManagement.Auth.WebAPI``` project and select *Manage User Secrets*.
-- You will need to specify two secrets related to the JWT signing and validation: ```Jwt:AccessKey``` and the ```Jwt:RefreshKey``` for, respectively, the access tokens and refresh tokens. They need to be at least 128 bits secret keys. ([Key Generator](https://generate-random.org/encryption-key-generator?count=1&bytes=128&cipher=aes-256-cbc&string=&password=)) May help you for local use.
+### Auth Service
+- `POST /Auth/register` — Register user
+- `POST /Auth/login` — Login
+- `POST /Auth/logout` — Logout
+- `POST /Auth/refresh-token` — Refresh JWT
+- `GET /google-login` — Google OAuth login
+- `GET /google-callback` — Google OAuth callback
 
-##### 3. Set the Google Client Secrets
-- Right click the ```MicroManagement.Auth.WebAPI``` project and select *Manage User Secrets*.
-- You will need to specify two secrets related to the google social auth: ```google:client-id``` and the ```google:client-secret```. You will need to create a OAuth 2.0 Client with Type "Web Application".
+### Main Service
+- `GET /api/TimeSessions` — List time sessions
+- `POST /api/TimeSessions/start` — Start session
+- `POST /api/TimeSessions/stop` — Stop session
+- `GET /api/Projects` — List projects
+- `POST /api/Projects` — Add project
 
-##### 4. Run the application
-You should be able to run the application at this step, using Visual Studio or the command line ```dotnet run```.
+### Activity Service
+- `GET /events` — Server-Sent Events stream
 
-#### Running the Projects and TimeSession project
-##### 1. Create the DB
-- Create an empty ```C:\Repos\Temp\MyDb-dev-dev.db``` file, this will be our DB
-> Note this static file path will be removed in a later step and configured accordingly.
-- Open the solution in Visual Studio, and select the ```MicroManagement.Persistence.Migrations.SQLite``` project as startup project.
-- Open the Nuget Package Manager console in Visual Studio and Select  ```MicroManagement.Persistence.Migrations.SQLite``` as Default Project.
-- Run ```Update-Database```.
-The migrations should get applied and your database will get created successfully.
+## Documentation
 
-##### 2. Set the application's JWT secrets
-- Right click the ```MicroManagement.Service``` project and select *Manage User Secrets*.
-- You will need to specify the secret related to the JWT signing and validation: ```Jwt:AccessKey```. It needs to be **the same** as it was set in the ```MicroManagement.Auth.WebAPI``` project.
+- [ARCHITECTURE.md](ARCHITECTURE.md): Detailed architecture, technology stack, and service interactions
+- [src/clients/web/README.md](src/clients/web/README.md): Web client details
+- Each service folder contains its own README and API details
 
-##### 4. Run the application
-You should be able to run the application at this step, using Visual Studio or the command line ```dotnet run```.
+## Security & Best Practices
+
+- JWT authentication, OAuth2 (Google)
+- Role-based authorization
+- Environment variables for secrets
+- TLS via Nginx (recommended for production)
+
+## Contributing
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for development patterns, service templates, and extension guidelines.
+
+## License
+
+MIT

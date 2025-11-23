@@ -11,6 +11,7 @@ env:
   IMAGE_NAME_WEB: karemsfar/mmgmt-web
   IMAGE_NAME_AUTH: karemsfar/mmgmt-auth
   IMAGE_NAME_SERVICE: karemsfar/mmgmt-service
+  IMAGE_NAME_ACTIVITY: karemsfar/mmgmt-activity
 
 jobs:
   build-and-push:
@@ -33,8 +34,15 @@ jobs:
           MAIN_DB_CONNECTION: "main"
           AUTH_SERVICE_URL: ${{ vars.AUTH_SERVICE_URL }}
           MAIN_SERVICE_URL: ${{ vars.MAIN_SERVICE_URL }}
+          ACTIVITY_SERVICE_URL: ${{ vars.ACTIVITY_SERVICE_URL }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          OTEL_JAEGER_URL: ${{ env.OTEL_JAEGER_URL }}
+          REDIS__CONFIGURATION: ${{ secrets.REDIS__CONFIGURATION }}
+          RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
+          RABBITMQ_PASS: ${{ secrets.RABBITMQ_PASS }}
         run: source ./devops/update-files.sh
 
       - name: Log in to DockerHub
@@ -45,10 +53,11 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker compose -f docker-compose.dev.yml build
+        run: docker compose -f docker-compose.yml -f docker-compose.dev.yml build
 
       - name: Push Docker image
         run: |
           docker push ${{ env.IMAGE_NAME_WEB }}:latest
           docker push ${{ env.IMAGE_NAME_AUTH }}:latest
           docker push ${{ env.IMAGE_NAME_SERVICE }}:latest
+          docker push ${{ env.IMAGE_NAME_ACTIVITY}}:latest

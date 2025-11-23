@@ -26,10 +26,10 @@ namespace MicroManagement.Services
                            orderby timeSession.StartTime
                            select new
                            {
-                               SessionProject = allProjects[timeSession.ProjectIds.First()],
+                               SessionProject = allProjects[timeSession.ProjectId],
                                SessionStartTime = timeSession.StartTime,
-                               SessionEndTime = timeSession.EndDate,
-                               TimeSpent = timeSession.EndDate - timeSession.StartTime
+                               SessionEndTime = timeSession.EndTime,
+                               TimeSpent = timeSession.EndTime - timeSession.StartTime
                            };
 
             var stringBuilder = new StringBuilder("Start;End;Project;Elapsed" + Environment.NewLine);

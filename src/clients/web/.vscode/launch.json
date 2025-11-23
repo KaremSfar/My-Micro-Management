@@ -2,10 +2,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "chrome",
+      "type": "firefox",
       "request": "launch",
       "name": "Debug React App",
-      "url": "http://localhost:3000"
+      "url": "http://localhost:5173", 
+      "preLaunchTask": "vite:start"
     }
   ]
 }

@@ -1,8 +1,6 @@
 ﻿using MicroManagement.Persistence.Abstraction.Repositories;
 using MicroManagement.Persistence.EF.Configuration;
 using MicroManagement.Persistence.EF.Repositories;
-using MicroManagement.Service.WebAPI.Hubs;
-using MicroManagement.Service.WebAPI.Services;
 using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
@@ -14,6 +12,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using MassTransit;
+using MicroManagement.Service.WebAPI.Events;
 
 namespace MicroManagement.Service
 {
@@ -28,10 +31,10 @@ namespace MicroManagement.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
+            AddOpenTelemetry(services);
+
             // Add services to the container.
             services.AddControllers();
-
-            services.AddSignalR();
 
             services.AddAuthentication(options =>
             {
@@ -49,21 +52,6 @@ namespace MicroManagement.Service
                     ValidIssuer = Configuration["Jwt:Issuer"]!,
                     ValidAudience = Configuration["Jwt:Audience"]!,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:JwtAccessKey"]!))
-                };
-
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"];
-                        var path = context.HttpContext.Request.Path;
-
-                        // Set Access token for SignalR hubs
-                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hub/timesessionshub"))
-                            context.Token = accessToken;
-
-                        return Task.CompletedTask;
-                    }
                 };
             });
 
@@ -83,7 +71,7 @@ namespace MicroManagement.Service
 
             services.AddTransient<ITimeSessionsRepository, SqlTimeSessionsRepository>();
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
-            services.AddSingleton<IUserConnectionsProvider, UserConnectionsProvider>();
+            services.AddTransient<ITimeSessionEventsPublisher, TimeSessionEventsPublisher>();
 
             services.AddOptions<DatabaseSettings>()
                 .Bind(Configuration.GetSection(DatabaseSettings.SectionName));
@@ -97,6 +85,22 @@ namespace MicroManagement.Service
                 options.AddPolicy("AllowLocalReact", p => p.SetIsOriginAllowed(p => true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             });
 
+            // MassTransit + RabbitMQ configuration
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(Configuration["RabbitMq:Host"], "/", h =>
+                    {
+                        h.Username(Configuration["RabbitMq:Username"]);
+                        h.Password(Configuration["RabbitMq:Password"]);
+                    });
+                    cfg.ConfigureEndpoints(context);
+                });
+
+                x.AddConsumer<UserInactivityConsumer>();
+            });
+
             void SetupMigrationAssembly(DbSetupOptions options)
             {
 
@@ -106,6 +110,7 @@ namespace MicroManagement.Service
                     "sqlite" => typeof(Persistence.SQLite.MigrationsApplier.Migrations.InitialCreate).Assembly.GetName().Name!,
                     _ => throw new ArgumentException("Choose Database type in configuration")
                 };
+                Console.WriteLine($"Using migrations assembly: {assembly}");
 
                 options.MigrationsAssembly(assembly);
             }
@@ -131,8 +136,40 @@ namespace MicroManagement.Service
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<TimeSessionsHub>("/hub/timesessionshub");
             });
+        }
+
+        private void AddOpenTelemetry(IServiceCollection services)
+        {
+            if (Configuration["OTEL:JAEGER_URL"] == null)
+                return;
+
+            services.AddOpenTelemetry()
+                .WithTracing(tracerProviderBuilder =>
+                {
+                    tracerProviderBuilder
+                        .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                            .AddService(serviceName: "mmgmt-service"))
+                        .AddAspNetCoreInstrumentation(options =>
+                        {
+                            options.RecordException = true;
+                        })
+                        .AddHttpClientInstrumentation(options =>
+                        {
+                            options.RecordException = true;
+                        })
+                        .AddOtlpExporter(options =>
+                        {
+                            options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
+                        })
+                        .AddConsoleExporter();
+                }).WithLogging(loggerOptions =>
+                {
+                    loggerOptions.AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
+                    });
+                });
         }
     }
 }
