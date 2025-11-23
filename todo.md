@@ -1,18 +1,17 @@
-## NEXT
+- [ ] Update Open Telemetry Stuff - Use Collector and enrich
 - [ ] Sync Pomodoro Across devices as well
-- [ ] Turn into Progressive web app to install
-- [ ] Add Context Concept
-- [ ] Make clients super dumb, only listen to ws and call http
 - [ ] Update Auth Service - use ready methods 
-- [x] Update Time Sessions feature 
-- [ ] Use Remote Caches to avoid building everything everytime
-- [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
-    - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
+- [ ] Turn into Progressive web app to install
 - [ ] Add Migration creator automation
+- [ ] Clean up env variables mess and only keep needed ones in github vs needed ones in VPS (find a secrets manager)
+- [ ] Use Remote Caches to avoid building everything everytime
 - [ ] Add Unit Tests :)
 - [ ] Swap datetimes with DateTimeOffsets
-- [ ] Update Open Telemetry Stuff - Use Collector and enrich
-- [ ] Clean up env variables mess and only keep needed ones in github vs needed ones in VPS (find a secrets manager)
+
+## NEXT
+- [ ] Add Context Concept
+- [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
+    - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
 - [ ] Redo Readme
 
 ## Bugs
@@ -68,5 +67,6 @@
 
 - [x] Go back to using Websockets lol
 - [x] Switch domain names
-
+- [x] Make clients super dumb, only listen to ws and call http
+- [x] Update Time Sessions feature 
 ----
