@@ -7,6 +7,7 @@
 - [ ] Use Remote Caches to avoid building everything everytime
 - [ ] Add Unit Tests :)
 - [ ] Swap datetimes with DateTimeOffsets
+- [x] Change Web site title and icon
 
 ## NEXT
 - [ ] Add Context Concept
