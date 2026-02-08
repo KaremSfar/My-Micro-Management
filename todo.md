@@ -18,6 +18,8 @@
 ## Bugs
 - [ ] Fix 401 token staleness
 - [ ] Console errors Websockets
+- [ ] Fix Time Sync across devices (minor)
+- [ ] Resiliency++
 
 ## Big Features / Epics
 - [x] Basics: Auth, SSO, Deploying 
