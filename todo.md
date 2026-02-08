@@ -8,6 +8,7 @@
 - [ ] Add Unit Tests :)
 - [ ] Swap datetimes with DateTimeOffsets
 - [x] Change Web site title and icon
+- [ ] Save env variables somewhere 
 
 ## NEXT
 - [ ] Add Context Concept
@@ -16,9 +17,11 @@
 - [ ] Redo Readme
 
 ## Bugs
+- [x] Why arent websockets WORKIIING ??
+    => Combination of wrong header upgrade + forgot to add .UseWebSockets in Startup
 - [ ] Fix 401 token staleness
 - [ ] Console errors Websockets
-- [ ] Fix Time Sync across devices (minor)
+- [ ] Fix Time Sync across devices (minor milliseconds)
 - [ ] Resiliency++
 
 ## Big Features / Epics

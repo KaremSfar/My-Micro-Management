@@ -96,6 +96,8 @@ public class Startup
     {
         app.UseCors("AllowLocalReact");
 
+        app.UseWebSockets();
+
         // Configure the HTTP request pipeline.
         if (env.IsDevelopment())
         {
