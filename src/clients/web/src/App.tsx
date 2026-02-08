@@ -10,7 +10,18 @@ import GoogleAuthCallback from './Auth/GoogleAuthCallback';
 import { ProjectProvider } from './context/ProjectContext';
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 to-orange-400">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white mx-auto mb-4"></div>
+          <p className="text-white font-medium text-lg">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-orange-300 to-orange-400">
