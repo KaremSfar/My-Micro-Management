@@ -1,26 +1,32 @@
-- [ ] Update Open Telemetry Stuff - Use Collector and enrich
-- [ ] Sync Pomodoro Across devices as well
-- [ ] Update Auth Service - use ready methods 
-- [ ] Turn into Progressive web app to install
-- [ ] Add Migration creator automation
-- [ ] Clean up env variables mess and only keep needed ones in github vs needed ones in VPS (find a secrets manager)
-- [ ] Use Remote Caches to avoid building everything everytime
-- [ ] Add Unit Tests :)
 - [ ] Swap datetimes with DateTimeOffsets
 - [x] Change Web site title and icon
-- [ ] Save env variables somewhere 
+- [x] Fix deployment on new VPS
+
+
+## Developer Experience
+- [ ] Extract .env files somewhere, maybe self hosted
+- [ ] Unify all URLs for services
+- [ ] Try JetBrains again :( VsCode has some friction
+- [ ] Get rid of the docker compose files found everywhere - add a prelaunch task for the Services
+- [ ] Telemetry should be on even for local devving
+- [ ] Add Unit Tests :)
+- [ ] Update Open Telemetry Stuff - Use Collector and enrich
+- [ ] Add Migration creator automation
+- [ ] Use Remote Caches to avoid building everything everytime
 
 ## NEXT
 - [ ] Add Context Concept
+- [ ] Sync Pomodoro Across devices as well
 - [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
     - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
 - [ ] Redo Readme
+- [ ] Turn into Progressive web app to install
 
 ## Bugs
 - [x] Why arent websockets WORKIIING ??
     => Combination of wrong header upgrade + forgot to add .UseWebSockets in Startup
 - [ ] Fix 401 token staleness
-- [ ] Console errors Websockets
+- [x] Console errors Websockets
 - [ ] Fix Time Sync across devices (minor milliseconds)
 - [ ] Resiliency++
 
