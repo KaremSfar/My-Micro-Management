@@ -17,18 +17,16 @@
 ## NEXT
 - [ ] Add Context Concept
 - [ ] Sync Pomodoro Across devices as well
-- [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
-    - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
 - [ ] Redo Readme
 - [ ] Turn into Progressive web app to install
 
 ## Bugs
 - [x] Why arent websockets WORKIIING ??
     => Combination of wrong header upgrade + forgot to add .UseWebSockets in Startup
-- [ ] Fix 401 token staleness
+- [x] Fix 401 token staleness (Page reloads on token refresh)
 - [x] Console errors Websockets
 - [ ] Fix Time Sync across devices (minor milliseconds)
-- [ ] Resiliency++
+- [ ] Resiliency++ (The Inactivity service)
 
 ## Big Features / Epics
 - [x] Basics: Auth, SSO, Deploying 
@@ -38,6 +36,8 @@
 - [ ] CLI app
 - [ ] Screenshots cli service, connect with Agent 
 - [ ] Outside: Create an n8n agent for Work (Scrum ceremonies, Planner ...) And integrate with mmgmt
+- [ ] On Pomodoro Paused projects, actually pause, do not restart the whole project !
+    - [ ] Start by implementing a Pause feature on the Projects card (Service changes :( ) 
 
 
 ## History

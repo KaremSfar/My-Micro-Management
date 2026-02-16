@@ -19,9 +19,7 @@ namespace MicroManagement.Service.WebAPI.Events
         {
             var message = context.Message;
             if (message == null || message.UserId == Guid.Empty)
-            {
-                return; // Ignore invalid messages
-            }
+                return; 
 
             await _timeSessionsService.StopTimeSession(message.UserId);
 

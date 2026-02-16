@@ -50,8 +50,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setAccessToken(data.accessToken);
     }
 
-    const refreshAuthToken = async () => {
-        setIsLoading(true);
+    const refreshAuthToken = async (showLoading = false) => {
+        if (showLoading) setIsLoading(true);
         try {
             const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/refresh-token`, {
                 method: 'POST',
@@ -65,13 +65,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const data = await response.json();
             setAccessToken(data.accessToken); // Update the access token
 
-            // Optionally, handle successful refresh (e.g., update UI or state)
-
         } catch (error) {
             // Handle absence or invalidity of refresh token here
             // For example, redirect to login page or show a login prompt
         } finally {
-            setIsLoading(false);
+            if (showLoading) setIsLoading(false);
         }
     };
 
@@ -113,7 +111,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Attempt to refresh the token on app startup
     useEffect(() => {
-        refreshAuthToken();
+        refreshAuthToken(true);
     }, []);
 
     return (
