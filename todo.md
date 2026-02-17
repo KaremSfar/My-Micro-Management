@@ -5,8 +5,6 @@
 
 ## Developer Experience
 - [ ] Extract .env files somewhere, maybe self hosted
-- [ ] Unify all URLs for services
-- [ ] Try JetBrains again :( VsCode has some friction
 - [ ] Get rid of the docker compose files found everywhere - add a prelaunch task for the Services
 - [ ] Telemetry should be on even for local devving
 - [ ] Add Unit Tests :)
