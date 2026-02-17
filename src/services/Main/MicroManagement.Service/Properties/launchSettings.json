@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "LocalDev": {
+    "Local": {
       "commandName": "Project",
       "launchUrl": "swagger",
       "environmentVariables": {

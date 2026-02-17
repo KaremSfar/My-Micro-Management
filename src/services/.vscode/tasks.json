@@ -1,0 +1,39 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Third Party Services Up",
+			"type": "docker-compose",
+			"dockerCompose": {
+                "up": {
+                    "detached": true,
+                    "build": false // Set to true if you want to rebuild every time
+                },
+                "files": [
+                    "${workspaceFolder}/docker-compose.thirdparty.yml"
+                ]
+            },
+			"presentation": {
+				"reveal": "silent",
+				"close": true
+			}
+		},
+		{
+			"label": "Third Party Services Down",
+			"type": "docker-compose",
+			"dockerCompose": {
+				"down": {
+					"removeOrphans": true,
+					"volumes": true
+				},
+				"files": [
+					"${workspaceFolder}/docker-compose.thirdparty.yml"
+				]
+			},
+			"presentation": {
+				"reveal": "silent",
+				"close": true
+			}
+		}
+	]
+}
