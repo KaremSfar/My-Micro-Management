@@ -11,9 +11,6 @@
             "projectPath": "${workspaceFolder}/Activity/MicroManagement.Activity.WebAPI/MicroManagement.Activity.WebAPI.csproj",
             "launchSettingsProfile": "Local",
             "postDebugTask": "Third Party Services Down",
-            "presentation": {
-                "hidden": true
-            }
         },
         {
             "name": "C#: MicroManagement.Service.WebAPI Debug",
@@ -22,9 +19,6 @@
             "projectPath": "${workspaceFolder}/Main/MicroManagement.Service/MicroManagement.Service.WebAPI.csproj",
             "launchSettingsProfile": "Local",
             "postDebugTask": "Third Party Services Down",
-            "presentation": {
-                "hidden": true
-            }
         },
         {
             "name": "C#: MicroManagement.Auth.WebAPI Debug",
@@ -33,9 +27,6 @@
             "projectPath": "${workspaceFolder}/Auth/MicroManagement.Auth.WebAPI/MicroManagement.Auth.WebAPI.csproj",
             "launchSettingsProfile": "Local",
             "postDebugTask": "Third Party Services Down",
-            "presentation": {
-                "hidden": true,
-            }
         },
     ],
     "compounds": [
@@ -47,7 +38,6 @@
                 "C#: MicroManagement.Auth.WebAPI Debug"
             ],
             "preLaunchTask": "Third Party Services Up",
-            "postDebugTask": "Third Party Services Down",
             "stopAll": true,
         }
     ]
