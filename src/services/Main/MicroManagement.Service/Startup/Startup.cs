@@ -141,7 +141,7 @@ namespace MicroManagement.Service
 
         private void AddOpenTelemetry(IServiceCollection services)
         {
-            if (Configuration["OTEL:JAEGER_URL"] == null)
+            if (Configuration["OTEL:ENDPOINT"] == null)
                 return;
 
             services.AddOpenTelemetry()
@@ -160,14 +160,13 @@ namespace MicroManagement.Service
                         })
                         .AddOtlpExporter(options =>
                         {
-                            options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
-                        })
-                        .AddConsoleExporter();
+                            options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
+                        });
                 }).WithLogging(loggerOptions =>
                 {
                     loggerOptions.AddOtlpExporter(options =>
                     {
-                        options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
+                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
                     });
                 });
         }

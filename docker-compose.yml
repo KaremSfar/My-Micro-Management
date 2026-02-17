@@ -25,6 +25,8 @@ services:
     image: jaegertracing/all-in-one:latest
     ports:
       - "16686:16686" # Jaeger UI
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
     environment:
       - COLLECTOR_OTLP_ENABLED=true
 
@@ -37,7 +39,7 @@ services:
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
       - googleclient_id=${googleclient_id}
       - googleclient_secret=${googleclient_secret}
-      - OTEL__JAEGER_URL=${OTEL__JAEGER_URL}
+      - OTEL__ENDPOINT=${OTEL__ENDPOINT}
     depends_on:
       - db
       - jaeger
@@ -49,7 +51,7 @@ services:
       - Database__ConnectionString=${Main_Database__ConnectionString}
       - Jwt__JwtAccessKey=${Jwt__JwtAccessKey}
       - Jwt__JwtRefreshKey=${Jwt__JwtRefreshKey}
-      - OTEL__JAEGER_URL=${OTEL__JAEGER_URL}
+      - OTEL__ENDPOINT=${OTEL__ENDPOINT}
       - RabbitMq__Host=rabbitmq
       - RabbitMq__UserName=${RABBITMQ_USER}
       - RabbitMq__Password=${RABBITMQ_PASS}
@@ -70,6 +72,7 @@ services:
       - RabbitMq__UserName=${RABBITMQ_USER}
       - RabbitMq__Password=${RABBITMQ_PASS}
       - Redis__Configuration=${REDIS__CONFIGURATION}
+      - OTEL__ENDPOINT=${OTEL__ENDPOINT}
     depends_on:
       redis:
         condition: service_started

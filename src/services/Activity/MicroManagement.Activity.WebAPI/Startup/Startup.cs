@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System.Text;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Logs;
 
 namespace MicroManagement.Activity.WebAPI;
 
@@ -22,6 +25,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        AddOpenTelemetry(services);
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -121,5 +125,37 @@ public class Startup
             sc.Schedule<UserInactivityMonitor>()
                 .EveryFiveMinutes();
         });
+    }
+
+    private void AddOpenTelemetry(IServiceCollection services)
+    {
+        if (Configuration["OTEL:ENDPOINT"] == null)
+            return;
+
+        services.AddOpenTelemetry()
+            .WithTracing(tracerProviderBuilder =>
+            {
+                tracerProviderBuilder
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService(serviceName: "mmgmt-activity"))
+                    .AddAspNetCoreInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                    })
+                    .AddHttpClientInstrumentation(options =>
+                    {
+                        options.RecordException = true;
+                    })
+                    .AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
+                    });
+            }).WithLogging(loggerOptions =>
+            {
+                loggerOptions.AddOtlpExporter(options =>
+                {
+                    options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
+                });
+            });
     }
 }
