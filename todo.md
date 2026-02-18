@@ -6,9 +6,10 @@
 ## Developer Experience
 - [ ] Extract .env files somewhere, maybe self hosted
 - [ ] Get rid of the docker compose files found everywhere - add a prelaunch task for the Services
-- [ ] Telemetry should be on even for local devving
+- [x] Telemetry should be on even for local devving
 - [ ] Add Unit Tests :)
 - [ ] Update Open Telemetry Stuff - Use Collector and enrich
+    - [x] Try out signoz and consider migrating (or gragana stack)
 - [ ] Add Migration creator automation
 - [ ] Use Remote Caches to avoid building everything everytime
 
@@ -29,7 +30,7 @@
 ## Big Features / Epics
 - [x] Basics: Auth, SSO, Deploying 
 - [x] Time sessions and Projects creating etc..
-- [ ] Add mail stuff (for Auth endpoints)
+- [ ] Add mail stuff (for Auth endpoints) - if using .NET baked in
 - [ ] Context Stuff
 - [ ] CLI app
 - [ ] Screenshots cli service, connect with Agent 

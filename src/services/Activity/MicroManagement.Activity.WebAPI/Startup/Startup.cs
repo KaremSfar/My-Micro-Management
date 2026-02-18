@@ -11,6 +11,7 @@ using System.Text;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Logs;
+using MassTransit.Logging;
 
 namespace MicroManagement.Activity.WebAPI;
 
@@ -146,6 +147,7 @@ public class Startup
                     {
                         options.RecordException = true;
                     })
+                    .AddSource(DiagnosticHeaders.DefaultListenerName)   // RabbitMQ publish/consume spans via MassTransit
                     .AddOtlpExporter(options =>
                     {
                         options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
@@ -153,7 +155,7 @@ public class Startup
             }).WithLogging(loggerOptions =>
             {
                 loggerOptions
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-auth"))
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-activity"))
                     .AddOtlpExporter(options =>
                     {
                         options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);

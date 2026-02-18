@@ -17,6 +17,9 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using MassTransit;
 using MicroManagement.Service.WebAPI.Events;
+using MassTransit.Logging;
+using OpenTelemetry.Metrics;
+using MassTransit.Monitoring;
 
 namespace MicroManagement.Service
 {
@@ -148,8 +151,8 @@ namespace MicroManagement.Service
                 .WithTracing(tracerProviderBuilder =>
                 {
                     tracerProviderBuilder
-                        .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                            .AddService(serviceName: "mmgmt-service"))
+                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-service"))
+                        .AddSource(DiagnosticHeaders.DefaultListenerName)   // RabbitMQ publish/consume spans via MassTransit
                         .AddAspNetCoreInstrumentation(options =>
                         {
                             options.RecordException = true;
@@ -158,6 +161,7 @@ namespace MicroManagement.Service
                         {
                             options.RecordException = true;
                         })
+                        .AddSource("MassTransit")   // RabbitMQ publish/consume spans via MassTransit
                         .AddOtlpExporter(options =>
                         {
                             options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
@@ -165,11 +169,19 @@ namespace MicroManagement.Service
                 }).WithLogging(loggerOptions =>
                 {
                     loggerOptions
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-auth"))
-                    .AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
-                    });
+                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-service"))
+                        .AddOtlpExporter(options =>
+                        {
+                            options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
+                        });
+                }).WithMetrics(metricProviderBuilder => 
+                {
+                    metricProviderBuilder.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-service"))
+                        .AddMeter(InstrumentationOptions.MeterName) 
+                        .AddOtlpExporter(options =>
+                        {
+                            options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
+                        });
                 });
         }
     }

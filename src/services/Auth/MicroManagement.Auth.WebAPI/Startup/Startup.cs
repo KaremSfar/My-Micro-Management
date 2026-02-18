@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
 
 namespace MicroManagement.Auth.WebAPI;
 
@@ -158,7 +159,7 @@ public class Startup
                     })
                     .AddOtlpExporter(options =>
                     {
-                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
+                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]!);
                     });
             })
             .WithLogging(loggerOptions =>
@@ -167,7 +168,18 @@ public class Startup
                     .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-auth"))
                     .AddOtlpExporter(options =>
                     {
-                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
+                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]!);
+                    });
+            }).WithMetrics(metricProviderBuilder =>
+            {
+                metricProviderBuilder
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService(serviceName: "mmgmt-auth"))
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]!);
                     });
             });
     }

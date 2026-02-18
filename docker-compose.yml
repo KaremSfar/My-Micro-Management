@@ -21,14 +21,14 @@ services:
     restart: always
     command: redis-server --appendonly yes
 
-  jaeger:
-    image: jaegertracing/all-in-one:latest
+  otel-lgtm:
+    container_name: otel-lgtm-mmgmt
+    image: grafana/otel-lgtm:latest
     ports:
-      - "16686:16686" # Jaeger UI
+      - "3000:3000"   # Grafana UI
       - "4317:4317"   # OTLP gRPC
       - "4318:4318"   # OTLP HTTP
-    environment:
-      - COLLECTOR_OTLP_ENABLED=true
+
 
   auth:
     image: karemsfar/mmgmt-auth:latest
@@ -42,7 +42,7 @@ services:
       - OTEL__ENDPOINT=${OTEL__ENDPOINT}
     depends_on:
       - db
-      - jaeger
+      - otel-lgtm
 
   service:
     image: karemsfar/mmgmt-service:latest
@@ -58,7 +58,7 @@ services:
     depends_on:
       db:
         condition: service_started
-      jaeger:
+      otel-lgtm:
         condition: service_started
       rabbitmq:
         condition: service_healthy
