@@ -160,12 +160,15 @@ public class Startup
                     {
                         options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
                     });
-            }).WithLogging(loggerOptions =>
+            })
+            .WithLogging(loggerOptions =>
             {
-                loggerOptions.AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
-                });
+                loggerOptions
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-auth"))
+                    .AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
+                    });
             });
     }
 }

@@ -164,7 +164,9 @@ namespace MicroManagement.Service
                         });
                 }).WithLogging(loggerOptions =>
                 {
-                    loggerOptions.AddOtlpExporter(options =>
+                    loggerOptions
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-auth"))
+                    .AddOtlpExporter(options =>
                     {
                         options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
                     });

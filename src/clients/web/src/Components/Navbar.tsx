@@ -28,7 +28,7 @@ const Navbar = () => {
             </div>
 
             {/* Right Island - Analytics & Avatar */}
-            <div className="flex items-center border-2 border-slate-200 rounded-xl bg-white shadow-sm overflow-hidden">
+            <div className="flex items-center border-2 border-slate-200 rounded-xl bg-white shadow-sm">
                 <NavLink 
                     to="/analytics" 
                     className={({ isActive }) => 
