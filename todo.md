@@ -8,11 +8,12 @@
 - [ ] Get rid of the docker compose files found everywhere - add a prelaunch task for the Services
 - [x] Telemetry should be on even for local devving
 - [ ] Add Unit Tests :)
-- [ ] Update Open Telemetry Stuff - Use Collector and enrich
-    - [x] Try out signoz and consider migrating (or gragana stack)
+- [x] Update Open Telemetry Stuff - Use Collector and enrich
+    - [x] Try out signoz and consider migrating (or grafana stack)
 - [ ] Add Migration creator automation
 - [ ] Use Remote Caches to avoid building everything everytime
-
+- [ ] Clean up projects - get rid of old migration stuff and empty projects
+- [ ] Maybe find a way in vscode to restart one specific serivce (dlel)
 ## NEXT
 - [ ] Add Context Concept
 - [ ] Sync Pomodoro Across devices as well
@@ -30,6 +31,7 @@
 ## Big Features / Epics
 - [x] Basics: Auth, SSO, Deploying 
 - [x] Time sessions and Projects creating etc..
+- [ ] Sync Pomodoro Across devices as well
 - [ ] Add mail stuff (for Auth endpoints) - if using .NET baked in
 - [ ] Context Stuff
 - [ ] CLI app

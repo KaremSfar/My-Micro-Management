@@ -9,10 +9,12 @@ namespace MicroManagement.Shared;
 
 public static class OpenTelemetryInitializationExtensions
 {
-    public static void AddOpenTelemetry(this IServiceCollection services, string serviceName, string otelEndpoint)
+    public static IServiceCollection AddOpenTelemetry(this IServiceCollection services,
+        string serviceName,
+        string otelEndpoint)
     {
         if (string.IsNullOrWhiteSpace(otelEndpoint))
-            return;
+            return services;
 
         var resourceBuilder = ResourceBuilder.CreateDefault()
             .AddService(serviceName: serviceName);
@@ -43,5 +45,7 @@ public static class OpenTelemetryInitializationExtensions
                 metricProviderBuilder.SetResourceBuilder(resourceBuilder)
                     .AddOtlpExporter(ConfigureOtlpExporter);
             });
+
+        return services;
     }
 }

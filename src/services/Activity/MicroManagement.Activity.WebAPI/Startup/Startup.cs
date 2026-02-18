@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System.Text;
 using MicroManagement.Shared;
+using MassTransit.Logging;
+using OpenTelemetry.Trace;
 
 
 namespace MicroManagement.Activity.WebAPI;
@@ -23,7 +25,12 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddOpenTelemetry("mmgmt-activity", Configuration["OTEL:ENDPOINT"]);
+        services.AddOpenTelemetry("mmgmt-activity", Configuration["OTEL:ENDPOINT"])
+            .ConfigureOpenTelemetryTracerProvider(tracerProviderBuilder =>
+            {
+                tracerProviderBuilder.AddSource(DiagnosticHeaders.DefaultListenerName);
+            });
+
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();

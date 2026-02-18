@@ -34,7 +34,11 @@ namespace MicroManagement.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOpenTelemetry("mmgmt-service", Configuration["OTEL:ENDPOINT"]);
+            services.AddOpenTelemetry("mmgmt-service", Configuration["OTEL:ENDPOINT"])
+                .ConfigureOpenTelemetryTracerProvider(tracerProviderBuilder =>
+                {
+                    tracerProviderBuilder.AddSource(DiagnosticHeaders.DefaultListenerName);
+                });
 
             // Add services to the container.
             services.AddControllers();
