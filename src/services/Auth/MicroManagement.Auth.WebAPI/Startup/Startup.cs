@@ -38,7 +38,7 @@ public class Startup
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
-        AddOpenTelemetry(services);
+        services.AddOpenTelemetry("mmgmt-auth", Configuration["OTEL:ENDPOINT"]);
 
         var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>()!;
 
@@ -138,49 +138,4 @@ public class Startup
         options.ClientSecret = Configuration["googleclient_secret"]!;
     }
 
-    private void AddOpenTelemetry(IServiceCollection services)
-    {
-        if (Configuration["OTEL:ENDPOINT"] == null)
-            return;
-
-        services.AddOpenTelemetry()
-            .WithTracing(tracerProviderBuilder =>
-            {
-                tracerProviderBuilder
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                        .AddService(serviceName: "mmgmt-auth"))
-                    .AddAspNetCoreInstrumentation(options =>
-                    {
-                        options.RecordException = true;
-                    })
-                    .AddHttpClientInstrumentation(options =>
-                    {
-                        options.RecordException = true;
-                    })
-                    .AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]!);
-                    });
-            })
-            .WithLogging(loggerOptions =>
-            {
-                loggerOptions
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-auth"))
-                    .AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]!);
-                    });
-            }).WithMetrics(metricProviderBuilder =>
-            {
-                metricProviderBuilder
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                        .AddService(serviceName: "mmgmt-auth"))
-                    .AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]!);
-                    });
-            });
-    }
 }

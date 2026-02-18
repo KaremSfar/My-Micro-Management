@@ -4,14 +4,11 @@ using MicroManagement.Activity.WebAPI.Events;
 using MicroManagement.Activity.WebAPI.Hubs;
 using MicroManagement.Activity.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System.Text;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using OpenTelemetry.Logs;
-using MassTransit.Logging;
+using MicroManagement.Shared;
+
 
 namespace MicroManagement.Activity.WebAPI;
 
@@ -26,7 +23,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        AddOpenTelemetry(services);
+        services.AddOpenTelemetry("mmgmt-activity", Configuration["OTEL:ENDPOINT"]);
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -126,40 +123,5 @@ public class Startup
             sc.Schedule<UserInactivityMonitor>()
                 .EveryFiveMinutes();
         });
-    }
-
-    private void AddOpenTelemetry(IServiceCollection services)
-    {
-        if (Configuration["OTEL:ENDPOINT"] == null)
-            return;
-
-        services.AddOpenTelemetry()
-            .WithTracing(tracerProviderBuilder =>
-            {
-                tracerProviderBuilder
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                        .AddService(serviceName: "mmgmt-activity"))
-                    .AddAspNetCoreInstrumentation(options =>
-                    {
-                        options.RecordException = true;
-                    })
-                    .AddHttpClientInstrumentation(options =>
-                    {
-                        options.RecordException = true;
-                    })
-                    .AddSource(DiagnosticHeaders.DefaultListenerName)   // RabbitMQ publish/consume spans via MassTransit
-                    .AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
-                    });
-            }).WithLogging(loggerOptions =>
-            {
-                loggerOptions
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: "mmgmt-activity"))
-                    .AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri(Configuration["OTEL:ENDPOINT"]);
-                    });
-            });
     }
 }
