@@ -35,14 +35,18 @@ public static class OpenTelemetryInitializationExtensions
                         options.RecordException = true;
                     })
                     .AddOtlpExporter(ConfigureOtlpExporter);
-            }).WithLogging(loggerOptions =>
+            })
+            .WithLogging(loggerOptions =>
             {
                 loggerOptions
                     .SetResourceBuilder(resourceBuilder)
                     .AddOtlpExporter(ConfigureOtlpExporter);
-            }).WithMetrics(metricProviderBuilder =>
+            })
+            .WithMetrics(metricProviderBuilder =>
             {
                 metricProviderBuilder.SetResourceBuilder(resourceBuilder)
+                    .AddHttpClientInstrumentation()
+                    .AddAspNetCoreInstrumentation()
                     .AddOtlpExporter(ConfigureOtlpExporter);
             });
 
