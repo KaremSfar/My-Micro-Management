@@ -24,11 +24,16 @@ services:
   otel-lgtm:
     container_name: otel-lgtm-mmgmt
     image: grafana/otel-lgtm:latest
-    ports:
-      - "3000:3000"   # Grafana UI
-      - "4317:4317"   # OTLP gRPC
-      - "4318:4318"   # OTLP HTTP
-
+    environment:
+      - GF_SECURITY_ADMIN_USER=todokarem
+      - GF_SECURITY_ADMIN_PASSWORD=todokarem
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/observability/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    # ports:
+    #   - "3000:3000"
+    #   - "4317"
+    #   - "4318"
 
   auth:
     image: karemsfar/mmgmt-auth:latest
@@ -92,6 +97,7 @@ services:
       - auth
       - service
       - web
+      - otel-lgtm
 
   rabbitmq:
     image: rabbitmq:3-management
