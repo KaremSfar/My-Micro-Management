@@ -4,8 +4,9 @@
 
 
 ## Developer Experience
-- [ ] Extract .env files somewhere, maybe self hosted
-- [ ] Get rid of the docker compose files found everywhere - add a prelaunch task for the Services
+- [x] Extract .env files somewhere, maybe self hosted
+    => Infisical
+- [x] Get rid of the docker compose files found everywhere - add a prelaunch task for the Services
 - [x] Telemetry should be on even for local devving
 - [ ] Add Unit Tests :)
 - [x] Update Open Telemetry Stuff - Use Collector and enrich

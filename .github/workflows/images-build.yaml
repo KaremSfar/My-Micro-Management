@@ -21,15 +21,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Make script executable
-        run: chmod +x ./devops/update-files.sh
-
-      - name: Run update-files.sh
-        env:
-          AUTH_SERVICE_URL: ${{ vars.AUTH_SERVICE_URL }}
-          MAIN_SERVICE_URL: ${{ vars.MAIN_SERVICE_URL }}
-          ACTIVITY_SERVICE_URL: ${{ vars.ACTIVITY_SERVICE_URL }}
-        run: source ./devops/update-files.sh
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to DockerHub
         uses: docker/login-action@v3
@@ -38,12 +31,46 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: docker compose -f docker-compose.yml -f docker-compose.dev.yml build
+      - name: Build and push auth
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src/services
+          file: ./src/services/Auth/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME_AUTH }}:latest
+          cache-from: type=gha,scope=auth
+          cache-to: type=gha,mode=max,scope=auth
 
-      - name: Push Docker image
-        run: |
-          docker push ${{ env.IMAGE_NAME_WEB }}:latest
-          docker push ${{ env.IMAGE_NAME_AUTH }}:latest
-          docker push ${{ env.IMAGE_NAME_SERVICE }}:latest
-          docker push ${{ env.IMAGE_NAME_ACTIVITY}}:latest
+      - name: Build and push service
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src/services
+          file: ./src/services/Main/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME_SERVICE }}:latest
+          cache-from: type=gha,scope=service
+          cache-to: type=gha,mode=max,scope=service
+
+      - name: Build and push activity
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src/services
+          file: ./src/services/Activity/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME_ACTIVITY }}:latest
+          cache-from: type=gha,scope=activity
+          cache-to: type=gha,mode=max,scope=activity
+
+      - name: Build and push web
+        uses: docker/build-push-action@v6
+        with:
+          context: ./src/clients/web
+          file: ./src/clients/web/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME_WEB }}:latest
+          build-args: |
+            VITE_AUTH_SERVICE_BASE_URL=${{ vars.AUTH_SERVICE_URL }}
+            VITE_MAIN_SERVICE_BASE_URL=${{ vars.MAIN_SERVICE_URL }}
+            VITE_ACTIVITY_SERVICE_BASE_URL=${{ vars.ACTIVITY_SERVICE_URL }}
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
