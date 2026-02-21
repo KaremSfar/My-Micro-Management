@@ -30,6 +30,8 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=false
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/observability/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    volumes:
+      - otel_lgtm_data:/data
     # ports:
     #   - "3000:3000"
     #   - "4317"
@@ -119,3 +121,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  otel_lgtm_data:
