@@ -1,5 +1,5 @@
 # Use the official Node.js 20 image as the build environment
-FROM node:20 AS build
+FROM node:24 AS build
 
 # Set working directory
 WORKDIR /app

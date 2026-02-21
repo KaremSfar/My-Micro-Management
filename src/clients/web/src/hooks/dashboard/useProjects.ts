@@ -13,7 +13,7 @@ export const useProjects = () => {
         error,
         refetch,
     } = useQuery({
-        queryKey: ["projects", accessToken],
+        queryKey: ["projects"],
         queryFn: async () => {
             const response = await fetch(
                 `${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`,

@@ -380,3 +380,6 @@ Directory.Build.Override.props
 
 # env variables
 .env
+
+# Infisical CLI config file
+.infisical.json

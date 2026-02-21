@@ -149,34 +149,35 @@ const PomodoroWidget: React.FC = () => {
     const isBreakMode = currentMode === 'shortBreak' || currentMode === 'longBreak';
 
     return (
-        <div className={`flex items-center justify-between p-2 rounded-lg text-white min-w-[130px] ${getBackgroundColor()}`}>
-            <span className="text-xl font-bold tabular-nums">
+        <div className={`flex items-center rounded-xl px-4 py-2 gap-3 shadow-md ${getBackgroundColor()}`}>
+            <span className="text-white font-bold text-lg tabular-nums">
                 {formatTime(timeLeft)}
             </span>
+            
+            <div className="flex items-center gap-1">
+                {!(isActive && isBreakMode) && (
+                    <button
+                        onClick={() => {
+                            handleStartPauseReset();
 
-            {!(isActive && isBreakMode) && (
+                            if (!isActive && currentMode === 'focus') {
+                                startTimerAndProject();
+                            }
+                        }}
+                        className="text-white/90 hover:text-white"
+                        aria-label={isActive && !isBreakMode ? "Reset timer" : "Start timer"}
+                    >
+                        {isActive && !isBreakMode ? <StopIcon className="h-5 w-5" /> : <PlayIcon className="h-5 w-5" />}
+                    </button>
+                )}
                 <button
-                    onClick={() => {
-                        handleStartPauseReset();
-
-
-                        if (!isActive && currentMode === 'focus') {
-                            startTimerAndProject();
-                        }
-                    }}
-                    className="ml-2 p-1 bg-white/20 hover:bg-white/30 rounded focus:outline-none focus:ring-2 focus:ring-white/50"
-                    aria-label={isActive && !isBreakMode ? "Reset timer" : "Start timer"}
+                    onClick={handleNextPhase}
+                    className="text-white/90 hover:text-white"
+                    aria-label="Next phase"
                 >
-                    {isActive && !isBreakMode ? <StopIcon className="h-5 w-5"></StopIcon> : <PlayIcon className="h-5 w-5"></PlayIcon>}
+                    <ForwardIcon className="h-5 w-5" />
                 </button>
-            )}
-            <button
-                onClick={handleNextPhase}
-                className="ml-1 p-1 bg-white/20 hover:bg-white/30 rounded focus:outline-none focus:ring-2 focus:ring-white/50"
-                aria-label="Next phase"
-            >
-                <ForwardIcon className="h-5 w-5"></ForwardIcon>
-            </button>
+            </div>
         </div>
     );
 };

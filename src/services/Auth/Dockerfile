@@ -5,8 +5,6 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
 COPY Auth/MicroManagement.Auth.DataContracts/MicroManagement.Auth.DataContracts.csproj ./Auth/MicroManagement.Auth.DataContracts/
-COPY Auth/MicroManagement.Auth.Migrations.AzureSQL/MicroManagement.Auth.Migrations.AzureSQL.csproj ./Auth/MicroManagement.Auth.Migrations.AzureSQL/
-COPY Auth/MicroManagement.Auth.Migrations.SQLite/MicroManagement.Auth.Migrations.SQLite.csproj ./Auth/MicroManagement.Auth.Migrations.SQLite/
 COPY Auth/MicroManagement.Auth.Migrations.SQLite/MicroManagement.Auth.Migrations.SQLite.csproj ./Auth/MicroManagement.Auth.Migrations.SQLite/
 COPY Auth/MicroManagement.Auth.Migrations.Postgres/MicroManagement.Auth.Migrations.Postgres.csproj ./Auth/MicroManagement.Auth.Migrations.Postgres/
 COPY Auth/MicroManagement.Auth.EFDbContext/MicroManagement.Auth.EFDbContext.csproj ./Auth/MicroManagement.Auth.EFDbContext/

@@ -4,10 +4,13 @@ using MicroManagement.Activity.WebAPI.Events;
 using MicroManagement.Activity.WebAPI.Hubs;
 using MicroManagement.Activity.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System.Text;
+using MicroManagement.Shared;
+using MassTransit.Logging;
+using OpenTelemetry.Trace;
+
 
 namespace MicroManagement.Activity.WebAPI;
 
@@ -22,6 +25,12 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddOpenTelemetry("mmgmt-activity", Configuration["OTEL:ENDPOINT"])
+            .ConfigureOpenTelemetryTracerProvider(tracerProviderBuilder =>
+            {
+                tracerProviderBuilder.AddSource(DiagnosticHeaders.DefaultListenerName);
+            });
+
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -95,6 +104,8 @@ public class Startup
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
     {
         app.UseCors("AllowLocalReact");
+
+        app.UseWebSockets();
 
         // Configure the HTTP request pipeline.
         if (env.IsDevelopment())

@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
 
 namespace MicroManagement.Auth.WebAPI;
 
@@ -37,7 +38,7 @@ public class Startup
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
-        AddOpenTelemetry(services);
+        services.AddOpenTelemetry("mmgmt-auth", Configuration["OTEL:ENDPOINT"]);
 
         var dbSettings = Configuration.GetSection(DatabaseSettings.SectionName).Get<DatabaseSettings>()!;
 
@@ -137,36 +138,4 @@ public class Startup
         options.ClientSecret = Configuration["googleclient_secret"]!;
     }
 
-    private void AddOpenTelemetry(IServiceCollection services)
-    {
-        if (Configuration["OTEL:JAEGER_URL"] == null)
-            return;
-
-        services.AddOpenTelemetry()
-            .WithTracing(tracerProviderBuilder =>
-            {
-                tracerProviderBuilder
-                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                        .AddService(serviceName: "mmgmt-auth"))
-                    .AddAspNetCoreInstrumentation(options =>
-                    {
-                        options.RecordException = true;
-                    })
-                    .AddHttpClientInstrumentation(options =>
-                    {
-                        options.RecordException = true;
-                    })
-                    .AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
-                    })
-                    .AddConsoleExporter();
-            }).WithLogging(loggerOptions =>
-            {
-                loggerOptions.AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
-                });
-            });
-    }
 }

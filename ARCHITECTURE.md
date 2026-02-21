@@ -9,7 +9,7 @@ This blueprint analyzes the codebase to provide a definitive reference for archi
 - **React + Vite + TypeScript**: Frontend web client
 - **Redis, RabbitMQ, PostgreSQL**: Data stores and messaging
 - **Nginx**: Reverse proxy
-- **Jaeger**: Distributed tracing
+- **Grafana**: Distributed tracing
 - **Docker Compose**: Deployment orchestration
 
 ### Architectural Pattern(s)
@@ -27,7 +27,7 @@ This blueprint analyzes the codebase to provide a definitive reference for archi
 
 [User] <--> [Web Client] <--> [Nginx] <--> [Auth Service] <--> [Postgres]
                                  |           |
-                                 |           +--> [Jaeger]
+                                 |           +--> [OTEL]
                                  |           +--> [Redis]
                                  |           +--> [RabbitMQ]
                                  +--> [Main Service] <--> [RabbitMQ]
@@ -75,7 +75,7 @@ This blueprint analyzes the codebase to provide a definitive reference for archi
     - GET /events
 
 ### 4.5. Supporting Components
-- **Jaeger**: Tracing
+- **OTEL**: Tracing
 - **RabbitMQ**: Messaging
 - **Redis**: Caching, fast data
 - **Postgres**: Relational data
@@ -99,7 +99,7 @@ This blueprint analyzes the codebase to provide a definitive reference for archi
 ## 7. Cross-Cutting Concerns Implementation
 - **Authentication & Authorization**: JWT, OAuth2, role-based checks
 - **Error Handling & Resilience**: Exception filters, retries, circuit breakers (recommended)
-- **Logging & Monitoring**: Jaeger tracing, recommend structured logging
+- **Logging & Monitoring**: OTEL tracing, recommend structured logging
 - **Validation**: Model validation, DTO validation
 - **Configuration Management**: Environment variables, Docker secrets
 
@@ -192,7 +192,7 @@ This section provides a high-level overview of the project's directory and file 
 
 [User] <--> [Web Client] <--> [Nginx] <--> [Auth Service] <--> [Postgres]
                                  |           |
-                                 |           +--> [Jaeger]
+                                 |           +--> [OTEL]
                                  |           +--> [Redis]
                                  |           +--> [RabbitMQ]
                                  +--> [Main Service] <--> [RabbitMQ]

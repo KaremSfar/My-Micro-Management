@@ -17,6 +17,9 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using MassTransit;
 using MicroManagement.Service.WebAPI.Events;
+using MassTransit.Logging;
+using OpenTelemetry.Metrics;
+using MassTransit.Monitoring;
 
 namespace MicroManagement.Service
 {
@@ -31,7 +34,11 @@ namespace MicroManagement.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
-            AddOpenTelemetry(services);
+            services.AddOpenTelemetry("mmgmt-service", Configuration["OTEL:ENDPOINT"])
+                .ConfigureOpenTelemetryTracerProvider(tracerProviderBuilder =>
+                {
+                    tracerProviderBuilder.AddSource(DiagnosticHeaders.DefaultListenerName);
+                });
 
             // Add services to the container.
             services.AddControllers();
@@ -137,39 +144,6 @@ namespace MicroManagement.Service
             {
                 endpoints.MapControllers();
             });
-        }
-
-        private void AddOpenTelemetry(IServiceCollection services)
-        {
-            if (Configuration["OTEL:JAEGER_URL"] == null)
-                return;
-
-            services.AddOpenTelemetry()
-                .WithTracing(tracerProviderBuilder =>
-                {
-                    tracerProviderBuilder
-                        .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                            .AddService(serviceName: "mmgmt-service"))
-                        .AddAspNetCoreInstrumentation(options =>
-                        {
-                            options.RecordException = true;
-                        })
-                        .AddHttpClientInstrumentation(options =>
-                        {
-                            options.RecordException = true;
-                        })
-                        .AddOtlpExporter(options =>
-                        {
-                            options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
-                        })
-                        .AddConsoleExporter();
-                }).WithLogging(loggerOptions =>
-                {
-                    loggerOptions.AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri(Configuration["OTEL:JAEGER_URL"]);
-                    });
-                });
         }
     }
 }

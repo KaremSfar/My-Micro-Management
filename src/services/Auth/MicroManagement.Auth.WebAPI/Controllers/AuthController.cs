@@ -96,8 +96,9 @@ namespace MicroManagement.Auth.WebAPI.Controllers
             var cookieOptions = new CookieOptions
             {
                 Secure = true, // Ensure the cookie is sent over HTTPS
-                SameSite = SameSiteMode.None, // Prevents the cookie from being sent in cross-site requests
-                Expires = DateTimeOffset.UtcNow.AddDays(7)
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddDays(7),
+                HttpOnly = true
             };
 
             Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);

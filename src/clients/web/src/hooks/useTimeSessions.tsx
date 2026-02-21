@@ -13,7 +13,7 @@ export const useTimeSessions = () => {
         error,
         refetch,
     } = useQuery({
-        queryKey: ['timeSessions', accessToken],
+        queryKey: ['timeSessions'],
         queryFn: async () => {
             const timeSessionsResponse = await fetch(
                 `${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/timeSessions`,
