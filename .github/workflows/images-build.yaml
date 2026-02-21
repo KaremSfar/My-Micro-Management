@@ -26,23 +26,9 @@ jobs:
 
       - name: Run update-files.sh
         env:
-          AUTH_DB_TYPE: "sqlite"
-          AUTH_DB_CONNECTION: "auth"
-          JWT_ACCESS_KEY: ${{ secrets.JWT_ACCESS_KEY }}
-          JWT_REFRESH_KEY: ${{ secrets.JWT_REFRESH_KEY }}
-          MAIN_DB_TYPE: "sqlite"
-          MAIN_DB_CONNECTION: "main"
           AUTH_SERVICE_URL: ${{ vars.AUTH_SERVICE_URL }}
           MAIN_SERVICE_URL: ${{ vars.MAIN_SERVICE_URL }}
           ACTIVITY_SERVICE_URL: ${{ vars.ACTIVITY_SERVICE_URL }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          OTEL__ENDPOINT: ${{ env.OTEL__ENDPOINT }}
-          REDIS__CONFIGURATION: ${{ secrets.REDIS__CONFIGURATION }}
-          RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
-          RABBITMQ_PASS: ${{ secrets.RABBITMQ_PASS }}
         run: source ./devops/update-files.sh
 
       - name: Log in to DockerHub
