@@ -1,20 +1,9 @@
 - [ ] Swap datetimes with DateTimeOffsets
-- [x] Change Web site title and icon
-- [x] Fix deployment on new VPS
-
 
 ## Developer Experience
-- [x] Extract .env files somewhere, maybe self hosted
-    => Infisical
-- [x] Get rid of the docker compose files found everywhere - add a prelaunch task for the Services
-- [x] Telemetry should be on even for local devving
 - [ ] Add Unit Tests :)
-- [x] Update Open Telemetry Stuff - Use Collector and enrich
-    - [x] Try out signoz and consider migrating (or grafana stack)
 - [ ] Add Migration creator automation
-- [x] Use Remote Caches to avoid building everything everytime
-- [ ] Clean up projects - get rid of old migration stuff and empty projects
-- [ ] Maybe find a way in vscode to restart one specific serivce (dlel)
+
 ## NEXT
 - [ ] Add Context Concept
 - [ ] Sync Pomodoro Across devices as well
@@ -22,16 +11,10 @@
 - [ ] Turn into Progressive web app to install
 
 ## Bugs
-- [x] Why arent websockets WORKIIING ??
-    => Combination of wrong header upgrade + forgot to add .UseWebSockets in Startup
-- [x] Fix 401 token staleness (Page reloads on token refresh)
-- [x] Console errors Websockets
 - [ ] Fix Time Sync across devices (minor milliseconds)
 - [ ] Resiliency++ (The Inactivity service)
 
 ## Big Features / Epics
-- [x] Basics: Auth, SSO, Deploying 
-- [x] Time sessions and Projects creating etc..
 - [ ] Sync Pomodoro Across devices as well
 - [ ] Add mail stuff (for Auth endpoints) - if using .NET baked in
 - [ ] Context Stuff
@@ -43,6 +26,28 @@
 
 
 ## History
+--- 
+- [x] Extract .env files somewhere, maybe self hosted
+    => Infisical
+- [x] Get rid of the docker compose files found everywhere - add a prelaunch task for the Services
+- [x] Telemetry should be on even for local devving
+- [x] Update Open Telemetry Stuff - Use Collector and enrich
+    - [x] Try out signoz and consider migrating (or grafana stack)
+- [x] Use Remote Caches to avoid building everything everytime
+- [x] Clean up projects - get rid of old migration stuff and empty projects
+
+- [x] Why arent websockets WORKIIING ??
+    => Combination of wrong header upgrade + forgot to add .UseWebSockets in Startup
+- [x] Fix 401 token staleness (Page reloads on token refresh)
+- [x] Console errors Websockets
+
+- [x] Basics: Auth, SSO, Deploying 
+- [x] Time sessions and Projects creating etc..
+
+
+- [x] Change Web site title and icon
+- [x] Fix deployment on new VPS
+---
 - [x] GET BACK ON TRACK: local development experience back on track: local services + web + dockers in 2-3 clicks 
 
 - [x] Add Open Telemetry and bundle Graphana / or stuff like that with it
@@ -83,4 +88,4 @@
 - [x] Switch domain names
 - [x] Make clients super dumb, only listen to ws and call http
 - [x] Update Time Sessions feature 
-----
+---
