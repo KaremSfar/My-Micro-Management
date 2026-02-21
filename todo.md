@@ -12,7 +12,7 @@
 - [x] Update Open Telemetry Stuff - Use Collector and enrich
     - [x] Try out signoz and consider migrating (or grafana stack)
 - [ ] Add Migration creator automation
-- [ ] Use Remote Caches to avoid building everything everytime
+- [x] Use Remote Caches to avoid building everything everytime
 - [ ] Clean up projects - get rid of old migration stuff and empty projects
 - [ ] Maybe find a way in vscode to restart one specific serivce (dlel)
 ## NEXT
