@@ -1,11 +1,12 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../Auth/AuthContext';
-import { GetContextDto } from '../DTOs/ContextDto';
+import { CreateContextDTO, GetContextDto } from '../DTOs/ContextDto';
 
 interface IContextContext {
     contexts: GetContextDto[];
     selectedContextId: string | null;
     setSelectedContextId: (contextId: string | null) => void;
+    createNewContext: (createContextDto: CreateContextDTO) => Promise<GetContextDto | null>;
 }
 
 const ContextContext = createContext<IContextContext | undefined>(undefined);
@@ -50,11 +51,36 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [accessToken]);
 
+    const createNewContext = useCallback(async (createContextDto: CreateContextDTO): Promise<GetContextDto | null> => {
+        if (!accessToken) return null;
+
+        const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/contexts`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(createContextDto),
+        });
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                console.error('Unauthorized - token may have expired');
+            }
+            throw new Error(`Failed to create context: ${response.status}`);
+        }
+
+        const createdContext = await response.json() as GetContextDto;
+        setContexts(prev => [...prev, createdContext]);
+        return createdContext;
+    }, [accessToken]);
+
     const value = useMemo(() => ({
         contexts,
         selectedContextId,
         setSelectedContextId,
-    }), [contexts, selectedContextId]);
+        createNewContext,
+    }), [contexts, selectedContextId, createNewContext]);
 
     return (
         <ContextContext.Provider value={value}>
