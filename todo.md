@@ -5,7 +5,6 @@
 - [ ] Add Migration creator automation
 
 ## NEXT
-- [ ] Add Context Concept
 - [ ] Sync Pomodoro Across devices as well
 - [ ] Redo Readme
 - [ ] Turn into Progressive web app to install
@@ -13,11 +12,11 @@
 ## Bugs
 - [ ] Fix Time Sync across devices (minor milliseconds)
 - [ ] Resiliency++ (The Inactivity service)
+- [ ] User Creation should create a default Context with it
 
 ## Big Features / Epics
 - [ ] Sync Pomodoro Across devices as well
 - [ ] Add mail stuff (for Auth endpoints) - if using .NET baked in
-- [ ] Context Stuff
 - [ ] CLI app
 - [ ] Screenshots cli service, connect with Agent 
 - [ ] Outside: Create an n8n agent for Work (Scrum ceremonies, Planner ...) And integrate with mmgmt
@@ -26,6 +25,10 @@
 
 
 ## History
+---
+- [x] Context Stuff
+- [x] Add Context Concept
+
 --- 
 - [x] Extract .env files somewhere, maybe self hosted
     => Infisical

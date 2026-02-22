@@ -24,7 +24,7 @@ public class ContextService : IContextsService
             Id = c.Id,
             Name = c.Name,
             Icon = c.Icon
-        });
+        }).OrderBy(c => c.Name == "Default" ? 0 : 1);
     }
 
     public async Task<GetContextDTO> CreateAsync(Guid userId, CreateContextDTO createDto)
