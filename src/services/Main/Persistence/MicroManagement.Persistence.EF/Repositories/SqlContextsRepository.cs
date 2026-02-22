@@ -24,10 +24,11 @@ public class SqlContextsRepository : IContextsRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Context>> GetAllAsync()
+    public async Task<IEnumerable<Context>> GetAllAsync(Guid userId)
     {
         return await _dbContext
             .Contexts
+            .Where(c => c.UserId == userId)
             .Select(c => c.Adapt<Context>())
             .ToListAsync();
     }

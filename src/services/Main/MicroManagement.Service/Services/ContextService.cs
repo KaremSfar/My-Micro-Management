@@ -15,9 +15,9 @@ public class ContextService : IContextsService
         _contextsRepository = contextsRepository;
     }
 
-    public async Task<IEnumerable<GetContextDTO>> GetAllAsync()
+    public async Task<IEnumerable<GetContextDTO>> GetAllAsync(Guid userId)
     {
-        var contexts = await _contextsRepository.GetAllAsync();
+        var contexts = await _contextsRepository.GetAllAsync(userId);
 
         return contexts.Select(c => new GetContextDTO
         {

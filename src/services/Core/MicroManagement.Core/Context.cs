@@ -7,4 +7,5 @@ public record Context
     public Guid Id { get; init; }
     public string Name { get; init; }
     public string Icon { get; init; }
+    public Guid UserId { get; init; }
 }

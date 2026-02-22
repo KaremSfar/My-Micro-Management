@@ -4,7 +4,7 @@ namespace MicroManagement.Service.Abstractions;
 
 public interface IContextsService
 {
-    Task<IEnumerable<GetContextDTO>> GetAllAsync();
+    Task<IEnumerable<GetContextDTO>> GetAllAsync(Guid userId);
     Task<GetContextDTO> CreateAsync(Guid userId, CreateContextDTO createDto);
     Task<GetContextDTO> UpdateAsync(Guid contextId, UpdateContextDTO updateDto);
 }

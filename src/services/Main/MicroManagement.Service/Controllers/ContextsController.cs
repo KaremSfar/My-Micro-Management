@@ -25,7 +25,7 @@ namespace MicroManagement.Service.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var contexts = await _contextsService.GetAllAsync();
+            var contexts = await _contextsService.GetAllAsync(GetUserId());
             return Ok(contexts);
         }
 
