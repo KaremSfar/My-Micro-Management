@@ -13,6 +13,12 @@ namespace MicroManagement.Persistence.Migrations.Postgres.Migrations
             migrationBuilder.Sql("""
                 INSERT INTO "Contexts" (SELECT Distinct ON ("UserId") gen_random_uuid() AS Id, 'Default' AS Name, '' AS Icon, "UserId" FROM "ProjectsTable")
             """);
+
+            migrationBuilder.Sql("""
+                UPDATE "ProjectsTable" p
+                SET "ContextId" = c."Id"
+                FROM "Contexts" c WHERE c."UserId" = p."UserId"
+            """);
         }
 
         /// <inheritdoc />
