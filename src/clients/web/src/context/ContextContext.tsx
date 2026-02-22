@@ -4,6 +4,7 @@ import { CreateContextDTO, GetContextDto } from '../DTOs/ContextDto';
 
 interface IContextContext {
     contexts: GetContextDto[];
+    isLoadingContexts: boolean;
     selectedContextId: string | null;
     setSelectedContextId: (contextId: string | null) => void;
     createNewContext: (createContextDto: CreateContextDTO) => Promise<GetContextDto | null>;
@@ -14,6 +15,7 @@ const ContextContext = createContext<IContextContext | undefined>(undefined);
 export const ContextProvider = ({ children }: { children: ReactNode }) => {
     const { accessToken } = useAuth();
     const [contexts, setContexts] = useState<GetContextDto[]>([]);
+    const [isLoadingContexts, setIsLoadingContexts] = useState(true);
     const [selectedContextId, setSelectedContextId] = useState<string | null>(null);
 
     useEffect(() => {
@@ -21,6 +23,7 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
             if (!accessToken) return;
 
             try {
+                setIsLoadingContexts(true);
                 const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/contexts`, {
                     headers: {
                         'Content-Type': 'application/json',
@@ -37,17 +40,28 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
 
                 const data: GetContextDto[] = await response.json();
                 setContexts(data);
+                setSelectedContextId((previousSelectedContextId) => {
+                    if (!previousSelectedContextId && data.length > 0) {
+                        return data[0].id;
+                    }
 
-                if (selectedContextId && !data.some(c => c.id === selectedContextId)) {
-                    setSelectedContextId(null);
-                }
+                    if (previousSelectedContextId && !data.some(c => c.id === previousSelectedContextId)) {
+                        return null;
+                    }
+
+                    return previousSelectedContextId;
+                });
             } catch (error) {
                 console.error('Error fetching contexts:', error);
+            } finally {
+                setIsLoadingContexts(false);
             }
         };
 
         if (accessToken) {
             fetchContexts();
+        } else {
+            setIsLoadingContexts(false);
         }
     }, [accessToken]);
 
@@ -72,15 +86,17 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
 
         const createdContext = await response.json() as GetContextDto;
         setContexts(prev => [...prev, createdContext]);
+        setSelectedContextId((previousSelectedContextId) => previousSelectedContextId ?? createdContext.id);
         return createdContext;
     }, [accessToken]);
 
     const value = useMemo(() => ({
         contexts,
+        isLoadingContexts,
         selectedContextId,
         setSelectedContextId,
         createNewContext,
-    }), [contexts, selectedContextId, createNewContext]);
+    }), [contexts, isLoadingContexts, selectedContextId, createNewContext]);
 
     return (
         <ContextContext.Provider value={value}>

@@ -7,9 +7,11 @@ function Dashboard() {
     // All state and logic is now consumed from the central context.
     // This component is now much simpler and only handles rendering.
     const { projects, runningProjectId, handleProjectClick, addNewProject } = useProjectContext();
-    const { selectedContextId } = useContextContext();
+    const { selectedContextId, isLoadingContexts } = useContextContext();
 
-    const visibleProjects = selectedContextId
+    const visibleProjects = isLoadingContexts
+        ? []
+        : selectedContextId
         ? projects.filter(project => project.contextId === selectedContextId)
         : projects;
 

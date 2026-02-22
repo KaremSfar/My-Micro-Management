@@ -33,7 +33,8 @@ public class ContextService : IContextsService
         {
             Id = Guid.NewGuid(),
             Name = createDto.Name!,
-            Icon = createDto.Icon!
+            Icon = createDto.Icon!,
+            UserId = userId
         };
 
         await _contextsRepository.AddAsync(context);
