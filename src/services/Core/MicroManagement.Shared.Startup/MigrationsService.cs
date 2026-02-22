@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
 namespace MicroManagement.Shared
@@ -16,7 +15,7 @@ namespace MicroManagement.Shared
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            var dbContext = await _dbContextFactory.CreateDbContextAsync();
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
             await dbContext.Database.MigrateAsync(cancellationToken);
         }
 
