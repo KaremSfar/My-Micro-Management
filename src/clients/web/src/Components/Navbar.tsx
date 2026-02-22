@@ -6,9 +6,9 @@ import ContextIsland from './ContextIsland';
 const Navbar = () => {
 
     return (
-        <nav className="flex items-center justify-between">
+        <nav className="relative flex items-center justify-between">
             {/* Left Island - Home Button */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 min-w-0">
                 <NavLink 
                     to="/" 
                     className={({ isActive }) => 
@@ -25,7 +25,7 @@ const Navbar = () => {
             </div>
 
             {/* Center Island - Pomodoro Widget */}
-            <div className="flex-grow flex justify-center">
+            <div className="absolute left-1/2 -translate-x-1/2">
                 <PomodoroWidget />
             </div>
 
