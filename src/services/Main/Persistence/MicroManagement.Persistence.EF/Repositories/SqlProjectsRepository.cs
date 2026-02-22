@@ -23,8 +23,11 @@ namespace MicroManagement.Persistence.EF.Repositories
 
         public async Task AddProjectAsync(Project project)
         {
-            var projectEntity = new ProjectEntity();
-            project.Adapt(projectEntity);
+            var context = await _dbContext
+                .Contexts
+                .FindAsync(project.ContextId);
+
+            var projectEntity = project.Adapt(new ProjectEntity()) with { Context = context };
 
             _dbContext.Projects.Add(projectEntity);
             await _dbContext.SaveChangesAsync();

@@ -2,6 +2,7 @@ export interface ProjectSessionDTO {
     id: string;
     name: string;
     color: string;
+    contextId: string;
 
     //TO-DO karem remove these fields below from here
     timeSpentCurrentSession: number;
@@ -12,10 +13,12 @@ export interface ProjectSessionDTO {
 export interface CreateProjectDTO {
     name?: string;
     color?: string;
+    contextId?: string;
 }
 
 export interface GetProjectDto {
     id: string;
     name: string;
     color: string;
+    contextId: string;
 }

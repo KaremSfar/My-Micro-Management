@@ -125,6 +125,7 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
     const addNewProject = useCallback((newProject: GetProjectDto) => {
         const addedProject: ProjectSessionDTO = {
             ...newProject,
+            contextId: newProject.contextId,
             isRunning: false,
             timeSpentCurrentSession: 0,
             timeSpentTotal: 0,
