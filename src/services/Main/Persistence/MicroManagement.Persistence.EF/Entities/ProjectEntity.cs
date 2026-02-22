@@ -22,7 +22,7 @@ namespace MicroManagement.Persistence.EF.Entities
         [Required]
         public string Color { get; set; }
 
-        public virtual ContextEntity? Context { get; set; }
+        public virtual ContextEntity Context { get; set; }
 
         public virtual ICollection<TimeSessionEntity> TimeSessions { get; set; } = new List<TimeSessionEntity>();
     }
