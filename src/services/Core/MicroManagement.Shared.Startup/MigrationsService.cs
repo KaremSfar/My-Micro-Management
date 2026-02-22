@@ -15,7 +15,7 @@ namespace MicroManagement.Shared
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+            var dbContext = await _dbContextFactory.CreateDbContextAsync();
             await dbContext.Database.MigrateAsync(cancellationToken);
         }
 

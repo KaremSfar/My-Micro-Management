@@ -44,11 +44,13 @@ namespace MicroManagement.Persistence.EF.Repositories
 
         public async Task<IEnumerable<Project>> GetAllAsync(Guid userId)
         {
-            return await _dbContext
+            var entities = await _dbContext
                 .Projects
+                .Include(p => p.Context)
                 .Where(p => p.UserId.ToString() == userId.ToString())
-                .Select(p => p.Adapt<Project>())
                 .ToListAsync();
+
+            return entities.Select(p => p.Adapt<Project>() with { ContextId = p.Context.Id });
         }
     }
 }

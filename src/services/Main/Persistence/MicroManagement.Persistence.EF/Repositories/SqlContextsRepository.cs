@@ -41,4 +41,17 @@ public class SqlContextsRepository : IContextsRepository
 
         return contextEntity.Adapt<Context>();
     }
+
+    public async Task UpdateAsync(Context context)
+    {
+        var contextEntity = await _dbContext.Contexts.FindAsync(context.Id);
+
+        if (contextEntity == null)
+            throw new KeyNotFoundException(nameof(Context.Id));
+
+        contextEntity.Name = context.Name;
+        contextEntity.Icon = context.Icon;
+
+        await _dbContext.SaveChangesAsync();
+    }
 }

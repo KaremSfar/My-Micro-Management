@@ -8,4 +8,5 @@ public interface IContextsRepository
     Task<IEnumerable<Context>> GetAllAsync();
     Task<Context> GetByIdAsync(Guid id);
     Task AddAsync(Context context);
+    Task UpdateAsync(Context context);
 }
