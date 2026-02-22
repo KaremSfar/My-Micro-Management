@@ -23,5 +23,8 @@ namespace MicroManagement.Services.Abstraction.DTOs
         /// </summary>
         [Required]
         public string? Color { get; set; }
+
+        [Required]
+        public Guid ContextId { get; set; }
     }
 }

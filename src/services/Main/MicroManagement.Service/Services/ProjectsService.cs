@@ -25,7 +25,7 @@ namespace MicroManagement.Services
 
         public async Task<GetProjectDTO> AddProject(Guid userId, CreateProjectDTO addProjectDto)
         {
-            var projectToAdd = new Project(Guid.NewGuid(), userId, addProjectDto.Name, addProjectDto.Color);
+            var projectToAdd = new Project(Guid.NewGuid(), userId, addProjectDto.Name!, addProjectDto.Color!, addProjectDto.ContextId);
 
             await _projectsRepo.AddProjectAsync(projectToAdd);
 
