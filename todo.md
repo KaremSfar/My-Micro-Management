@@ -28,7 +28,6 @@
 ---
 - [x] Context Stuff
 - [x] Add Context Concept
-
 --- 
 - [x] Extract .env files somewhere, maybe self hosted
     => Infisical
