@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { GetProjectDto, ProjectSessionDTO } from '../DTOs/ProjectDto';
 import { useAuth } from '../Auth/AuthContext';
 import { useTimer } from '../hooks/dashboard/useTimer';
@@ -21,46 +22,34 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
     const [runningProjectId, setRunningProjectId] = useState<string | null>(null);
     const [pausedProjectId, setPausedProjectId] = useState<string | null>(null); // New state for paused project
 
-    // Fetch initial projects
-    // Fetch initial projects only once on mount - DO NOT refetch on token refresh
-    useEffect(() => {
-        const fetchProjects = async () => {
-            if (!accessToken) return;
+    const { data: initialProjects } = useQuery({
+        queryKey: ['projects'],
+        queryFn: async () => {
+            const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+            });
 
-            try {
-                const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${accessToken}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        console.error('Unauthorized - token may have expired');
-                        // Token is invalid, will be handled by auth context
-                    }
-                    throw new Error(`Failed to fetch projects: ${response.status}`);
+            if (!response.ok) {
+                if (response.status === 401) {
+                    console.error('Unauthorized - token may have expired');
                 }
-
-                const data: ProjectSessionDTO[] = await response.json();
-                setProjects(data);
-
-                // Check if any project is running from the backend data and set it
-                const runningProject = data.find(p => p.isRunning);
-                if (runningProject) {
-                    setRunningProjectId(runningProject.id);
-                }
-            } catch (error) {
-                console.error('Error fetching projects:', error);
+                throw new Error(`Failed to fetch projects: ${response.status}`);
             }
-        };
 
-        if (accessToken) {
-            fetchProjects();
-        }
+            return response.json() as Promise<ProjectSessionDTO[]>;
+        },
+        enabled: !!accessToken,
+    });
 
-    }, []);
+    useEffect(() => {
+        if (!initialProjects) return;
+        setProjects(initialProjects);
+        const runningProject = initialProjects.find(p => p.isRunning);
+        if (runningProject) setRunningProjectId(runningProject.id);
+    }, [initialProjects]);
 
     // Timer logic is now managed within the provider
     useTimer(runningProjectId, setProjects);
@@ -86,14 +75,8 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
     // WebSocket connection is managed internally by useWebSocket hook
     useWebSocket(startProject, stopProjects);
 
-    const handleProjectClick = useCallback(async (projectId: string) => {
-        if (!accessToken) {
-            console.error('No access token available');
-            return;
-        }
-
-        if (projectId === runningProjectId) {
-            stopProjects();
+    const { mutateAsync: stopSession } = useMutation({
+        mutationFn: async () => {
             const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/timesessions/stop`, {
                 method: 'POST',
                 headers: {
@@ -101,12 +84,14 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
                     'Authorization': `Bearer ${accessToken}`,
                 },
             });
-
             if (!response.ok && response.status === 401) {
                 console.error('Unauthorized - token may have expired');
             }
-        } else {
-            startProject(projectId);
+        },
+    });
+
+    const { mutateAsync: startSession } = useMutation({
+        mutationFn: async (projectId: string) => {
             const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/timesessions/start`, {
                 method: 'POST',
                 headers: {
@@ -115,12 +100,26 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
                 },
                 body: JSON.stringify(projectId),
             });
-
             if (!response.ok && response.status === 401) {
                 console.error('Unauthorized - token may have expired');
             }
+        },
+    });
+
+    const handleProjectClick = useCallback(async (projectId: string) => {
+        if (!accessToken) {
+            console.error('No access token available');
+            return;
         }
-    }, [runningProjectId, startProject, stopProjects, accessToken]);
+
+        if (projectId === runningProjectId) {
+            stopProjects();
+            await stopSession();
+        } else {
+            startProject(projectId);
+            await startSession(projectId);
+        }
+    }, [runningProjectId, startProject, stopProjects, accessToken, stopSession, startSession]);
 
     const addNewProject = useCallback((newProject: GetProjectDto) => {
         const addedProject: ProjectSessionDTO = {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '../Auth/AuthContext';
 import type { CreateProjectDTO, GetProjectDto } from '../DTOs/ProjectDto';
 import { useContextContext } from '../context/ContextContext';
@@ -15,26 +16,32 @@ function NewProjectForm({ onClose, onProjectCreated }: NewProjectFormProps) {
     const { contexts, selectedContextId } = useContextContext();
     const [contextId, setContextId] = useState(selectedContextId ?? '');
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!contextId) return;
-
-        try {
+    const { mutateAsync: createProject } = useMutation({
+        mutationFn: async (dto: CreateProjectDTO) => {
             const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${accessToken}`
                 },
-                body: JSON.stringify({ name: projectName, color: projectColor, contextId } as CreateProjectDTO)
+                body: JSON.stringify(dto),
             });
 
             if (!response.ok) {
                 throw new Error('Failed to create project');
             }
 
-            const project = await response.json();
-            onProjectCreated({ ...(project as GetProjectDto), contextId: (project as GetProjectDto).contextId ?? contextId });
+            return response.json() as Promise<GetProjectDto>;
+        },
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!contextId) return;
+
+        try {
+            const project = await createProject({ name: projectName, color: projectColor, contextId });
+            onProjectCreated({ ...project, contextId: project.contextId ?? contextId });
             onClose();
         } catch (error) {
             console.error('Error creating project:', error);

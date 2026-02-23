@@ -1,5 +1,6 @@
 // src/contexts/AuthContext.tsx
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useCallback, useContext, useState, useEffect, ReactNode } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 interface IAuthContext {
     accessToken: string | null;
@@ -28,59 +29,76 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setIsAuthenticated(!!token);
     };
 
+    const loginMutation = useMutation({
+        mutationFn: async ({ email, password }: { email: string; password: string }) => {
+            const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+                credentials: 'include'
+            });
+            return response.json();
+        },
+        onSuccess: (data) => setAccessToken(data.accessToken),
+    });
+
+    const singupMutation = useMutation({
+        mutationFn: async ({ firstName, lastName, email, password }: { firstName: string; lastName: string; email: string; password: string }) => {
+            const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ firstName, lastName, email, password }),
+                credentials: 'include'
+            });
+            return response.json();
+        },
+        onSuccess: (data) => setAccessToken(data.accessToken),
+    });
+
+    const refreshMutation = useMutation({
+        mutationFn: async () => {
+            const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/refresh-token`, {
+                method: 'POST',
+                credentials: 'include',
+            });
+            if (!response.ok) throw new Error('Failed to refresh token');
+            return response.json();
+        },
+        onSuccess: (data) => setAccessToken(data.accessToken),
+    });
+
+    const logoutMutation = useMutation({
+        mutationFn: async () => {
+            await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+            });
+        },
+        onSuccess: () => setAccessToken(null),
+    });
+
     const login = async (email: string, password: string) => {
-        const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-            credentials: 'include'
-        });
-        const data = await response.json();
-        setAccessToken(data.accessToken);
+        await loginMutation.mutateAsync({ email, password });
     };
 
     const singup = async (firstName: string, lastName: string, email: string, password: string) => {
-        const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ firstName, lastName, email, password }),
-            credentials: 'include'
-        });
-        const data = await response.json();
-        setAccessToken(data.accessToken);
-    }
+        await singupMutation.mutateAsync({ firstName, lastName, email, password });
+    };
 
-    const refreshAuthToken = async (showLoading = false) => {
+    const refreshAuthToken = useCallback(async (showLoading = false) => {
         if (showLoading) setIsLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/refresh-token`, {
-                method: 'POST',
-                credentials: 'include', // Necessary to send the HttpOnly cookie
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to refresh token');
-            }
-
-            const data = await response.json();
-            setAccessToken(data.accessToken); // Update the access token
-
-        } catch (error) {
+            await refreshMutation.mutateAsync();
+        } catch {
             // Handle absence or invalidity of refresh token here
-            // For example, redirect to login page or show a login prompt
         } finally {
             if (showLoading) setIsLoading(false);
         }
-    };
+    }, [refreshMutation]);
 
     const logout = async () => {
-        await fetch(`${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/auth/logout`, {
-            method: 'POST',
-            credentials: 'include',
-        });
-
-        setAccessToken(null);
-    }
+        await logoutMutation.mutateAsync();
+    };
 
     const loginWithGoogle = () => {
         window.location.href = `${import.meta.env.VITE_AUTH_SERVICE_BASE_URL}/google-login?returnUrl=${window.location.origin}`;
