@@ -8,6 +8,7 @@ import Analytics from './Pages/Analytics';
 import SignupForm from './Auth/SignupForm';
 import GoogleAuthCallback from './Auth/GoogleAuthCallback';
 import { ProjectProvider } from './context/ProjectContext';
+import { ContextProvider } from './context/ContextContext';
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -28,16 +29,18 @@ function App() {
       <div className="border-2 border-black lg:h-[75vh] w-3/4 flex justify-center items-center bg-white rounded-lg shadow-xl p-5 m-4">
           <BrowserRouter>
             {isAuthenticated ? (
-              <ProjectProvider> {/* Wrap authenticated routes with the provider */}
-                <Routes>
-                  <Route path="/" element={<Layout><Dashboard /></Layout>} />
-                  <Route path="/analytics" element={<Layout><Analytics /></Layout>} />
-                  <Route path="/login" element={<Navigate to="/" replace />} />
-                  <Route path="/signup" element={<Navigate to="/" replace />} />
-                  <Route path="/google-login-success" element={<GoogleAuthCallback />} />
-                  <Route path="*" element={<Layout><Dashboard /></Layout>} />
-                </Routes>
-              </ProjectProvider>
+              <ContextProvider>
+                <ProjectProvider>
+                  <Routes>
+                    <Route path="/" element={<Layout><Dashboard /></Layout>} />
+                    <Route path="/analytics" element={<Layout><Analytics /></Layout>} />
+                    <Route path="/login" element={<Navigate to="/" replace />} />
+                    <Route path="/signup" element={<Navigate to="/" replace />} />
+                    <Route path="/google-login-success" element={<GoogleAuthCallback />} />
+                    <Route path="*" element={<Layout><Dashboard /></Layout>} />
+                  </Routes>
+                </ProjectProvider>
+              </ContextProvider>
             ) : (
               <Routes>
                 <Route path="/login" element={<LoginForm />} />

@@ -41,5 +41,10 @@ namespace MicroManagement.Services.Abstraction.DTOs
         /// The Total Time spent on this Project, ever
         /// </summary>
         public double TimeSpentTotal { get; set; }
+
+        /// <summary>
+        /// The ContextId of the project, this is used to group projects by context on the client side
+        /// </summary>
+        public Guid ContextId { get; set; }
     }
 }

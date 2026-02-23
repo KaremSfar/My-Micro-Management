@@ -3,6 +3,7 @@ using System;
 using MicroManagement.Persistence.EF.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroManagement.Persistence.Migrations.Postgres.Migrations
 {
     [DbContext(typeof(MyMicroManagementDbContext))]
-    partial class MyMicroManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260222114307_AddProjectsContext")]
+    partial class AddProjectsContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace MicroManagement.Persistence.Migrations.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ContextsTable");
+                    b.ToTable("Contexts");
                 });
 
             modelBuilder.Entity("MicroManagement.Persistence.EF.Entities.ProjectEntity", b =>
@@ -54,7 +57,7 @@ namespace MicroManagement.Persistence.Migrations.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ContextId")
+                    b.Property<Guid?>("ContextId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -100,9 +103,7 @@ namespace MicroManagement.Persistence.Migrations.Postgres.Migrations
                 {
                     b.HasOne("MicroManagement.Persistence.EF.Entities.ContextEntity", "Context")
                         .WithMany("Projects")
-                        .HasForeignKey("ContextId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ContextId");
 
                     b.Navigation("Context");
                 });

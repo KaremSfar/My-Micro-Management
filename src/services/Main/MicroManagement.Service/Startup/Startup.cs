@@ -5,21 +5,16 @@ using MicroManagement.Services;
 using MicroManagement.Services.Abstraction;
 using MicroManagement.Services.Abstraction.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.WebSockets;
 using MicroManagement.Shared;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using OpenTelemetry.Logs;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using MassTransit;
 using MicroManagement.Service.WebAPI.Events;
 using MassTransit.Logging;
-using OpenTelemetry.Metrics;
-using MassTransit.Monitoring;
+using MicroManagement.Service.Abstractions;
+using MicroManagement.Service.WebAPI.Services;
 
 namespace MicroManagement.Service
 {
@@ -71,6 +66,31 @@ namespace MicroManagement.Service
 
                 // Include DataContracts / DTOs descriptions through XML Comments
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetAssembly(typeof(ProjectSessionDTO))!.GetName().Name}.xml"));
+
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Description = "Enter your JWT token"
+                });
+
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
             services.AddTransient<IProjectsRepository, SqlProjectsRepository>();
@@ -79,6 +99,9 @@ namespace MicroManagement.Service
             services.AddTransient<ITimeSessionsRepository, SqlTimeSessionsRepository>();
             services.AddTransient<ITimeSessionsService, TimeSessionsService>();
             services.AddTransient<ITimeSessionEventsPublisher, TimeSessionEventsPublisher>();
+
+            services.AddTransient<IContextsRepository, SqlContextsRepository>();
+            services.AddTransient<IContextsService, ContextService>();
 
             services.AddOptions<DatabaseSettings>()
                 .Bind(Configuration.GetSection(DatabaseSettings.SectionName));

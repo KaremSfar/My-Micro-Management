@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '../Auth/AuthContext';
 import type { CreateProjectDTO, GetProjectDto } from '../DTOs/ProjectDto';
+import { useContextContext } from '../context/ContextContext';
 
 interface NewProjectFormProps {
     onClose: () => void;
@@ -11,25 +13,35 @@ function NewProjectForm({ onClose, onProjectCreated }: NewProjectFormProps) {
     const [projectName, setProjectName] = useState('');
     const [projectColor, setProjectColor] = useState('#000000');
     const { accessToken } = useAuth();
+    const { contexts, selectedContextId } = useContextContext();
+    const [contextId, setContextId] = useState(selectedContextId ?? '');
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
+    const { mutateAsync: createProject } = useMutation({
+        mutationFn: async (dto: CreateProjectDTO) => {
             const response = await fetch(`${import.meta.env.VITE_MAIN_SERVICE_BASE_URL}/api/projects`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${accessToken}`
                 },
-                body: JSON.stringify({ name: projectName, color: projectColor } as CreateProjectDTO)
+                body: JSON.stringify(dto),
             });
 
             if (!response.ok) {
                 throw new Error('Failed to create project');
             }
 
-            const project = await response.json();
-            onProjectCreated(project as GetProjectDto);
+            return response.json() as Promise<GetProjectDto>;
+        },
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!contextId) return;
+
+        try {
+            const project = await createProject({ name: projectName, color: projectColor, contextId });
+            onProjectCreated({ ...project, contextId: project.contextId ?? contextId });
             onClose();
         } catch (error) {
             console.error('Error creating project:', error);
@@ -62,6 +74,23 @@ function NewProjectForm({ onClose, onProjectCreated }: NewProjectFormProps) {
                     onChange={(e) => setProjectColor(e.target.value)}
                     className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />
+            </div>
+            <div>
+                <label htmlFor="projectContext" className="block text-sm font-medium text-gray-700">
+                    Context
+                </label>
+                <select
+                    id="projectContext"
+                    value={contextId}
+                    onChange={(e) => setContextId(e.target.value)}
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                >
+                    <option value="" disabled>Select a context</option>
+                    {contexts.map((context) => (
+                        <option key={context.id} value={context.id}>{context.name}</option>
+                    ))}
+                </select>
             </div>
             <div className="flex justify-end space-x-2">
                 <button

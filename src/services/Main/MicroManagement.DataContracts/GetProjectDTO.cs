@@ -25,5 +25,10 @@ namespace MicroManagement.Services.Abstraction.DTOs
         /// The Color of the project, this is used to personalize the experience on the application
         /// </summary>
         public string? Color { get; set; }
+
+        /// <summary>
+        /// The ContextId of the project 
+        /// /// </summary>
+        public string ContextId { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace MicroManagement.Persistence.EF.Configuration
 
         public DbSet<ProjectEntity> Projects { get; set; }
         public DbSet<TimeSessionEntity> TimeSessions { get; set; }
+        public DbSet<ContextEntity> Contexts { get; set; }
     }
 }
